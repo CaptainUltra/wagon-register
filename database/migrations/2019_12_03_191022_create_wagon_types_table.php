@@ -14,11 +14,14 @@ class CreateWagonTypesTable extends Migration
     public function up()
     {
         Schema::create('wagon_types', function (Blueprint $table) {
-            $table->primary('wagon_type');
+            $table->bigIncrements('id');
             $table->string('wagon_type');
+            $table->unique('wagon_type');
             $table->boolean('conditioned');
-            $table->string('interior_type'); //TODO: Should this be in a separate table?
-            $table->string('index_image');
+            $table->integer('interior_type_id');
+            $table->foreign('interior_type_id')->references('id')->on('interior_types');
+            $table->integer('index_image_id');
+            $table->foreign('index_image_id')->references('id')->on('images');
             $table->timestamps();
         });
     }
