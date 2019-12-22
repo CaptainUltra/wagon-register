@@ -21,4 +21,12 @@ class Wagon extends Model
     {
         return $this->hasMany(Event::class);
     }
+    /**
+     * Get the images associated with the wagon
+     */
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
 }
