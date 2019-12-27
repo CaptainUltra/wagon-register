@@ -18,7 +18,6 @@ class CreateCarouselSlidesTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('image_id');
-            $table->foreign('image_id')->references('id')->on('images');
             $table->timestamps();
         });
     }

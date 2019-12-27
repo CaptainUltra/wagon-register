@@ -19,9 +19,7 @@ class CreateWagonTypesTable extends Migration
             $table->unique('wagon_type');
             $table->boolean('conditioned');
             $table->integer('interior_type_id');
-            $table->foreign('interior_type_id')->references('id')->on('interior_types');
             $table->integer('index_image_id');
-            $table->foreign('index_image_id')->references('id')->on('images');
             $table->timestamps();
         });
     }
