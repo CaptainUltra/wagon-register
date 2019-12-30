@@ -15,11 +15,11 @@ class CreateWagonTypesTable extends Migration
     {
         Schema::create('wagon_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('wagon_type');
-            $table->unique('wagon_type');
+            $table->string('name');
+            $table->unique('name');
             $table->boolean('conditioned');
             $table->integer('interior_type_id');
-            $table->integer('index_image_id');
+            $table->integer('index_image_id')->nullable();
             $table->timestamps();
         });
     }

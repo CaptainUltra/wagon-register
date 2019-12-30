@@ -16,15 +16,15 @@ class CreateWagonsTable extends Migration
         Schema::create('wagons', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('number');
-            $table->integer('type');
+            $table->integer('type_id');
             $table->string('letter_index')->nullable();
             $table->integer('v_max')->nullable();
             $table->integer('seats')->nullable();
-            $table->integer('depot');
-            $table->integer('revision_point')->nullable();
+            $table->integer('depot_id')->nullable();
+            $table->integer('revision_point_id')->nullable();
             $table->date('revision_date')->nullable();
             $table->date('revision_exp_date')->nullable();
-            $table->integer('index_image')->nullable();
+            $table->integer('index_image_id')->nullable();
             $table->timestamps();
         });
     }

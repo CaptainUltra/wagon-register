@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wagon extends Model
 {
+    protected $fillable = ['number', 'type_id', 'depot_id'];
+    public function setTypeIdAttribute($value)
+    {
+        $wagonType = substr($this->number, 4, 2).'-'.substr($this->number, 6, 2);
+        $this->attributes['type_id'] = WagonType::where('name', $wagonType)->firstOrFail()->id;
+    }
     /**
      * Get the wagon type to which the wagon belongs
      */
