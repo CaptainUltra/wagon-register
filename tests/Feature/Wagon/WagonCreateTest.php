@@ -24,9 +24,7 @@ class WagonCreateTest extends TestCase
 
         $response = $this->post('/wagons', [
             'number' => '615285970014',
-            'type_id' => ''
         ]);
-
         $response->assertOk();
         $this->assertCount(1, Wagon::all());
     }
@@ -36,7 +34,6 @@ class WagonCreateTest extends TestCase
     {
         $response = $this->post('/wagons', [
             'number' => '',
-            'type_id' => ''
         ]);
 
         $response->assertSessionHasErrors('number');
@@ -52,11 +49,9 @@ class WagonCreateTest extends TestCase
         ])->save();
         $this->post('/wagons', [
             'number' => '615285970014',
-            'type_id' => ''
         ]);
         $response = $this->post('/wagons', [
             'number' => '615285970014',
-            'type_id' => ''
         ]);
 
         $response->assertSessionHasErrors('number');

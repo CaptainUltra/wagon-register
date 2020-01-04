@@ -19,11 +19,18 @@ class WagonType extends Model
         return $this->morphOne(Image::class, 'imagable');
     }
     /**
-     * Get the image that the wagon type has
+     * Get the interior type that the wagon type belongs to
      */
     public function interiorType()
     {
         return $this->belongsTo(InteriorType::class);
+    }
+    /**
+     * Get the wagons that the wagon type has
+     */
+    public function wagons()
+    {
+        return $this->hasMany(Wagon::class);
     }
     
 }

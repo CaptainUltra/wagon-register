@@ -18,22 +18,25 @@ class WagonUpdateDeleteTest extends TestCase
         $this->withoutExceptionHandling();
         $interiorType = factory(InteriorType::class)->create()->save();
         $interiorType = InteriorType::first();
-        $wagonType = factory(WagonType::class)->create([
-            'interior_type_id' => $interiorType->name
+        factory(WagonType::class)->create([
+            'interior_type_id' => $interiorType->name,
+        ])->save();
+        factory(WagonType::class)->create([
+            'interior_type_id' => $interiorType->name,
+            'name'=>'22-97'
         ])->save();
 
         $this->post('/wagons', [
             'number' => '615285970014',
-            'type_id' => '',
         ]);
         $wagon = Wagon::first();
 
         $response = $this->patch('/wagons/'.$wagon->id, [
-            'number' => '615285970029',
-            'type_id' => '',
+            'number' => '615222970029',
         ]);
         $wagon = Wagon::first();
-        $this->assertEquals('615285970029', $wagon->number);
+        $this->assertEquals('615222970029', $wagon->number);
+        $this->assertEquals('2', $wagon->type_id);
     }
     /**@test */
     public function testWagonCanBeDeleted()
