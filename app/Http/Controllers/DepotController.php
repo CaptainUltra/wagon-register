@@ -14,7 +14,7 @@ class DepotController extends Controller
      */
     public function index()
     {
-        //
+        return Depot::all();
     }
 
     /**
@@ -46,7 +46,7 @@ class DepotController extends Controller
      */
     public function show(Depot $depot)
     {
-        //
+        return $depot;
     }
 
     /**

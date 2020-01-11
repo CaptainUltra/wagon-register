@@ -23,4 +23,3 @@ Route::resource('wagons', 'WagonController');
 Route::resource('interiortypes', 'InteriorTypeController');
 Route::resource('wagontypes', 'WagonTypeController');
 Route::resource('revisorypoints', 'RevisoryPointController');
-Route::resource('depots', 'DepotController');
