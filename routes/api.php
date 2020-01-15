@@ -15,4 +15,5 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('depots', 'DepotController');
+    Route::apiResource('revisorypoints', 'RevisoryPointController');
 });

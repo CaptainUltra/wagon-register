@@ -2,60 +2,82 @@
 
 namespace Tests\Feature;
 
-use App\RevisoryPoint;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Tests\TestCase;
+use App\RevisoryPoint;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RevisoryPointTest extends TestCase
 {
     use RefreshDatabase;
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = factory(User::class)->create();
+    }
+
+    /**@test */
+    public function testUnAuthRedirectToLogin()
+    {
+        $response = $this->post('api/revisorypoints', array_merge($this->data(), ['api_token' => '']));
+
+        $response->assertRedirect('/login');
+        $this->assertCount(0, RevisoryPoint::all());
+    }
     /**@test */
     public function testRevisoryPointCanBeCreated()
     {
         $this->withoutExceptionHandling();
 
-        $response = $this->post('/revisorypoints', [
-            'name' => 'Sofia',
-            'abbreviation' => 'Nd'
-        ]);
+        $response = $this->post('api/revisorypoints', $this->data());
 
         $response->assertOk();
         $this->assertCount(1, RevisoryPoint::all());
     }
     /**@test */
-    public function testNameIsRequired()
+    public function testRequiredFields()
     {
-        $response = $this->post('/revisorypoints', [
-            'name' => '',
-            'abbreviation' => 'Nd'
-        ]);
-        $response->assertSessionHasErrors('name');
+        collect(['name', 'abbreviation'])
+            ->each(function ($field) {
+                $response = $this->post('api/revisorypoints', array_merge($this->data(), [$field => '']));
+                $response->assertSessionHasErrors($field);
+            });
     }
     /**@test */
-    public function testAbbreviationIsRequired()
+    public function testRevisoryPointCanBeRetrieved()
     {
-        $response = $this->post('/revisorypoints', [
-            'name' => 'Sofia',
-            'abbreviation' => ''
+        $revisoryPoint = factory(RevisoryPoint::class)->create();
+
+        $response = $this->get('api/revisorypoints/' . $revisoryPoint->id . '?api_token=' . $this->user->api_token);
+        $response->assertJson([
+            'name' => $revisoryPoint->name,
+            'abbreviation' => $revisoryPoint->abbreviation
         ]);
-        $response->assertSessionHasErrors('abbreviation');
     }
+    /**@test */
+    public function testRevisoryPointsCanBeRetrieved()
+    {
+        $revisoryPoint = factory(RevisoryPoint::class)->create();
+        $revisoryPoint2 = factory(RevisoryPoint::class)->create();
+
+        $response = $this->get('api/revisorypoints'.'?api_token=' . $this->user->api_token);
+        $response->assertJsonCount(2);
+    }
+
     /**@test */
     public function testRevisoryPointCanBeUpdated()
     {
         $this->withoutExceptionHandling();
 
-        $this->post('/revisorypoints', [
-            'name' => 'Sofia',
-            'abbreviation' => 'Nd'
-        ]);
-        $revisoryPoint = RevisoryPoint::first();
+        $revisoryPoint = factory(RevisoryPoint::class)->create();
 
-        $this->patch('/revisorypoints/'. $revisoryPoint->id, [
+        $this->patch('api/revisorypoints/' . $revisoryPoint->id, array_merge($this->data(), [
             'name' => 'Septemvri',
             'abbreviation' => 'Kwg'
-        ]);
+        ]));
         $revisoryPoint = RevisoryPoint::first();
 
         $this->assertEquals('Septemvri', $revisoryPoint->name);
@@ -66,16 +88,20 @@ class RevisoryPointTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->post('/revisorypoints', [
-            'name' => 'Sofia',
-            'abbreviation' => 'Nd'
-        ]);
-        $revisoryPoint = RevisoryPoint::first();
-        
+        $revisoryPoint = factory(RevisoryPoint::class)->create();
+
         $this->assertCount(1, RevisoryPoint::all());
 
-        $this->delete('/revisorypoints/'. $revisoryPoint->id);
+        $this->delete('api/revisorypoints/' . $revisoryPoint->id, ['api_token' => $this->user->api_token]);
 
         $this->assertCount(0, RevisoryPoint::all());
+    }
+    private function data()
+    {
+        return [
+            'name' => 'Sofia',
+            'abbreviation' => 'Nd',
+            'api_token' => $this->user->api_token
+        ];
     }
 }

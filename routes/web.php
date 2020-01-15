@@ -22,4 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('wagons', 'WagonController');
 Route::resource('interiortypes', 'InteriorTypeController');
 Route::resource('wagontypes', 'WagonTypeController');
-Route::resource('revisorypoints', 'RevisoryPointController');
+

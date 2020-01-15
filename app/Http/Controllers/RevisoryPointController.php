@@ -14,7 +14,7 @@ class RevisoryPointController extends Controller
      */
     public function index()
     {
-        //
+        return RevisoryPoint::all();
     }
 
     /**
@@ -46,7 +46,7 @@ class RevisoryPointController extends Controller
      */
     public function show(RevisoryPoint $revisorypoint)
     {
-        //
+        return $revisorypoint;
     }
 
     /**
