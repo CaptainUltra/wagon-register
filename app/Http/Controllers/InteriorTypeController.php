@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\InteriorType;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\Int_;
 
 class InteriorTypeController extends Controller
 {
@@ -14,7 +15,7 @@ class InteriorTypeController extends Controller
      */
     public function index()
     {
-        //
+        return InteriorType::all();
     }
 
     /**
@@ -46,7 +47,7 @@ class InteriorTypeController extends Controller
      */
     public function show(InteriorType $interiortype)
     {
-        //
+        return $interiortype;
     }
 
     /**
