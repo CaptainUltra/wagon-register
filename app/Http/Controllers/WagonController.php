@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Wagon;
+use App\Http\Resources\Wagon as WagonResource;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WagonController extends Controller
 {
@@ -14,17 +16,7 @@ class WagonController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return WagonResource::collection(Wagon::all());
     }
 
     /**
@@ -35,7 +27,11 @@ class WagonController extends Controller
      */
     public function store(Request $request)
     {
-        Wagon::create($this->validateRequest());
+        $wagon = Wagon::create($this->validateRequest());
+        
+        return (new WagonResource($wagon))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +42,7 @@ class WagonController extends Controller
      */
     public function show(Wagon $wagon)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Wagon  $wagon
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Wagon $wagon)
-    {
-        //
+        return new WagonResource($wagon);
     }
 
     /**
@@ -70,6 +55,10 @@ class WagonController extends Controller
     public function update(Request $request, Wagon $wagon)
     {
         $wagon->update($this->validateRequest());
+
+        return (new WagonResource($wagon))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -81,17 +70,23 @@ class WagonController extends Controller
     public function destroy(Wagon $wagon)
     {
         $wagon->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
+    /**
+     * Validate data from request.
+     * 
+     * @return mixed
+     */
     private function validateRequest()
     {
         return request()->validate([
             'number' => 'required|unique:wagons',
-            'type_id' => '',
-            'letter_index'=> '',
-            'v_max'=> 'int',
-            'seats'=> 'int',
-            'depot_id' => 'int',
-            'revision_point_id' => 'int',
+            'letter_index'=> 'string',
+            'v_max'=> 'integer',
+            'seats'=> 'integer',
+            'depot_id' => 'integer|exists:depots,id',
+            'revisory_point_id' => 'integer|exists:revisory_points,id',
             'revision_date' => 'date',
             //'index_image_id'=> ''
         ]);

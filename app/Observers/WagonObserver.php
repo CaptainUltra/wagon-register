@@ -22,6 +22,7 @@ class WagonObserver
 
     /**
      * Handle the wagon "updating" event.
+     *  Assign the propper wagon type id to the wagon that is being update.
      *
      * @param  \App\Wagon  $wagon
      * @return void

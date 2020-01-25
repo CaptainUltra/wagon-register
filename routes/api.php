@@ -18,4 +18,5 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('revisorypoints', 'RevisoryPointController');
     Route::apiResource('interiortypes', 'InteriorTypeController');
     Route::apiResource('wagontypes', 'WagonTypeController');
+    Route::apiResource('wagons', 'WagonController');
 });
