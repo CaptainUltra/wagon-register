@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class WagonType extends Model
 {
     protected $fillable = ['name', 'conditioned', 'interior_type_id'];
-    public function setInteriorTypeIdAttribute(string $interiorTypeName)
+    /**
+     * Return url to self
+     * 
+     * @return string
+     */
+    public function path()
     {
-        $this->attributes['interior_type_id'] = InteriorType::where('name', $interiorTypeName)->firstOrFail()->id;
+        return url('/api/wagontypes/' . $this->id);
     }
     /**
      * Get the image that the wagon type has

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\WagonType;
+use App\Http\Resources\WagonType as WagonTypeResource;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WagonTypeController extends Controller
 {
@@ -14,17 +16,7 @@ class WagonTypeController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return WagonTypeResource::collection(WagonType::all());
     }
 
     /**
@@ -35,7 +27,11 @@ class WagonTypeController extends Controller
      */
     public function store(Request $request)
     {
-        WagonType::create($this->validateRequest());
+        $wagonType = WagonType::create($this->validateRequest());
+
+        return (new WagonTypeResource($wagonType))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +42,7 @@ class WagonTypeController extends Controller
      */
     public function show(WagonType $wagontype)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\WagonType  $wagontype
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(WagonType $wagontype)
-    {
-        //
+        return new WagonTypeResource($wagontype);
     }
 
     /**
@@ -70,6 +55,10 @@ class WagonTypeController extends Controller
     public function update(Request $request, WagonType $wagontype)
     {
         $wagontype->update($this->validateRequest());
+
+        return (new WagonTypeResource($wagontype))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -81,6 +70,8 @@ class WagonTypeController extends Controller
     public function destroy(WagonType $wagontype)
     {
         $wagontype->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
     /**
      * Validate data from request.
@@ -92,7 +83,7 @@ class WagonTypeController extends Controller
         return request()->validate([
             'name' => 'required',
             'conditioned' => 'required|bool',
-            'interior_type_id' => 'required',
+            'interior_type_id' => 'required|exists:interior_types,id',
             'index_image_id' =>'int'
         ]);
     }

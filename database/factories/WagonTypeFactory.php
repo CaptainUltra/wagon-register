@@ -8,8 +8,8 @@ use Faker\Generator as Faker;
 
 $factory->define(WagonType::class, function (Faker $faker) {
     return [
-        'name' => '85-97',
+        'name' => $faker->name,
         'conditioned' => $faker->boolean,
-        'interior_type_id' => ''
+        'interior_type_id' => factory(InteriorType::class)
     ];
 });
