@@ -19,4 +19,9 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('interiortypes', 'InteriorTypeController');
     Route::apiResource('wagontypes', 'WagonTypeController');
     Route::apiResource('wagons', 'WagonController');
+    Route::apiResource('permissions', 'PermissionController')->only([
+        'index', 'show'
+    ]);
+    Route::apiResource('roles', 'RoleController');
+    Route::apiResource('users', 'UserController');
 });
