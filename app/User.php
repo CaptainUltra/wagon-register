@@ -57,10 +57,10 @@ class User extends Authenticatable
 
     public function hasPermission($permission)
     {
-        foreach ($this->roles() as $role) {
-            foreach($role->permissions() as $userPermisson)
+        foreach ($this->roles as $role) {
+            foreach($role->permissions as $userPermisson)
             {
-                if($userPermisson === $permission) return true;
+                if($userPermisson['slug'] === $permission) return true;
             }
         }
         return false;

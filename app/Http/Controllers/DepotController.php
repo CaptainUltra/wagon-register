@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Depot;
 use Illuminate\Http\Request;
+use App\Http\Resources\Depot as DepotResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class DepotController extends Controller
 {
@@ -14,17 +16,9 @@ class DepotController extends Controller
      */
     public function index()
     {
-        return Depot::all();
-    }
+        $this->authorize('viewAny', Depot::class);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return DepotResource::collection(Depot::all());
     }
 
     /**
@@ -35,7 +29,12 @@ class DepotController extends Controller
      */
     public function store(Request $request)
     {
-        Depot::create($this->validateRequest());
+        $this->authorize('create', Depot::class);
+
+        $depot = Depot::create($this->validateRequest());
+        return (new DepotResource($depot))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +45,9 @@ class DepotController extends Controller
      */
     public function show(Depot $depot)
     {
-        return $depot;
-    }
+        $this->authorize('view', $depot);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Depot  $depot
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Depot $depot)
-    {
-        //
+        return new DepotResource($depot);
     }
 
     /**
@@ -69,7 +59,13 @@ class DepotController extends Controller
      */
     public function update(Request $request, Depot $depot)
     {
+        $this->authorize('update', $depot);
+
         $depot->update($this->validateRequest());
+
+        return (new DepotResource($depot))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -80,7 +76,11 @@ class DepotController extends Controller
      */
     public function destroy(Depot $depot)
     {
+        $this->authorize('delete', $depot);
+        
         $depot->delete();
+        
+        return response([], Response::HTTP_NO_CONTENT);
     }
     /**
      * Validate data from request.

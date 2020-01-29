@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use App\Depot;
+use App\Permission;
+use App\Role;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class DepotTest extends TestCase
@@ -18,6 +21,17 @@ class DepotTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
+
+        //Set up role and permissions for the user
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'depot-viewAny']);
+        factory(Permission::class)->create(['slug' => 'depot-view']);
+        factory(Permission::class)->create(['slug' => 'depot-create']);
+        factory(Permission::class)->create(['slug' => 'depot-update']);
+        factory(Permission::class)->create(['slug' => 'depot-delete']);
+
+        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5]);
     }
 
     /**@test */
@@ -32,11 +46,27 @@ class DepotTest extends TestCase
     public function testDepotCanBeCreated()
     {
         $this->withoutExceptionHandling();
-
         $response = $this->post('api/depots', $this->data());
+        $depot = Depot::first();
 
-        $response->assertOk();
         $this->assertCount(1, Depot::all());
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJson([
+            'data' => [
+                'id' => $depot->id,
+                'name' => $depot->name
+            ],
+            'links' => [
+                'self' => $depot->path()
+            ]
+        ]);
+    }
+    /**@test */
+    public function testForbiddenDepotCreate()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->post('api/depots', $this->data());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testNameIsRequired()
@@ -48,11 +78,20 @@ class DepotTest extends TestCase
     public function testDepotCanBeRetrieved()
     {
         $depot = factory(Depot::class)->create();
-
         $response = $this->get('api/depots/' . $depot->id . '?api_token=' . $this->user->api_token);
         $response->assertJson([
-            'name' => $depot->name
+            'data' => [
+                'name' => $depot->name
+            ]
         ]);
+    }
+    /**@test */
+    public function testForbiddenDepotRetrieve()
+    {
+        $depot = factory(Depot::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/depots/' . $depot->id . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testDepotsCanBeRetrieved()
@@ -60,8 +99,14 @@ class DepotTest extends TestCase
         $depot = factory(Depot::class)->create();
         $depot2 = factory(Depot::class)->create();
         $response = $this->get('api/depots' . '?api_token=' . $this->user->api_token);
-        $response->assertJsonCount(2);
-        
+        $response->assertJsonCount(2, 'data');
+    }
+    /**@test */
+    public function testForbiddenDepotsRetrieve()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/depots' . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testDepotCanBeUpdated()
@@ -69,10 +114,28 @@ class DepotTest extends TestCase
         $this->withoutExceptionHandling();
 
         $depot = factory(Depot::class)->create();
-        $this->patch('api/depots/' . $depot->id, array_merge($this->data(), ['name' => 'Septemvri']));
+        $response =$this->patch('api/depots/' . $depot->id, array_merge($this->data(), ['name' => 'Septemvri']));
         $depot = Depot::first();
 
         $this->assertEquals('Septemvri', $depot->name);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                'id' => $depot->id,
+                'name' => $depot->name
+            ],
+            'links' => [
+                'self' => $depot->path()
+            ]
+        ]);
+    }
+    /**@test */
+    public function testForbiddenDepotUpdate()
+    {
+        $depot = factory(Depot::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->patch('api/depots/' . $depot->id, array_merge($this->data(), ['name' => 'Septemvri']));
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testDepotCanBeDeleted()
@@ -83,9 +146,18 @@ class DepotTest extends TestCase
 
         $this->assertCount(1, Depot::all());
 
-        $this->delete('api/depots/' . $depot->id, ['api_token' => $this->user->api_token]);
+        $response = $this->delete('api/depots/' . $depot->id, ['api_token' => $this->user->api_token]);
 
         $this->assertCount(0, Depot::all());
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+    /**@test */
+    public function testForbiddenDepotDelete()
+    {
+        $depot = factory(Depot::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->delete('api/depots/' . $depot->id, ['api_token' => $this->user->api_token]);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     private function data()
