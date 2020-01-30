@@ -23,8 +23,16 @@ class PermissionSeeder extends Seeder
     private function data()
     {
         return [
-            ['name' => 'Test1', 'slug' => 'test-1'],
-            ['name' => 'Test1', 'slug' => 'test-1']
+            ['name' => 'Depot viewAny', 'slug' => 'depot-viewAny'],
+            ['name' => 'Depot view', 'slug' => 'depot-view'],
+            ['name' => 'Depot create', 'slug' => 'depot-create'],
+            ['name' => 'Depot update', 'slug' => 'depot-update'],
+            ['name' => 'Deppt delete', 'slug' => 'depot-delete'],
+            ['name' => 'Revisory point viewAny', 'slug' => 'revisorypoint-viewAny'],
+            ['name' => 'Revisory point view', 'slug' => 'revisorypoint-view'],
+            ['name' => 'Revisory point create', 'slug' => 'revisorypoint-create'],
+            ['name' => 'Revisory point update', 'slug' => 'revisorypoint-update'],
+            ['name' => 'Revisory point delete', 'slug' => 'revisorypoint-delete'],
         ];
     }
 }
