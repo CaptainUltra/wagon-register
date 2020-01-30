@@ -8,6 +8,15 @@ class RevisoryPoint extends Model
 {
     protected $fillable = ['name', 'abbreviation'];
     /**
+     * Return url to self
+     * 
+     * @return string
+     */
+    public function path()
+    {
+        return url('/api/revisorypoints/' . $this->id);
+    }
+    /**
      * Get the wagons that the revisory point has
      */
     public function wagons()

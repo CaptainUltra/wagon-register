@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\RevisoryPoint;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\RevisoryPoint as RevisoryPointResource;
 
 class RevisoryPointController extends Controller
 {
@@ -14,17 +16,9 @@ class RevisoryPointController extends Controller
      */
     public function index()
     {
-        return RevisoryPoint::all();
-    }
+        $this->authorize('viewAny', RevisoryPoint::class);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return RevisoryPointResource::collection(RevisoryPoint::all());
     }
 
     /**
@@ -35,7 +29,13 @@ class RevisoryPointController extends Controller
      */
     public function store(Request $request)
     {
-        RevisoryPoint::create($this->validateRequest());
+        $this->authorize('create', RevisoryPoint::class);
+
+        $revisoryPoint = RevisoryPoint::create($this->validateRequest());
+
+        return (new RevisoryPointResource($revisoryPoint))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -46,18 +46,9 @@ class RevisoryPointController extends Controller
      */
     public function show(RevisoryPoint $revisorypoint)
     {
-        return $revisorypoint;
-    }
+        $this->authorize('view', $revisorypoint);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\RevisoryPoint  $revisorypoint
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RevisoryPoint $revisorypoint)
-    {
-        //
+        return new RevisoryPointResource($revisorypoint);
     }
 
     /**
@@ -69,7 +60,13 @@ class RevisoryPointController extends Controller
      */
     public function update(Request $request, RevisoryPoint $revisorypoint)
     {
+        $this->authorize('update', $revisorypoint);
+
         $revisorypoint->update($this->validateRequest());
+
+        return (new RevisoryPointResource($revisorypoint))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -80,7 +77,11 @@ class RevisoryPointController extends Controller
      */
     public function destroy(RevisoryPoint $revisorypoint)
     {
+        $this->authorize('delete', $revisorypoint);
+
         $revisorypoint->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
     /**
      * Validate data from request.
