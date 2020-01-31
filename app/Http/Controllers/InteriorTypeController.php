@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\InteriorType;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Int_;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\InteriorType as InteriorTypeResource;
 
 class InteriorTypeController extends Controller
 {
@@ -15,17 +17,9 @@ class InteriorTypeController extends Controller
      */
     public function index()
     {
-        return InteriorType::all();
-    }
+        $this->authorize('viewAny', InteriorType::class);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return InteriorTypeResource::collection(InteriorType::all());
     }
 
     /**
@@ -36,7 +30,13 @@ class InteriorTypeController extends Controller
      */
     public function store(Request $request)
     {
-        InteriorType::create($this->validateRequest());
+        $this->authorize('create', InteriorType::class);
+
+        $interiorType  = InteriorType::create($this->validateRequest());
+
+        return (new InteriorTypeResource($interiorType))
+        ->response()
+        ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -47,18 +47,9 @@ class InteriorTypeController extends Controller
      */
     public function show(InteriorType $interiortype)
     {
-        return $interiortype;
-    }
+        $this->authorize('view', $interiortype);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\InteriorType  $interiortype
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(InteriorType $interiortype)
-    {
-        //
+        return new InteriorTypeResource($interiortype);
     }
 
     /**
@@ -70,7 +61,13 @@ class InteriorTypeController extends Controller
      */
     public function update(Request $request, InteriorType $interiortype)
     {
+        $this->authorize('update', $interiortype);
+
         $interiortype->update($this->validateRequest());
+
+        return (new InteriorTypeResource($interiortype))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -81,7 +78,11 @@ class InteriorTypeController extends Controller
      */
     public function destroy(InteriorType $interiortype)
     {
+        $this->authorize('delete', $interiortype);
+        
         $interiortype->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
     /**
      * Validate data from request.

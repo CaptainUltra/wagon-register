@@ -33,6 +33,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'Revisory point create', 'slug' => 'revisorypoint-create'],
             ['name' => 'Revisory point update', 'slug' => 'revisorypoint-update'],
             ['name' => 'Revisory point delete', 'slug' => 'revisorypoint-delete'],
+            ['name' => 'Interior type viewAny', 'slug' => 'interiortype-viewAny'],
+            ['name' => 'Interior type view', 'slug' => 'interiortype-view'],
+            ['name' => 'Interior type create', 'slug' => 'interiortype-create'],
+            ['name' => 'Interior type update', 'slug' => 'interiortype-update'],
+            ['name' => 'Interior type delete', 'slug' => 'interiortype-delete'],
         ];
     }
 }
