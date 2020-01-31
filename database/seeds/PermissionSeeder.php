@@ -38,6 +38,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'Interior type create', 'slug' => 'interiortype-create'],
             ['name' => 'Interior type update', 'slug' => 'interiortype-update'],
             ['name' => 'Interior type delete', 'slug' => 'interiortype-delete'],
+            ['name' => 'Wagon type viewAny', 'slug' => 'wagontype-viewAny'],
+            ['name' => 'Wagon type view', 'slug' => 'wagontype-view'],
+            ['name' => 'Wagon type create', 'slug' => 'wagontype-create'],
+            ['name' => 'Wagon type update', 'slug' => 'wagontype-update'],
+            ['name' => 'Wagon type delete', 'slug' => 'wagontype-delete'],
         ];
     }
 }

@@ -16,6 +16,8 @@ class WagonTypeController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', WagonType::class);
+
         return WagonTypeResource::collection(WagonType::all());
     }
 
@@ -27,6 +29,8 @@ class WagonTypeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', WagonType::class);
+
         $wagonType = WagonType::create($this->validateRequest());
 
         return (new WagonTypeResource($wagonType))
@@ -42,6 +46,8 @@ class WagonTypeController extends Controller
      */
     public function show(WagonType $wagontype)
     {
+        $this->authorize('view', $wagontype);
+
         return new WagonTypeResource($wagontype);
     }
 
@@ -54,6 +60,8 @@ class WagonTypeController extends Controller
      */
     public function update(Request $request, WagonType $wagontype)
     {
+        $this->authorize('update', $wagontype);
+
         $wagontype->update($this->validateRequest());
 
         return (new WagonTypeResource($wagontype))
@@ -69,6 +77,8 @@ class WagonTypeController extends Controller
      */
     public function destroy(WagonType $wagontype)
     {
+        $this->authorize('delete', $wagontype);
+        
         $wagontype->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
