@@ -34,7 +34,7 @@
               <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                    <a class="nav-link active" href="/">Начало</a>
+                    <a class="nav-link active" href="{{route('homepage')}}">Начало</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/search">Тъсене</a>

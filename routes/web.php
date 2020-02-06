@@ -11,11 +11,18 @@
 |
 */
 
-
 Auth::routes();
 
-Route::get('/', 'PageController@homepage')->name('homepage');
-Route::get('/dashboard/{any?}', 'PageController@dashboard')->where('any', '.*')->middleware('auth');
+$domain = substr(env('APP_URL', 'localhost'), 7);
+Route::domain($domain)->group(function () {
+    Route::get('/', 'PageController@homepage')->name('homepage');
+    Route::get('dashboard', function () {
+        return redirect()->route('dashboard');
+    });
+});
 
+Route::domain('app.' . $domain)->group(function () {
+    Route::get('{any?}', 'PageController@dashboard')->where('any', '.*')->middleware('auth')->name('dashboard');
+});
 
 
