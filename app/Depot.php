@@ -14,7 +14,7 @@ class Depot extends Model
      */
     public function path()
     {
-        return url('/api/depots/' . $this->id);
+        return '/depots/' . $this->id;
     }
     /**
      * Get the wagon that the depot has

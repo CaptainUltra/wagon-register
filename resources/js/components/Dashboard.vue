@@ -1,37 +1,26 @@
 <template>
-  <div class="row bg-white">
-    <!--<div class="col-md-2 col-sm-6 col-xs-6 h-100 bg-light border-right border-dark">
-             <nav class="pl-4 pt-4">
-              <h3>Табло за управление</h3>
-                <div class="shadow-sm mb-5 mt-3 bg-white rounded align-content-center">
-                <p class="text-center mb-0 pt-1 pl-1 font-weight-bold">Вагони</p>
-                <router-link to="dashboard/seen" class="d-block p-1">Маркирай видян</router-link>
-                <router-link to="dashboard/my-seen" class="d-block p-1">Моите видени</router-link>
-                <router-link to="dashboard/wagons" class="d-block p-1">Всички вагони</router-link>
-                </div>
-          </nav> 
-    </div>-->
+  <div class="row bg-white mr-0">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
       <div class="sidebar-sticky">
         <h3 class="p-4 pb-0">Табло за управление</h3>
         <ul class="nav flex-column pl-3">
           <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link active">Табло за управление</router-link>
+            <router-link to="/" class="nav-link active">Табло за управление</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>
+            <router-link to="/home" class="nav-link">Табло за управление</router-link>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#collapseExample">Dropdown</a>
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#collapseExample">Депа</a>
             <div class="collapse" id="collapseExample">
-               <div class="card card-body mr-3">
+              <div class="card card-body mr-3">
                 <li class="nav-item">
-                  <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>
+                  <router-link to="/depots/create" class="nav-link">Създаване на депо</router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>
+                  <router-link to="/depots" class="nav-link">Всички депа</router-link>
                 </li>
-               </div>
+              </div>
             </div>
           </li>
           <li class="nav-item">
@@ -69,7 +58,10 @@
         </ul>
       </div>
     </nav>
-    <main class="col-md-9 d-none d-md-block ml-sm-auto col-lg-10 px-4">
+    <main
+      class="col-md-9 d-none d-md-block ml-sm-auto col-lg-10 px-4 overflow-hidden"
+      style="height: 94.6vh;"
+    >
       <div class="pt-3 pb-2 mb-3">
         <router-view></router-view>
       </div>
@@ -79,8 +71,24 @@
 
 <script>
 export default {
-  mounted() {
-    console.log("Component mounted.");
+  name: "Dashboard",
+  props: ["user"],
+  created() {
+    window.axios.interceptors.request.use(config => {
+      if (config.method === "get") {
+        if (config.url.includes("?")) {
+          config.url = config.url + "&api_token=" + this.user.api_token;
+        } else {
+          config.url = config.url + "?api_token=" + this.user.api_token;
+        }
+      } else {
+        config.data = {
+          ...config.data,
+          api_token: this.user.api_token
+        };
+      }
+      return config;
+    });
   }
 };
 </script>

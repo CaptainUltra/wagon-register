@@ -18,7 +18,7 @@ class DepotController extends Controller
     {
         $this->authorize('viewAny', Depot::class);
 
-        return DepotResource::collection(Depot::all());
+        return DepotResource::collection(Depot::paginate(15));
     }
 
     /**
