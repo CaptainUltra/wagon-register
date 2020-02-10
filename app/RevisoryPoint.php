@@ -14,7 +14,7 @@ class RevisoryPoint extends Model
      */
     public function path()
     {
-        return url('/api/revisorypoints/' . $this->id);
+        return '/revisorypoints/' . $this->id;
     }
     /**
      * Get the wagons that the revisory point has

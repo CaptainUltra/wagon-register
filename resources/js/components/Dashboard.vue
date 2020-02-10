@@ -11,8 +11,8 @@
             <router-link to="/home" class="nav-link">Табло за управление</router-link>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#collapseExample">Депа</a>
-            <div class="collapse" id="collapseExample">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#depotCollapse">Депа</a>
+            <div class="collapse" id="depotCollapse">
               <div class="card card-body mr-3">
                 <li class="nav-item">
                   <router-link to="/depots/create" class="nav-link">Създаване на депо</router-link>
@@ -23,8 +23,18 @@
               </div>
             </div>
           </li>
-          <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#revPointCollapse">Пунктове за ревизия</a>
+            <div class="collapse" id="revPointCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/revisorypoints/create" class="nav-link">Създаване на пункт</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/revisorypoints" class="nav-link">Всички пунктове</router-link>
+                </li>
+              </div>
+            </div>
           </li>
           <li class="nav-item">
             <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>

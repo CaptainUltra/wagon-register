@@ -18,7 +18,7 @@ class RevisoryPointController extends Controller
     {
         $this->authorize('viewAny', RevisoryPoint::class);
 
-        return RevisoryPointResource::collection(RevisoryPoint::all());
+        return RevisoryPointResource::collection(RevisoryPoint::paginate(15));
     }
 
     /**
