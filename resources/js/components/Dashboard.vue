@@ -7,9 +7,6 @@
           <li class="nav-item">
             <router-link to="/" class="nav-link active">Табло за управление</router-link>
           </li>
-          <li class="nav-item">
-            <router-link to="/home" class="nav-link">Табло за управление</router-link>
-          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#depotCollapse">Депа</a>
             <div class="collapse" id="depotCollapse">
@@ -32,6 +29,19 @@
                 </li>
                 <li class="nav-item">
                   <router-link to="/revisorypoints" class="nav-link">Всички пунктове</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#interiorTypeCollapse">Типове интериори</a>
+            <div class="collapse" id="interiorTypeCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/interiortypes/create" class="nav-link">Създаване на тип</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/interiortypes" class="nav-link">Всички типове</router-link>
                 </li>
               </div>
             </div>

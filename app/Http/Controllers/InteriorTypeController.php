@@ -19,7 +19,7 @@ class InteriorTypeController extends Controller
     {
         $this->authorize('viewAny', InteriorType::class);
 
-        return InteriorTypeResource::collection(InteriorType::all());
+        return InteriorTypeResource::collection(InteriorType::paginate(15));
     }
 
     /**

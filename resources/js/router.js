@@ -9,6 +9,10 @@ import RevisoryPointCreate from "./views/RevisoryPointCreate.vue";
 import RevisoryPointShow from "./views/RevisoryPointShow.vue";
 import RevisoryPointIndex from "./views/RevisoryPointIndex.vue";
 import RevisoryPointEdit from "./views/RevisoryPointEdit.vue";
+import InteriorTypeCreate from "./views/InteriorTypeCreate.vue";
+import InteriorTypeShow from "./views/InteriorTypeShow.vue";
+import InteriorTypeIndex from "./views/InteriorTypeIndex.vue";
+import InteriorTypeEdit from "./views/InteriorTypeEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +28,10 @@ export default new VueRouter({
         {path: '/revisorypoints', component: RevisoryPointIndex},
         {path: '/revisorypoints/:id', component: RevisoryPointShow},
         {path: '/revisorypoints/:id/edit', component: RevisoryPointEdit},
+        {path: '/interiortypes/create', component: InteriorTypeCreate},
+        {path: '/interiortypes', component: InteriorTypeIndex},
+        {path: '/interiortypes/:id', component: InteriorTypeShow},
+        {path: '/interiortypes/:id/edit', component: InteriorTypeEdit},
       ],
       mode: 'history'
 })

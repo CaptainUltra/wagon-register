@@ -14,7 +14,7 @@ class InteriorType extends Model
      */
     public function path()
     {
-        return url('/api/interiortypes/' . $this->id);
+        return '/interiortypes/' . $this->id;
     }
     /**
      * Get wagon types that have this interior type
