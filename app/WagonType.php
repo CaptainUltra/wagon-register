@@ -14,7 +14,7 @@ class WagonType extends Model
      */
     public function path()
     {
-        return url('/api/wagontypes/' . $this->id);
+        return '/wagontypes/' . $this->id;
     }
     /**
      * Get the image that the wagon type has

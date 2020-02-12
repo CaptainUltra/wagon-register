@@ -18,7 +18,7 @@ class WagonType extends JsonResource
             'data' => [
                 'id' => $this->id,
                 'name' => $this->name,
-                'conditioned' => $this->conditioned, //? 'true' : 'false',
+                'conditioned' => $this->conditioned,
                 'interior_type' => new InteriorType($this->interiorType),
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],

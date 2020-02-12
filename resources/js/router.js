@@ -13,6 +13,10 @@ import InteriorTypeCreate from "./views/InteriorTypeCreate.vue";
 import InteriorTypeShow from "./views/InteriorTypeShow.vue";
 import InteriorTypeIndex from "./views/InteriorTypeIndex.vue";
 import InteriorTypeEdit from "./views/InteriorTypeEdit.vue";
+import WagonTypeCreate from "./views/WagonTypeCreate.vue";
+import WagonTypeShow from "./views/WagonTypeShow.vue";
+import WagonTypeIndex from "./views/WagonTypeIndex.vue";
+import WagonTypeEdit from "./views/WagonTypeEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -32,6 +36,10 @@ export default new VueRouter({
         {path: '/interiortypes', component: InteriorTypeIndex},
         {path: '/interiortypes/:id', component: InteriorTypeShow},
         {path: '/interiortypes/:id/edit', component: InteriorTypeEdit},
+        {path: '/wagontypes/create', component: WagonTypeCreate},
+        {path: '/wagontypes', component: WagonTypeIndex},
+        {path: '/wagontypes/:id', component: WagonTypeShow},
+        {path: '/wagontypes/:id/edit', component: WagonTypeEdit},
       ],
       mode: 'history'
 })
