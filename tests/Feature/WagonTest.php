@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Wagon;
 
+use App\Role;
 use App\User;
 use App\Depot;
 use App\Wagon;
 use App\WagonType;
 use Carbon\Carbon;
+use App\Permission;
 use Tests\TestCase;
 use App\InteriorType;
 use App\RevisoryPoint;
@@ -26,6 +28,15 @@ class WagonTest extends TestCase
         factory(WagonType::class)->create(['name' => '85-97']);
         factory(Depot::class)->create();
         factory(RevisoryPoint::class)->create();
+
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'wagon-viewAny']);
+        factory(Permission::class)->create(['slug' => 'wagon-view']);
+        factory(Permission::class)->create(['slug' => 'wagon-create']);
+        factory(Permission::class)->create(['slug' => 'wagon-update']);
+        factory(Permission::class)->create(['slug' => 'wagon-delete']);
+        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5]);
     }
     /**@test */
     public function testUnAuthRedirectToLogin()
@@ -39,10 +50,10 @@ class WagonTest extends TestCase
     public function testWagonCanBeCreated()
     {
         $this->withoutExceptionHandling();
-        
+
         $response = $this->post('api/wagons', $this->data());
         $wagon = Wagon::first();
-        
+
         $this->assertCount(1, Wagon::all());
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson([
@@ -54,7 +65,13 @@ class WagonTest extends TestCase
             ]
         ]);
     }
-
+    /**@test */
+    public function testForbiddenWagonCreate()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->post('api/wagons', $this->data());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
     /**@test */
     public function testWagonNumberIsRequired()
     {
@@ -108,6 +125,14 @@ class WagonTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenWagonRetrieve()
+    {
+        $wagon= factory(Wagon::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/wagons/' . $wagon->id . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testWagonsCanBeRetrieved()
     {
         factory(Wagon::class)->create();
@@ -115,6 +140,13 @@ class WagonTest extends TestCase
 
         $response = $this->get('api/wagons' . '?api_token=' . $this->user->api_token);
         $response->assertJsonCount(2, 'data');
+    }
+    /**@test */
+    public function testForbiddenWagonsRetrieve()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/wagons' . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testWagonCanBeUpdated()
@@ -139,6 +171,14 @@ class WagonTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenWagonTypeUpdate()
+    {
+        $wagon = factory(Wagon::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->patch('api/wagons/' . $wagon->id, array_merge($this->data(), ['number' => '615222970029']));
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testWagonCanBeDeleted()
     {
 
@@ -149,6 +189,14 @@ class WagonTest extends TestCase
         $response = $this->delete('api/wagons/' . $wagon->id, ['api_token' => $this->user->api_token]);
         $this->assertCount(0, Wagon::all());
         $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+    /**@test */
+    public function testForbiddenWagonDelete()
+    {
+        $wagon = factory(Wagon::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->delete('api/wagons/' . $wagon->id, ['api_token' => $this->user->api_token]);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     private function data()
     {
