@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Observers\WagonObserver;
 use App\Wagon;
+use App\Observers\WagonObserver;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
         Wagon::observe(WagonObserver::class);
     }
 }
