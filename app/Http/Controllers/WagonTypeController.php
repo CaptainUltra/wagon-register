@@ -93,6 +93,7 @@ class WagonTypeController extends Controller
         return request()->validate([
             'name' => 'required',
             'conditioned' => 'required|bool',
+            'revision_valid_for' => 'required|int',
             'interior_type_id' => 'required|exists:interior_types,id',
             'index_image_id' =>'int'
         ]);

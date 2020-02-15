@@ -10,6 +10,7 @@ $factory->define(WagonType::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'conditioned' => $faker->boolean,
+        'revision_valid_for' => $faker->randomDigitNotNull,
         'interior_type_id' => factory(InteriorType::class)
     ];
 });

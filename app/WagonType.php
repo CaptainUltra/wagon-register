@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WagonType extends Model
 {
-    protected $fillable = ['name', 'conditioned', 'interior_type_id'];
+    protected $fillable = ['name', 'conditioned', 'interior_type_id', 'revision_valid_for'];
     /**
      * Return url to self
      * 
