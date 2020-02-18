@@ -59,8 +59,18 @@
               </div>
             </div>
           </li>
-          <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">Табло за управление</router-link>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#wagonCollapse">Вагони</a>
+            <div class="collapse" id="wagonCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/wagons/create" class="nav-link">Създаване на вагон</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/wagons" class="nav-link">Всички вагони</router-link>
+                </li>
+              </div>
+            </div>
           </li>
         </ul>
 

@@ -18,7 +18,7 @@ class WagonController extends Controller
     {
         $this->authorize('viewAny', Wagon::class);
 
-        return WagonResource::collection(Wagon::all());
+        return WagonResource::collection(Wagon::paginate(15));
     }
 
     /**
@@ -91,13 +91,13 @@ class WagonController extends Controller
     private function validateRequest()
     {
         return request()->validate([
-            'number' => 'required|unique:wagons',
-            'letter_index'=> 'string',
-            'v_max'=> 'integer',
-            'seats'=> 'integer',
-            'depot_id' => 'integer|exists:depots,id',
-            'revisory_point_id' => 'integer|exists:revisory_points,id',
-            'revision_date' => 'date',
+            'number' => 'required',
+            'letter_index'=> '',
+            'v_max'=> '',
+            'seats'=> '',
+            'depot_id' => '',
+            'revisory_point_id' => '',
+            'revision_date' => '',
             //'index_image_id'=> ''
         ]);
     }

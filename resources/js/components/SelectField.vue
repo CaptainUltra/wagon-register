@@ -34,7 +34,6 @@ export default {
         this.updateWhenLoaded();
       })
       .catch(error => {
-        alert("Грешка при взимането на информация");
       });
   },
   methods: {

@@ -79,24 +79,6 @@ class WagonTest extends TestCase
 
         $response->assertSessionHasErrors('number');
     }
-
-    /**@test */
-    public function testWagonNumberMustBeUnique()
-    {
-        $this->post('api/wagons', $this->data());
-        $response = $this->post('api/wagons', $this->data());
-
-        $response->assertSessionHasErrors('number');
-    }
-    /**@test */
-    public function testWagonForValidFields()
-    {
-        collect(['depot_id', 'revisory_point_id'])
-            ->each(function ($field) {
-                $response = $this->post('api/wagons', array_merge($this->data(), [$field => 2]));
-                $response->assertSessionHasErrors($field);
-            });
-    }
     /**@test */
     public function testRervisionDateIsStoredProperly()
     {

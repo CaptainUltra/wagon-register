@@ -12,10 +12,10 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roleUser = factory(App\Role::class)->create(['name' => 'User role', 'slug' => 'user-role']);
-        $roleUser->permissions()->sync([1, 2, 6, 7, 11, 12, 16, 17]);
+        $roleUser->permissions()->sync([1, 2, 6, 7, 11, 12, 16, 17, 21, 22]);
         $roleUser->save();
         $roleModerator = factory(App\Role::class)->create(['name' => 'Moderator role', 'slug' => 'moderator-role']);
-        $roleModerator->permissions()->sync([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+        $roleModerator->permissions()->sync([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]);
         $roleModerator->save();
     }
 }

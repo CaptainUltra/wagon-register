@@ -16,7 +16,22 @@ class Wagon extends Model
      */
     public function path()
     {
-        return url('/api/wagontypes/' . $this->id);
+        return '/wagons/' . $this->id;
+    }
+    /**
+     * Stylized number (with spaces and dashes)
+     */
+    public function getStylizedNumber()
+    {
+        $ab = substr($this->number, 0, 2);
+        $cd = substr($this->number, 2, 2);
+        $ef = substr($this->number, 4, 2);
+        $gh = substr($this->number, 6, 2);
+        $xyz = substr($this->number, 8, 3);
+        $k = substr($this->number, 11);
+        //AB CD EF-GH XYZ-K
+        $number = $ab . ' ' . $cd . ' ' . $ef . '-' . $gh . ' ' . $xyz . '-' . $k;
+        return $number;
     }
     /**
      * Set the wagon's date as an instance of carbon
@@ -64,5 +79,4 @@ class Wagon extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
-
 }

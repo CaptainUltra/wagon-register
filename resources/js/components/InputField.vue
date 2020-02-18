@@ -22,6 +22,12 @@ export default {
       value: ""
     };
   },
+  mounted(){
+    if(this.data !== null)
+    {
+      this.value = this.data;
+    }
+  },
   computed: {
     hasError: function ()
     {
