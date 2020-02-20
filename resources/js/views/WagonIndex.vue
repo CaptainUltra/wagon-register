@@ -1,5 +1,6 @@
 <template>
   <div class="py-4">
+    <Search></Search>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="wagons.length === 0">
@@ -35,11 +36,13 @@
 
 <script>
 import Pagination from "../components/Pagination";
+import Search from "../components/Search";
 
 export default {
   name: "WagonIndex",
   components: {
-    Pagination
+    Pagination,
+    Search
   },
   mounted() {
     axios

@@ -4,9 +4,12 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Wagon extends Model
 {
+    use Searchable;
+    
     protected $fillable = ['number', 'letter_index', 'v_max', 'seats', 'depot_id', 'revisory_point_id', 'revision_date'];
     protected $dates = ['revision_date'];
     /**
@@ -33,6 +36,14 @@ class Wagon extends Model
         $number = $ab . ' ' . $cd . ' ' . $ef . '-' . $gh . ' ' . $xyz . '-' . $k;
         return $number;
     }
+    public function getShortStylizedNumber()
+    {
+        $ef = substr($this->number, 4, 2);
+        $gh = substr($this->number, 6, 2);
+        $xyz = substr($this->number, 8, 3);
+        $number = $ef . '-' . $gh . ' ' . $xyz;
+        return $number;
+    }
     /**
      * Set the wagon's date as an instance of carbon
      *
@@ -42,6 +53,22 @@ class Wagon extends Model
     public function setRevisionDateAttribute($value)
     {
         $this->attributes['revision_date'] = Carbon::parse($value);
+    }
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = [
+            'id' => $this->id,
+            //'number' => $this->number
+            'short_number' => $this->getShortStylizedNumber()
+            //'stylized_number' => $this->getStylizedNumber()
+        ];
+
+        return $array;
     }
     /**
      * Get the wagon type to which the wagon belongs

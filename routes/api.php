@@ -24,4 +24,5 @@ Route::middleware('auth:api')->group(function () {
     ]);
     Route::apiResource('roles', 'RoleController');
     Route::apiResource('users', 'UserController');
+    Route::post('wagonsearch','WagonSearchController@index');
 });
