@@ -11,7 +11,7 @@ class Wagon extends Model
     use Searchable;
     
     protected $fillable = ['number', 'letter_index', 'v_max', 'seats', 'depot_id', 'revisory_point_id', 'revision_date'];
-    protected $dates = ['revision_date'];
+    protected $dates = ['revision_date', 'revision_exp_date'];
     /**
      * Return url to self
      * 
@@ -52,7 +52,31 @@ class Wagon extends Model
      */
     public function setRevisionDateAttribute($value)
     {
-        $this->attributes['revision_date'] = Carbon::parse($value);
+        if($value == '')
+        {
+            $this->attributes['revision_date'] = null;
+        }
+        else
+        {
+            $this->attributes['revision_date'] = Carbon::parse($value);
+        }
+    }
+    /**
+     * Set the wagon's revision expiration date as an instance of carbon
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setRevisionExpDateAttribute($value)
+    {
+        if($value == '')
+        {
+            $this->attributes['revision_exp_date'] = null;
+        }
+        else
+        {
+            $this->attributes['revision_exp_date'] = $value;
+        }
     }
     /**
      * Get the indexable data array for the model.
@@ -63,9 +87,7 @@ class Wagon extends Model
     {
         $array = [
             'id' => $this->id,
-            //'number' => $this->number
             'short_number' => $this->getShortStylizedNumber()
-            //'stylized_number' => $this->getStylizedNumber()
         ];
 
         return $array;

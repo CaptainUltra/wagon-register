@@ -10,6 +10,13 @@
           :errors="errors"
           @updatefield="form.name = $event"
         />
+        <InputField
+          name="revision_valid_for"
+          label="Валидност на ревизия"
+          placeholder="Валидност на ревизия за вагон от тази серия..."
+          :errors="errors"
+          @updatefield="form.revision_valid_for = $event"
+        />
         <div class="pb-2">
           <label for="conditioned" class="ml-2 pt-2 font-weight-bold text-primary">Климатизиран</label>
           <select
@@ -55,7 +62,8 @@ export default {
       form: {
         name: "",
         conditioned: null,
-        interior_type_id: null
+        interior_type_id: null,
+        revision_valid_for: null
       },
       selectedConditioned: null,
       errors: null

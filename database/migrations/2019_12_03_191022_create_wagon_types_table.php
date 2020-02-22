@@ -18,6 +18,7 @@ class CreateWagonTypesTable extends Migration
             $table->string('name');
             $table->unique('name');
             $table->boolean('conditioned');
+            $table->integer('revision_valid_for');
             $table->integer('interior_type_id');
             $table->integer('index_image_id')->nullable();
             $table->timestamps();

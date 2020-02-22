@@ -87,6 +87,7 @@ class WagonTest extends TestCase
         $response = $this->post('api/wagons', $this->data());
         $this->assertCount(1, Wagon::all());
         $this->assertInstanceOf(Carbon::class, Wagon::first()->revision_date);
+        $this->assertInstanceOf(Carbon::class, Wagon::first()->revision_exp_date);
     }
     /**@test */
     public function testWagonCanBeRetrieved()
@@ -101,7 +102,7 @@ class WagonTest extends TestCase
                 'v_max' => $wagon->v_max,
                 'seats' => $wagon->seats,
                 'revision_date' => $wagon->revision_date->format('d.m.Y'),
-                //'revision_expiration_date' => $wagon->revision_exp_date->format('d.m.Y'),
+                'revision_expiration_date' => $wagon->revision_exp_date->format('d.m.Y'),
                 'last_updated' => $wagon->updated_at->format('d.m.Y h:i:s')
             ]
         ]);
@@ -151,6 +152,23 @@ class WagonTest extends TestCase
                 'self' => $wagon->path()
             ]
         ]);
+    }
+    /**@test */
+    public function testWagonRevisionExpirationDateIsCalculated()
+    {
+        $this->withoutExceptionHandling();
+        factory(WagonType::class)->create(['name' => '22-97', 'revision_valid_for' => 1])->save();
+        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '505222970039']));
+        $wagon = Wagon::first();
+        
+        $response->assertJson([
+            'data' => [
+                'revision_expiration_date' => $wagon->revision_exp_date->format('d.m.Y')
+            ],
+            'links' => [
+                'self' => $wagon->path()
+            ]
+        ]);  
     }
     /**@test */
     public function testForbiddenWagonTypeUpdate()

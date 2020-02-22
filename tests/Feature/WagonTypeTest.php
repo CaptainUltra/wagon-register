@@ -81,7 +81,7 @@ class WagonTypeTest extends TestCase
     /**@test */
     public function testRequiredFields()
     {
-        collect(['name', 'conditioned', 'interior_type_id'])
+        collect(['name', 'conditioned', 'interior_type_id', 'revision_valid_for'])
             ->each(function ($field) {
                 $response = $this->post('api/wagontypes', array_merge($this->data(), [$field => '']));
                 $response->assertSessionHasErrors($field);
@@ -190,6 +190,7 @@ class WagonTypeTest extends TestCase
         return [
             'name' => '22-97',
             'conditioned' => true,
+            'revision_valid_for' => 1,
             'interior_type_id' =>  1,
             'api_token' => $this->user->api_token
         ];

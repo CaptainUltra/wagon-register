@@ -11,6 +11,14 @@
           :data="form.name"
           @updatefield="form.name = $event"
         />
+        <InputField
+          name="revision_valid_for"
+          label="Валидност на ревизия"
+          placeholder="Валидност на ревизия за вагон от тази серия..."
+          :errors="errors"
+          :data="form.revision_valid_for"
+          @updatefield="form.revision_valid_for = $event"
+        />
         <div class="pb-2">
           <label for="conditioned" class="ml-2 pt-2 font-weight-bold text-primary">Климатизиран</label>
           <select
@@ -63,6 +71,7 @@ export default {
         this.form.name = response.data.data.name;
         this.form.interior_type = response.data.data.interior_type;
         this.form.conditioned = response.data.data.conditioned;
+        this.form.revision_valid_for = response.data.data.revision_valid_for;
         this.form.interior_type_id = this.form.interior_type.data.id;
         this.selectedConditioned = this.form.conditioned ? "true" : "false";
         this.loading = false;

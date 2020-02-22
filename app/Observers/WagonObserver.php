@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Wagon;
 use App\WagonType;
+use Carbon\Carbon;
 
 class WagonObserver
 {
@@ -17,7 +18,10 @@ class WagonObserver
     public function creating(Wagon $wagon)
     {
         $wagonType = substr($wagon->number, 4, 2).'-'.substr($wagon->number, 6, 2);
-        $wagon->type_id = WagonType::where('name', $wagonType)->firstOrFail()->id;
+        $wagonTypeInstance = WagonType::where('name', $wagonType)->firstOrFail();
+        $wagon->type_id = $wagonTypeInstance->id;
+
+        $this->CalculateRevisionExpirationDate($wagon, $wagonTypeInstance);
     }
 
     /**
@@ -32,37 +36,18 @@ class WagonObserver
         $wagonType = substr($wagon->number, 4, 2).'-'.substr($wagon->number, 6, 2);
         $wagon->type_id = WagonType::where('name', $wagonType)->firstOrFail()->id;
     }
-
-    /**
-     * Handle the wagon "deleted" event.
-     *
-     * @param  \App\Wagon  $wagon
-     * @return void
-     */
-    public function deleted(Wagon $wagon)
+    private function CalculateRevisionExpirationDate(Wagon $wagon, WagonType $wagonType)
     {
-        //
-    }
-
-    /**
-     * Handle the wagon "restored" event.
-     *
-     * @param  \App\Wagon  $wagon
-     * @return void
-     */
-    public function restored(Wagon $wagon)
-    {
-        //
-    }
-
-    /**
-     * Handle the wagon "force deleted" event.
-     *
-     * @param  \App\Wagon  $wagon
-     * @return void
-     */
-    public function forceDeleted(Wagon $wagon)
-    {
-        //
+        if($wagon->revision_date != null)
+        {
+            $timeToAdd = $wagonType->revision_valid_for;
+            $revisionDate = $wagon->revision_date;
+            $expirationDate = $revisionDate->addYears($timeToAdd);
+            $wagon->revision_exp_date = $expirationDate;
+        }
+        else
+        {
+            $wagon->revision_exp_date = '';
+        }
     }
 }

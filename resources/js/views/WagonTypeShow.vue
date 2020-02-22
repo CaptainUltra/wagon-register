@@ -23,6 +23,10 @@
           {{wagonType.interior_type.data.name}}
         </p>
         <p>
+          <b>Валидност на ревизия:</b>
+          {{wagonType.revision_valid_for}}
+        </p>
+        <p>
           <b>Последна промяна:</b>
           {{wagonType.last_updated}}
         </p>

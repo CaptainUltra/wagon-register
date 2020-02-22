@@ -20,13 +20,13 @@ class Wagon extends JsonResource
                 'number' => $this->number,
                 'stylized_number' => $this->getStylizedNumber(),
                 'type' => new WagonType($this->wagonType),
-                'letter_index' => $this->letter_index,
-                'v_max' => $this->v_max,
-                'seats' => $this->seats,
+                'letter_index' => $this->letter_index ?? '-',
+                'v_max' => $this->v_max ?? '-',
+                'seats' => $this->seats ?? '-',
                 'depot' => new Depot($this->depot),
                 'revisory_point' => new RevisoryPoint($this->revisoryPoint),
-                'revision_date' => $this->revision_date->format('d.m.Y'),
-                //'revision_expiration_date' => $this->revision_exp_date->format('d.m.Y'),
+                'revision_date' => isset($this->revision_date) ? $this->revision_date->format('d.m.Y') : '-',
+                'revision_expiration_date' => isset($this->revision_exp_date) ? $this->revision_exp_date->format('d.m.Y') : '-',
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [

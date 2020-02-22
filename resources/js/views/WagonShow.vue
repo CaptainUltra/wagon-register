@@ -20,15 +20,15 @@
           </p>
           <p>
             <b>Буквено означение:</b>
-            {{wagon.letter_index ? wagon.letter_index : "-"}}
+            {{wagon.letter_index}}
           </p>
           <p>
             <b>Максимална скорост:</b>
-            {{wagon.v_max ? wagon.v_max : "-"}}
+            {{wagon.v_max}}
           </p>
           <p>
             <b>Брой на местата:</b>
-            {{wagon.seats ? wagon.seats : "-"}}
+            {{wagon.seats}}
           </p>
           <p>
             <b>Депо:</b>
@@ -37,9 +37,9 @@
           <h6>
             <b>Ревизия (пункт / дата / дата на изтичане):</b>
           </h6>
-          <p>{{wagon.revisory_point ? wagon.revisory_point.data.name : "-"}} / 
-            {{wagon.revision_date ? wagon.revision_date : "-"}} / 
-            {{wagon.depot ? wagon.depot.name : "-"}}</p>
+          <p>{{wagon.revisory_point ? wagon.revisory_point.data.name : "-"}} (<b>{{wagon.revisory_point ? wagon.revisory_point.data.abbreviation : ""}}</b>) / 
+            {{wagon.revision_date}} / 
+            <b>{{wagon.revision_expiration_date}}</b></p>
           <p>
             <b>Последна промяна:</b>
             {{wagon.last_updated}}
