@@ -37,5 +37,11 @@ class WagonType extends Model
     {
         return $this->hasMany(Wagon::class);
     }
-    
+    /**
+     * Get the trains that the wagon type has
+     */
+    public function trains()
+    {
+        return $this->belongsToMany(Train::class)->withPivot('position');
+    }
 }

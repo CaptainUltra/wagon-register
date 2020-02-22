@@ -48,6 +48,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'Wagon create', 'slug' => 'wagon-create'],
             ['name' => 'Wagon update', 'slug' => 'wagon-update'],
             ['name' => 'Wagon delete', 'slug' => 'wagon-delete'],
+            ['name' => 'Train viewAny', 'slug' => 'train-viewAny'],
+            ['name' => 'Train view', 'slug' => 'train-view'],
+            ['name' => 'Train create', 'slug' => 'train-create'],
+            ['name' => 'Train update', 'slug' => 'train-update'],
+            ['name' => 'Train delete', 'slug' => 'train-delete'],
         ];
     }
 }
