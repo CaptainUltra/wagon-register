@@ -85,6 +85,19 @@
               </div>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#stationCollapse">Гари</a>
+            <div class="collapse" id="stationCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/stations/create" class="nav-link">Създаване на гара</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/stations" class="nav-link">Всички гари</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
         </ul>
 
         <h6

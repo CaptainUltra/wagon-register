@@ -25,6 +25,10 @@ import TrainCreate from "./views/TrainCreate.vue";
 import TrainIndex from "./views/TrainIndex.vue";
 import TrainShow from "./views/TrainShow.vue";
 import TrainEdit from "./views/TrainEdit.vue";
+import StationCreate from "./views/StationCreate.vue";
+import StationShow from "./views/StationShow.vue";
+import StationIndex from "./views/StationIndex.vue";
+import StationEdit from "./views/StationEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -56,6 +60,10 @@ export default new VueRouter({
         {path: '/trains', component: TrainIndex},
         {path: '/trains/:id', component: TrainShow},
         {path: '/trains/:id/edit', component: TrainEdit},
+        {path: '/stations/create', component: StationCreate},
+        {path: '/stations', component: StationIndex},
+        {path: '/stations/:id', component: StationShow},
+        {path: '/stations/:id/edit', component: StationEdit},
       ],
       mode: 'history'
 })
