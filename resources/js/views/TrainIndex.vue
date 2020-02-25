@@ -1,35 +1,29 @@
 <template>
   <div class="py-4">
-    <Search model="stylized_number" route="wagonsearch" placeholder="Търсене на вагон"></Search>
+      <Search model="number" placeholder="Търсене на влак" route="trainsearch"></Search>
     <div v-if="loading">Зареждане</div>
     <div v-else>
-      <div v-if="wagons.length === 0">
-        <p>Няма налични вагони</p>
+      <div v-if="trains.length === 0">
+        <p>Няма налични влакове</p>
       </div>
-      <h4>Списък на всички вагони</h4>
+      <h4>Списък на всички влакове</h4>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">№</th>
-            <th scope="col">Серия</th>
-            <th scope="col">Буквено означение</th>
-            <th scope="col">Места</th>
-            <th scope="col">Гара на домуване</th>
+            <th scope="col">Маршрут</th>
             <th scope="col">Последна промяна</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="wagon in wagons">
-            <th scope="row"><router-link class="text-body" :to="'/wagons/' + wagon.data.id">{{ wagon.data.stylized_number}}</router-link></th>
-            <td>{{wagon.data.type.data.name}}</td>
-            <td>{{wagon.data.letter_index }}</td>
-            <td>{{wagon.data.seats}}</td>
-            <td>{{wagon.data.depot ? wagon.data.depot.data.name : "-"}}</td>
-            <td>{{wagon.data.last_updated}}</td>
+          <tr v-for="train in trains">
+            <th scope="row"><router-link class="text-body" :to="'/trains/' + train.data.id">{{train.data.number}}</router-link></th>
+            <td><router-link class="text-body" :to="'/trains/' + train.data.id">{{train.data.route}}</router-link></td>
+            <td>{{train.data.last_updated}}</td>
           </tr>
         </tbody>
       </table>
-      <Pagination :pagination="pagination" model="wagons" @updatepage="updateData"></Pagination>
+      <Pagination :pagination="pagination" model="trains" @updatepage="updateData"></Pagination>
     </div>
   </div>
 </template>
@@ -39,16 +33,16 @@ import Pagination from "../components/Pagination";
 import Search from "../components/Search";
 
 export default {
-  name: "WagonIndex",
+  name: "TrainIndex",
   components: {
     Pagination,
     Search
   },
   mounted() {
     axios
-      .get("/api/wagons")
+      .get("/api/trains")
       .then(response => {
-        this.wagons = response.data.data;
+        this.trains = response.data.data;
         this.pagination.currentPage = response.data.meta["current_page"];
         this.pagination.lastPage = response.data.meta["last_page"];
         this.pagination.total = response.data.meta["total"];
@@ -61,7 +55,7 @@ export default {
   data: function() {
     return {
       loading: true,
-      wagons: null,
+      trains: null,
       pagination: {
         total: null,
         currentPage: null,
@@ -71,7 +65,7 @@ export default {
   },
   methods: {
     updateData(value) {
-      this.wagons = value.values;
+      this.trains = value.values;
       this.pagination = value.pagination;
       this.loading = value.loading;
     }

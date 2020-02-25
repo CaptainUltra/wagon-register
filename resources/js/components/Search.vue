@@ -9,7 +9,7 @@
       <input
         type="text"
         class="form-control"
-        placeholder="Търсене на вагон"
+        :placeholder="placeholder"
         id="searchTerm"
         v-model="searchTerm"
         @input="search"
@@ -22,7 +22,8 @@
       >
         <div v-if="results == 0 && searchTerm != 0">Не са намерени резултати за '{{ searchTerm }}'</div>
         <div v-for="result in results" @click="focus = false">
-          <router-link class="text-body" :to="result.links.self">{{ result.data.stylized_number}}</router-link>
+          <router-link  v-if="model === 'stylized_number'" class="text-body" :to="result.links.self">{{ result.data.stylized_number}}</router-link>
+          <router-link  v-if="model === 'number'" class="text-body" :to="result.links.self">{{ result.data.number}}</router-link>
         </div>
       </div>
     </div>
@@ -34,6 +35,7 @@ import _ from "lodash";
 
 export default {
   name: "Search",
+  props: ["model", "placeholder", "route"],
   data: function() {
     return {
       searchTerm: "",
@@ -47,7 +49,7 @@ export default {
         return;
       }
       axios
-        .post("/api/wagonsearch", { searchTerm: this.searchTerm })
+        .post("/api/" + this.route, { searchTerm: this.searchTerm })
         .then(response => {
           this.results = response.data.data;
         })

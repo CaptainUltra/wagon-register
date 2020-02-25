@@ -26,4 +26,5 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('users', 'UserController');
     Route::apiResource('trains', 'TrainController');
     Route::post('wagonsearch','WagonSearchController@index');
+    Route::post('trainsearch','TrainSearchController@index');
 });

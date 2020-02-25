@@ -72,6 +72,19 @@
               </div>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#trainCollapse">Влакове</a>
+            <div class="collapse" id="trainCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/trains/create" class="nav-link">Създаване на влак</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/trains" class="nav-link">Всички влакове</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
         </ul>
 
         <h6
@@ -99,7 +112,7 @@
       </div>
     </nav>
     <main
-      class="col-md-9 d-none d-md-block ml-sm-auto col-lg-10 px-4 overflow-hidden"
+      class="col-md-9 d-none d-md-block ml-sm-auto col-lg-10 px-4 overflow-x-hidden"
       style="height: 94.6vh;"
     >
       <div class="pt-3 pb-2 mb-3">

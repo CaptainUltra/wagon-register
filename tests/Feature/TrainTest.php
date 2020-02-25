@@ -32,6 +32,8 @@ class TrainTest extends TestCase
         factory(Permission::class)->create(['slug' => 'train-update']);
         factory(Permission::class)->create(['slug' => 'train-delete']);
         factory(Permission::class)->create(['slug' => 'wagontype-viewAny']);
+        factory(WagonType::class)->create();
+        factory(WagonType::class)->create();
 
         $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5, 6]);
     }
@@ -175,17 +177,21 @@ class TrainTest extends TestCase
         $response = $this->get('api/trains/' . $train->id . '?api_token=' . $this->user->api_token);
         $this->assertCount(0, $response['data']['wagontypes']);
 
-        factory(WagonType::class)->create();
-        factory(WagonType::class)->create();
         $wagonTypes = json_decode($this->get('api/wagontypes' . '?api_token=' . $this->user->api_token)->getContent(), true);
         $wagonTypesArray = array();
         foreach ($wagonTypes['data'] as $wagonType) {
             $wagonTypesArray[] = $wagonType['data']['id'];
         }
 
-        $response = $this->put('api/trains/' . $train->id . '?show-roles=1', array_merge($this->data(), [
-            'name' => 'Role 2',
-            'slug' => 'role-2',
+        $response = $this->put('api/trains/' . $train->id , array_merge($this->data(), [
+            'number' => $train->number,
+            'route' => $train->route,
+            'wagontypes' => $wagonTypesArray
+        ]));
+
+        $response = $this->put('api/trains/' . $train->id , array_merge($this->data(), [
+            'number' => $train->number,
+            'route' => $train->route,
             'wagontypes' => $wagonTypesArray
         ]));
         $this->assertCount(2, $response['data']['wagontypes']);
@@ -199,9 +205,9 @@ class TrainTest extends TestCase
 
         $wagonTypesArray = array();
 
-        $response = $this->put('api/trains/' . $train->id . '?show-roles=1', array_merge($this->data(), [
-            'name' => 'Role 2',
-            'slug' => 'role-2',
+        $response = $this->put('api/trains/' . $train->id, array_merge($this->data(), [
+            'number' => $train->number,
+            'route' => $train->route,
             'wagontypes' => $wagonTypesArray
         ]));
         $this->assertCount(0, $response['data']['wagontypes']);
@@ -211,6 +217,7 @@ class TrainTest extends TestCase
         return [
             'number' => '8601',
             'route' => 'София - Пловдив - Бургас',
+            'wagontypes' => [1, 2],
             'api_token' => $this->user->api_token
         ];
     }

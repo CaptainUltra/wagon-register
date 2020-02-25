@@ -39,7 +39,7 @@
           </h6>
           <p>{{wagon.revisory_point ? wagon.revisory_point.data.name : "-"}} (<b>{{wagon.revisory_point ? wagon.revisory_point.data.abbreviation : ""}}</b>) / 
             {{wagon.revision_date}} / 
-            <b>{{wagon.revision_expiration_date}}</b></p>
+            <b class="text-danger">{{wagon.revision_expiration_date}}</b></p>
           <p>
             <b>Последна промяна:</b>
             {{wagon.last_updated}}

@@ -21,6 +21,10 @@ import WagonCreate from "./views/WagonCreate.vue";
 import WagonShow from "./views/WagonShow.vue";
 import WagonIndex from "./views/WagonIndex.vue";
 import WagonEdit from "./views/WagonEdit.vue";
+import TrainCreate from "./views/TrainCreate.vue";
+import TrainIndex from "./views/TrainIndex.vue";
+import TrainShow from "./views/TrainShow.vue";
+import TrainEdit from "./views/TrainEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -48,6 +52,10 @@ export default new VueRouter({
         {path: '/wagons', component: WagonIndex},
         {path: '/wagons/:id', component: WagonShow},
         {path: '/wagons/:id/edit', component: WagonEdit},
+        {path: '/trains/create', component: TrainCreate},
+        {path: '/trains', component: TrainIndex},
+        {path: '/trains/:id', component: TrainShow},
+        {path: '/trains/:id/edit', component: TrainEdit},
       ],
       mode: 'history'
 })

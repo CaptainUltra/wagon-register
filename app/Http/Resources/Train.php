@@ -20,7 +20,7 @@ class Train extends JsonResource
                 'number' => $this->number,
                 'route' => $this->route,
                 'description' => $this->description,
-                'wagontypes' => WagonType::collection($this->wagonTypes),
+                'wagontypes' => WagonType::collection($this->wagonTypes()->orderBy('position')->get()),
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [

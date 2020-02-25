@@ -71,6 +71,7 @@ class TrainController extends Controller
     {
         $this->authorize('update', $train);
 
+        $train->wagonTypes()->sync([]);
         $wagonTypes = $this->validateRequest()['wagontypes'];
         $i = 1;
         foreach($wagonTypes as $wagonType)
