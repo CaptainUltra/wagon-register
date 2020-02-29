@@ -22,8 +22,8 @@
           <tr v-for="wagon in wagons">
             <th scope="row"><router-link class="text-body" :to="'/wagons/' + wagon.data.id">{{ wagon.data.stylized_number}}</router-link></th>
             <td>{{wagon.data.type.data.name}}</td>
-            <td>{{wagon.data.letter_index }}</td>
-            <td>{{wagon.data.seats}}</td>
+            <td>{{wagon.data.letter_index ? wagon.data.letter_index : "-" }}</td>
+            <td>{{wagon.data.seats ? wagon.data.seats : "-"}}</td>
             <td>{{wagon.data.depot ? wagon.data.depot.data.name : "-"}}</td>
             <td>{{wagon.data.last_updated}}</td>
           </tr>

@@ -34,7 +34,10 @@ class WagonObserver
     public function updating(Wagon $wagon)
     {
         $wagonType = substr($wagon->number, 4, 2).'-'.substr($wagon->number, 6, 2);
-        $wagon->type_id = WagonType::where('name', $wagonType)->firstOrFail()->id;
+        $wagonTypeInstance = WagonType::where('name', $wagonType)->firstOrFail();
+        $wagon->type_id = $wagonTypeInstance->id;
+        
+        $this->CalculateRevisionExpirationDate($wagon, $wagonTypeInstance);
     }
     private function CalculateRevisionExpirationDate(Wagon $wagon, WagonType $wagonType)
     {
