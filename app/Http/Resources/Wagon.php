@@ -27,6 +27,7 @@ class Wagon extends JsonResource
                 'revisory_point' => new RevisoryPoint($this->revisoryPoint),
                 'revision_date' => isset($this->revision_date) ? $this->revision_date->format('d.m.Y') : '-',
                 'revision_expiration_date' => isset($this->revision_exp_date) ? $this->revision_exp_date->format('d.m.Y') : '-',
+                'events' => Event::collection($this->whenLoaded('events')),
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [

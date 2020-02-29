@@ -48,6 +48,13 @@ class WagonController extends Controller
     {
         $this->authorize('view', $wagon);
 
+        if(request()->has('show-events') && request('show-events')){
+            $wagonId = $wagon->id;
+            $wagon = Wagon::with(['events' => function ($query) {
+                $query->orderBy('date', 'desc')->paginate(3);
+            }])->find($wagonId);
+        }
+
         return new WagonResource($wagon);
     }
 

@@ -37,20 +37,42 @@
           <h6>
             <b>Ревизия (пункт / дата / дата на изтичане):</b>
           </h6>
-          <p>{{wagon.revisory_point ? wagon.revisory_point.data.name : "-"}} (<b>{{wagon.revisory_point ? wagon.revisory_point.data.abbreviation : ""}}</b>) / 
-            {{wagon.revision_date}} / 
-            <b class="text-danger">{{wagon.revision_expiration_date}}</b></p>
+          <p>
+            {{wagon.revisory_point ? wagon.revisory_point.data.name : "-"}} (
+            <b>{{wagon.revisory_point ? wagon.revisory_point.data.abbreviation : ""}}</b>
+            ) /
+            {{wagon.revision_date}} /
+            <b
+              class="text-danger"
+            >{{wagon.revision_expiration_date}}</b>
+          </p>
           <p>
             <b>Последна промяна:</b>
             {{wagon.last_updated}}
           </p>
         </div>
+        <div class="col-12 pt-2">
+          <h5>Последно видян:</h5>
+          <ul class="list-group">
+            <li
+              v-for="event in wagon.events"
+              class="list-group-item"
+            >{{event.data.date}} - видян на {{event.data.train ? event.data.train.data.number : ""}} {{event.data.station ? event.data.station.data.name : ""}}</li>
+            <li class="list-group-item">
+              <router-link :to="'/wagons/' + wagon.id +'/events'">Всички събития за този вагон</router-link>
+            </li>
+          </ul>
+        </div>
         <div class="pt-3 pl-2 d-flex w-100 justify-content-between">
           <a href="#" @click="$router.back()">< Назад</a>
           <div class="justify-content-end position-relative">
             <router-link
+              :to="'/wagons/' + wagon.id + '/events/create'"
+              class="btn btn-outline-primary"
+            >Добавяне на събитие</router-link>
+            <router-link
               :to="'/wagons/' + wagon.id + '/edit'"
-              class="btn btn-outline-success"
+              class="btn btn-outline-success ml-3"
             >Промяна</router-link>
             <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal">Изтриване</button>
             <div v-if="modal" class="position-absolute bg-dark rounded-lg p-4">
@@ -74,7 +96,7 @@ export default {
   name: "WagonShow",
   mounted() {
     axios
-      .get("/api/wagons/" + this.$route.params.id)
+      .get("/api/wagons/" + this.$route.params.id + "?show-events=1")
       .then(response => {
         this.wagon = response.data.data;
         this.loading = false;

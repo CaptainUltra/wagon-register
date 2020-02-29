@@ -16,11 +16,17 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('wagon_id');
-            $table->integer('type_id');
             $table->integer('user_id');
+            $table->integer('station_id')->nullable();
+            $table->integer('train_id')->nullable();
             $table->date('date');
-            //TODO: Add other columns 
+            $table->string('comment')->nullable();
             $table->timestamps();
+
+            /*$table->foreign('wagon_id')->references('id')->on('wagons');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('station_id')->references('id')->on('stations');
+            $table->foreign('train_id')->references('id')->on('trains');*/
         });
     }
 

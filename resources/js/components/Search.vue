@@ -24,6 +24,8 @@
         <div v-for="result in results" @click="focus = false">
           <router-link  v-if="model === 'stylized_number'" class="text-body" :to="result.links.self">{{ result.data.stylized_number}}</router-link>
           <router-link  v-if="model === 'number'" class="text-body" :to="result.links.self">{{ result.data.number}}</router-link>
+          <p v-if="model === 'return_train_id'" class="text-body"  v-on:click="$emit('updateid', result.data.id)">{{ result.data.number}}</p>
+          <p v-if="model === 'return_station_id'" class="text-body" v-on:click="$emit('updateid', result.data.id)">{{ result.data.name}}</p>
         </div>
       </div>
     </div>
@@ -35,7 +37,13 @@ import _ from "lodash";
 
 export default {
   name: "Search",
-  props: ["model", "placeholder", "route"],
+  props: ["model", "placeholder", "route", 'data'],
+  mounted(){
+    if(this.data !== null)
+    {
+      this.searchTerm = this.data;
+    }
+  },
   data: function() {
     return {
       searchTerm: "",
@@ -57,6 +65,11 @@ export default {
           console.log(error.response);
         });
     }, 300)
+  },
+  watch: {
+    data: function(val) {
+      this.searchTerm = val;
+    }
   }
 };
 </script>

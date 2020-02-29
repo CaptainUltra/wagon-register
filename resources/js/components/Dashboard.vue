@@ -98,6 +98,12 @@
               </div>
             </div>
           </li>
+          <li class="nav-item">
+            <router-link to="/events" class="nav-link">Всички събития</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/events/today" class="nav-link">Събития от днес</router-link>
+          </li>
         </ul>
 
         <h6
