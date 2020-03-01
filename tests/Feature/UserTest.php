@@ -18,6 +18,7 @@ class UserTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
+        factory(Role::class)->create();
     }
 
     /**@test */
@@ -120,7 +121,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
-        $response = $this->get('api/users/' . $user->id . '?api_token=' . $this->user->api_token. '&show-roles=1');
+        $response = $this->get('api/users/' . $user->id . '?api_token=' . $this->user->api_token . '&show-roles=1');
         $this->assertCount(0, $response['data']['roles']);
 
         factory(Role::class)->create();
@@ -130,20 +131,16 @@ class UserTest extends TestCase
         foreach ($roles['data'] as $role) {
             $rolesArray[] = $role['data']['id'];
         }
-
         $response = $this->put('api/users/' . $user->id . '?show-roles=1', array_merge($this->data(), [
-            'name' => 'Role 2',
-            'slug' => 'role-2',
             'roles' => $rolesArray
         ]));
-        $this->assertCount(2, $response['data']['roles']);
-
+        $this->assertCount(3, $response['data']['roles']);
     }
     public function testRolesCanBeRemovedFromUser()
     {
         $this->withoutExceptionHandling();
         $user = factory(User::class)->create();
-        $response = $this->get('api/users/' . $user->id . '?api_token=' . $this->user->api_token. '&show-roles=1');
+        $response = $this->get('api/users/' . $user->id . '?api_token=' . $this->user->api_token . '&show-roles=1');
 
         factory(Role::class)->create();
         factory(Role::class)->create();
@@ -154,11 +151,9 @@ class UserTest extends TestCase
         }
 
         $response = $this->put('api/users/' . $user->id . '?show-roles=1', array_merge($this->data(), [
-            'name' => 'Role 2',
-            'slug' => 'role-2',
             'roles' => $rolesArray
         ]));
-        $this->assertCount(2, $response['data']['roles']);
+        $this->assertCount(3, $response['data']['roles']);
 
         $rolesArray = array();
         $response = $this->put('api/users/' . $user->id . '?show-roles=1', array_merge($this->data(), [

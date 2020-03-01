@@ -18,7 +18,9 @@ class Role extends JsonResource
             'data' => [
                 'id' => $this->id,
                 'name' => $this->name,
-                'permissions' => Permission::collection($this->whenLoaded('permissions'))
+                'slug' => $this->slug,
+                'permissions' => Permission::collection($this->whenLoaded('permissions')),
+                'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [
                 'self' => $this->path()

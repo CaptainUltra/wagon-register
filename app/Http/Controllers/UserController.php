@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\User as UserResource;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,10 +19,10 @@ class UserController extends Controller
     public function index()
     {
         if(request()->has('show-roles') && request('show-roles')){
-            $users = User::with('roles')->get();
+            $users = User::with('roles')->paginate(15);;
         }
         else{
-            $users = User::all();
+            $users = User::paginate(15);
         }
         return UserResource::collection($users);
     }
@@ -33,7 +35,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($this->validateRequest());
+        $data = $this->validateRequest();
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'api_token' => Str::random(32)
+        ]);
+        if($data['roles'] != null)
+        {
+            $roles = $data['roles'];
+            $user->roles()->sync($roles);
+        }
+        else
+        {
+            $user->roles()->sync([1]);
+        }
 
         if(request()->has('show-roles') && request('show-roles')){
             $userId = $user->id;
@@ -104,9 +121,9 @@ class UserController extends Controller
     private function validateRequest()
     {
         return request()->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
+            'name' => 'required_without:roles',
+            'email' => 'required_without:roles|email',
+            'password' => 'required_without:roles',
             'roles' => ''
         ]);
     }

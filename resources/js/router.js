@@ -37,6 +37,13 @@ import StatusCreate from "./views/StatusCreate.vue";
 import StatusShow from "./views/StatusShow.vue";
 import StatusIndex from "./views/StatusIndex.vue";
 import StatusEdit from "./views/StatusEdit.vue";
+import UserCreate from "./views/UserCreate.vue";
+import UserShow from "./views/UserShow.vue";
+import UserIndex from "./views/UserIndex.vue";
+import RoleCreate from "./views/RoleCreate.vue";
+import RoleShow from "./views/RoleShow.vue";
+import RoleIndex from "./views/RoleIndex.vue";
+import RoleEdit from "./views/RoleEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -102,7 +109,14 @@ export default new VueRouter({
         { path: "/statuses/create", component: StatusCreate },
         { path: "/statuses", component: StatusIndex },
         { path: "/statuses/:id", component: StatusShow },
-        { path: "/statuses/:id/edit", component: StatusEdit }
+        { path: "/statuses/:id/edit", component: StatusEdit },
+        { path: "/users/create", component: UserCreate },
+        { path: "/users", component: UserIndex },
+        { path: "/users/:id", component: UserShow },
+        { path: "/roles/create", component: RoleCreate },
+        { path: "/roles", component: RoleIndex },
+        { path: "/roles/:id", component: RoleShow },
+        { path: "/roles/:id/edit", component: RoleEdit },
     ],
     mode: "history"
 });

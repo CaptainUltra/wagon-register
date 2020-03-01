@@ -134,7 +134,7 @@ class RoleTest extends TestCase
         //Gather permissions' ids into an array 
         $permissionArray = array();
         foreach ($permissions['data'] as $permission) {
-            $permissionArray[] = $permission['id'];
+            $permissionArray[] = $permission['data']['id'];
         }
 
         //Update the role with the permissions array
@@ -162,7 +162,7 @@ class RoleTest extends TestCase
         //Gather permissions' ids into an array 
         $permissionArray = array();
         foreach ($permissions['data'] as $permission) {
-            $permissionArray[] = $permission['id'];
+            $permissionArray[] = $permission['data']['id'];
         }
 
         //Update the role with the permissions array

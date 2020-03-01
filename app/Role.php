@@ -14,7 +14,7 @@ class Role extends Model
      */
     public function path()
     {
-        return url('/api/roles/' . $this->id);
+        return '/roles/' . $this->id;
     }
     /**
      * Get the permissions that belong to the role.

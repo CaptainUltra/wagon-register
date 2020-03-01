@@ -19,7 +19,8 @@ class User extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'email' => $this->email,
-                'roles' => Role::collection($this->whenLoaded('roles'))
+                'roles' => Role::collection($this->whenLoaded('roles')),
+                'created_at' => $this->created_at->format('d.m.Y h:i:s')
             ],
             'links' => [
                 'self' => $this->path()

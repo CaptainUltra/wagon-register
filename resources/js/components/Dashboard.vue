@@ -111,6 +111,32 @@
               </div>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#userCollapse">Потребители</a>
+            <div class="collapse" id="userCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/users/create" class="nav-link">Създаване на потребител</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/users" class="nav-link">Всички потребители</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#roleCollapse">Роли</a>
+            <div class="collapse" id="roleCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/roles/create" class="nav-link">Създаване на роля</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/roles" class="nav-link">Всички роли</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
           <li class="nav-item">
             <router-link to="/events" class="nav-link">Всички събития</router-link>
           </li>

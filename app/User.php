@@ -44,7 +44,7 @@ class User extends Authenticatable
      */
     public function path()
     {
-        return url('/api/users/' . $this->id);
+        return '/users/' . $this->id;
     }
     /**
      * Get the roles that the user has
