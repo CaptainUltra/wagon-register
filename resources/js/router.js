@@ -33,6 +33,10 @@ import EventCreate from "./views/EventCreate.vue";
 import EventShow from "./views/EventShow.vue";
 import EventIndex from "./views/EventIndex.vue";
 import EventEdit from "./views/EventEdit.vue";
+import StatusCreate from "./views/StatusCreate.vue";
+import StatusShow from "./views/StatusShow.vue";
+import StatusIndex from "./views/StatusIndex.vue";
+import StatusEdit from "./views/StatusEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -94,7 +98,11 @@ export default new VueRouter({
             props: route => ({ filter: "user", value: route.params.id })
         },
         { path: "/events/:id", component: EventShow },
-        { path: "/events/:id/edit", component: EventEdit }
+        { path: "/events/:id/edit", component: EventEdit },
+        { path: "/statuses/create", component: StatusCreate },
+        { path: "/statuses", component: StatusIndex },
+        { path: "/statuses/:id", component: StatusShow },
+        { path: "/statuses/:id/edit", component: StatusEdit }
     ],
     mode: "history"
 });

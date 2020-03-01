@@ -98,6 +98,19 @@
               </div>
             </div>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#statusCollapse">Статуси на вагони</a>
+            <div class="collapse" id="statusCollapse">
+              <div class="card card-body mr-3">
+                <li class="nav-item">
+                  <router-link to="/statuses/create" class="nav-link">Създаване на статус</router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/statuses" class="nav-link">Всички статуси</router-link>
+                </li>
+              </div>
+            </div>
+          </li>
           <li class="nav-item">
             <router-link to="/events" class="nav-link">Всички събития</router-link>
           </li>
