@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(WagonTypeSeeder::class);
         $this->call(DepotSeeder::class);
         $this->call(RevisoryPointSeeder::class);
+        $this->call(StatusSeeder::class);
     }
 }

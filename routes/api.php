@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('trains', 'TrainController');
     Route::apiResource('stations', 'StationController');
     Route::apiResource('events', 'EventController');
+    Route::apiResource('statuses', 'StatusController');
     Route::post('wagonsearch','WagonSearchController@index');
     Route::post('trainsearch','TrainSearchController@index');
     Route::post('stationsearch','StationSearchController@index');
