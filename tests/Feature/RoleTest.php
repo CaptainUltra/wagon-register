@@ -19,6 +19,16 @@ class RoleTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'role-viewAny']);
+        factory(Permission::class)->create(['slug' => 'role-view']);
+        factory(Permission::class)->create(['slug' => 'role-create']);
+        factory(Permission::class)->create(['slug' => 'role-update']);
+        factory(Permission::class)->create(['slug' => 'role-delete']);
+        factory(Permission::class)->create(['slug' => 'permission-viewAny']);
+
+        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5, 6]);
     }
 
     /**@test */
@@ -27,7 +37,7 @@ class RoleTest extends TestCase
         $response = $this->post('api/roles', array_merge($this->data(), ['api_token' => '']));
 
         $response->assertRedirect('/login');
-        $this->assertCount(0, Role::all());
+        $this->assertCount(1, Role::all());
     }
     /**@test */
     public function testRoleCanBeCreated()
@@ -35,9 +45,9 @@ class RoleTest extends TestCase
         $this->withoutExceptionHandling();
 
         $response = $this->post('api/roles', $this->data());
-        $role = Role::first();
+        $role = Role::where('id', 2)->first();
 
-        $this->assertCount(1, Role::all());
+        $this->assertCount(2, Role::all());
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson([
             'data' => [
@@ -48,6 +58,13 @@ class RoleTest extends TestCase
                 'self' => $role->path()
             ]
         ]);
+    }
+    /**@test */
+    public function testForbiddenRoleCreate()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->post('api/roles', $this->data());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testRoleRequiredFields()
@@ -70,13 +87,28 @@ class RoleTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenRoleRetrieve()
+    {
+        $depot = factory(Role::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/roles/' . $depot->id . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testRolesCanBeRetrieved()
     {
         $role = factory(Role::class)->create();
         $role = factory(Role::class)->create();
 
         $response = $this->get('api/roles' . '?api_token=' . $this->user->api_token . '&show-permissions=1');
-        $response->assertJsonCount(2, 'data');
+        $response->assertJsonCount(3, 'data');
+    }
+    /**@test */
+    public function testForbiddenRolesRetrieve()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/roles' . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testRoleCanBeUpdated()
@@ -87,7 +119,7 @@ class RoleTest extends TestCase
             'name' => 'Role 2',
             'slug' => 'role-2'
         ]));
-        $role = Role::first();
+        $role = Role::where('id', 2)->first();
 
         $this->assertEquals('Role 2', $role->name);
         $this->assertEquals('role-2', $role->slug);
@@ -103,17 +135,36 @@ class RoleTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenRoleUpdate()
+    {
+        $role = factory(Role::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->put('api/roles/' . $role->id, array_merge($this->data(), [
+            'name' => 'Role 2',
+            'slug' => 'role-2'
+        ]));
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testRoleCanBeDeleted()
     {
         $this->withoutExceptionHandling();
         $role = factory(Role::class)->create();
 
-        $this->assertCount(1, Role::all());
+        $this->assertCount(2, Role::all());
 
         $response = $this->delete('api/roles/' . $role->id, ['api_token' => $this->user->api_token]);
 
-        $this->assertCount(0, Role::all());
+        $this->assertCount(1, Role::all());
         $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+    /**@test */
+    public function testForbiddenRoleDelete()
+    {
+        $role = factory(Role::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->delete('api/roles/' . $role->id, ['api_token' => $this->user->api_token]);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testPermissionsCanBeAssingnedToRole()
@@ -123,7 +174,6 @@ class RoleTest extends TestCase
         //Create and fetch a role
         $role = factory(Role::class)->create();
         $response = $this->get('api/roles/' . $role->id . '?api_token=' . $this->user->api_token . '&show-permissions=1');
-        //$response->assertJsonCount(0, 'data.permissions');
         $this->assertCount(0, $response['data']['permissions']);
 
         //Create and fetch permissions
@@ -143,8 +193,7 @@ class RoleTest extends TestCase
             'slug' => 'role-2',
             'permissions' => $permissionArray
         ]));
-        $this->assertCount(2, $response['data']['permissions']);
-
+        $this->assertCount(8, $response['data']['permissions']);
     }
     public function testPermissionsCanBeRemovedFromRole()
     {
@@ -171,7 +220,7 @@ class RoleTest extends TestCase
             'slug' => 'role-2',
             'permissions' => $permissionArray
         ]));
-        $this->assertCount(2, $response['data']['permissions']);
+        $this->assertCount(8, $response['data']['permissions']);
 
         $permissionArray = array();
         $response = $this->put('api/roles/' . $role->id, array_merge($this->data(), [

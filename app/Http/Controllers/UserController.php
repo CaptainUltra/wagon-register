@@ -18,6 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         if(request()->has('show-roles') && request('show-roles')){
             $users = User::with('roles')->paginate(15);;
         }
@@ -35,6 +37,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
+
         $data = $this->validateRequest();
         $user = User::create([
             'name' => $data['name'],
@@ -70,6 +74,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', $user);
+
         if(request()->has('show-roles') && request('show-roles')){
             $userId = $user->id;
             $user = User::with('roles')->find($userId);
@@ -86,6 +92,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         $roles = $this->validateRequest()['roles'];
         $user->roles()->sync($roles);
         
@@ -109,6 +117,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
+
         $user->delete();
 
         return response([], Response::HTTP_NO_CONTENT);

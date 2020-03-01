@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Role;
 use App\User;
+use App\Permission;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,15 @@ class UserTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
-        factory(Role::class)->create();
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'user-viewAny']);
+        factory(Permission::class)->create(['slug' => 'user-view']);
+        factory(Permission::class)->create(['slug' => 'user-create']);
+        factory(Permission::class)->create(['slug' => 'user-update']);
+        factory(Permission::class)->create(['slug' => 'user-delete']);
+        factory(Permission::class)->create(['slug' => 'role-viewAny']);
+        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5, 6]);
     }
 
     /**@test */
@@ -52,6 +61,13 @@ class UserTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenUserCreate()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->post('api/users', $this->data());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testUserRequiredFields()
     {
         collect(['name', 'email', 'password'])
@@ -73,6 +89,14 @@ class UserTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenUserRetrieve()
+    {
+        $user = factory(User::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/users/' . $user->id . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testUsersCanBeRetrieved()
     {
         $role = factory(User::class)->create();
@@ -80,6 +104,13 @@ class UserTest extends TestCase
 
         $response = $this->get('api/users' . '?api_token=' . $this->user->api_token);
         $response->assertJsonCount(3, 'data');
+    }
+    /**@test */
+    public function testForbiddenUsersRetrieve()
+    {
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->get('api/users' . '?api_token=' . $this->user->api_token);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testUserCanBeUpdated()
@@ -104,6 +135,14 @@ class UserTest extends TestCase
         ]);
     }
     /**@test */
+    public function testForbiddenUserUpdate()
+    {
+        $user = factory(User::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->put('api/users/' . $user->id, $this->data());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+    /**@test */
     public function testUserCanBeDeleted()
     {
         $this->withoutExceptionHandling();
@@ -115,6 +154,14 @@ class UserTest extends TestCase
 
         $this->assertCount(1, User::all());
         $response->assertStatus(Response::HTTP_NO_CONTENT);
+    }
+    /**@test */
+    public function testForbiddenUserDelete()
+    {
+        $user = factory(User::class)->create();
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->delete('api/users/' . $user->id, ['api_token' => $this->user->api_token]);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
     /**@test */
     public function testRolesCanBeAssignedToUser()

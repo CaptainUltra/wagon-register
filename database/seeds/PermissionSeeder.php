@@ -68,6 +68,18 @@ class PermissionSeeder extends Seeder
             ['name' => 'Status create', 'slug' => 'status-create'],
             ['name' => 'Status update', 'slug' => 'status-update'],
             ['name' => 'Status delete', 'slug' => 'status-delete'],
+            ['name' => 'Permission viewAny', 'slug' => 'permission-viewAny'],
+            ['name' => 'Permission view', 'slug' => 'permission-view'],
+            ['name' => 'Role viewAny', 'slug' => 'role-viewAny'],
+            ['name' => 'Role view', 'slug' => 'role-view'],
+            ['name' => 'Role create', 'slug' => 'role-create'],
+            ['name' => 'Role update', 'slug' => 'role-update'],
+            ['name' => 'Role delete', 'slug' => 'role-delete'],
+            ['name' => 'User viewAny', 'slug' => 'user-viewAny'],
+            ['name' => 'User view', 'slug' => 'user-view'],
+            ['name' => 'User create', 'slug' => 'user-create'],
+            ['name' => 'User update', 'slug' => 'user-update'],
+            ['name' => 'User delete', 'slug' => 'user-delete'],
         ];
     }
 }

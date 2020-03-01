@@ -16,6 +16,8 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         if (request()->has('show-permissions') && request('show-permissions')) {
             $roles = Role::with('permissions')->get();
         } else {
@@ -32,6 +34,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
+
         $role = Role::create($this->validateRequest());
     
         $permissions = $this->validateRequest()['permissions'];
@@ -50,6 +54,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->authorize('view', $role);
+
         if (request()->has('show-permissions') && request('show-permissions')) {
             $roleId = $role->id;
             $role = Role::with('permissions')->find($roleId);
@@ -66,6 +72,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update', $role);
+
         $permissions = $this->validateRequest()['permissions'];
         $role->permissions()->sync($permissions);
 
@@ -88,6 +96,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
+
         $role->delete();
 
         return response([], Response::HTTP_NO_CONTENT);

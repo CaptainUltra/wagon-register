@@ -15,6 +15,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Permission::class);
+
         return PermissionResource::collection(Permission::all());
     }
 
@@ -26,6 +28,8 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
+        $this->authorize('view', $permission);
+        
         return new PermissionResource($permission);
     }
 }
