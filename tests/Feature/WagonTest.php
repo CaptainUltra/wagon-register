@@ -110,7 +110,7 @@ class WagonTest extends TestCase
     /**@test */
     public function testForbiddenWagonRetrieve()
     {
-        $wagon= factory(Wagon::class)->create();
+        $wagon = factory(Wagon::class)->create();
         $this->user->roles[0]->permissions()->sync([]);
         $response = $this->get('api/wagons/' . $wagon->id . '?api_token=' . $this->user->api_token);
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -160,7 +160,7 @@ class WagonTest extends TestCase
         factory(WagonType::class)->create(['name' => '22-97', 'revision_valid_for' => 1])->save();
         $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '505222970039']));
         $wagon = Wagon::first();
-        
+
         $response->assertJson([
             'data' => [
                 'revision_expiration_date' => $wagon->revision_exp_date->format('d.m.Y')
@@ -168,7 +168,7 @@ class WagonTest extends TestCase
             'links' => [
                 'self' => $wagon->path()
             ]
-        ]);  
+        ]);
     }
     /**@test */
     public function testForbiddenWagonTypeUpdate()
@@ -208,6 +208,7 @@ class WagonTest extends TestCase
             'depot_id' => 1,
             'revisory_point_id' => 1,
             'revision_date' => '2019/08/06',
+            'status_id' => 1,
             'api_token' => $this->user->api_token
         ];
     }

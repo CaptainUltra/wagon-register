@@ -38,6 +38,12 @@
           @updatefield="form.depot_id = $event"
         ></SelectField>
         <SelectField
+          name="status"
+          label="Статус"
+          model="statuses"
+          @updatefield="form.status_id = $event"
+        ></SelectField>
+        <SelectField
           name="revisorypoint"
           label="Пункт на ревизия"
           model="revisorypoints"
@@ -77,6 +83,7 @@ export default {
         v_max: null,
         seats: null,
         depot_id: null,
+        status_id: null,
         revisory_point_id: null,
         revision_date:null,
       },

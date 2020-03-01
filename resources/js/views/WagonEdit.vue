@@ -51,6 +51,13 @@
               @updatefield="form.depot_id = $event"
             ></SelectField>
             <SelectField
+              name="status"
+              label="Статус"
+              model="statuses"
+              :data="form.status_id"
+              @updatefield="form.status_id = $event"
+            ></SelectField>
+            <SelectField
               name="revisorypoint"
               label="Пункт на ревизия"
               model="revisorypoints"
@@ -96,7 +103,9 @@ export default {
         this.form.seats = response.data.data.seats;
         this.depot = response.data.data.depot;
         this.updateDepot();
-        this.revisory_point= response.data.data.revisory_point;
+        this.status = response.data.data.status;
+        this.updateSatatus();
+        this.revisory_point = response.data.data.revisory_point;
         this.updateRevisoryPoint();
         this.form.revision_date = response.data.data.revision_date;
         this.loading = false;
@@ -117,10 +126,12 @@ export default {
         v_max: null,
         seats: null,
         depot_id: null,
+        status_id: null,
         revisory_point_id: null,
         revision_date: null
       },
       depot: null,
+      status: null,
       revisory_point: null,
       errors: null,
       loading: true
@@ -152,6 +163,11 @@ export default {
     updateRevisoryPoint() {
       if (this.revisory_point != null) {
         this.form.revisory_point_id = this.revisory_point.data.id;
+      }
+    },
+    updateSatatus() {
+      if (this.status != null) {
+        this.form.status_id = this.status.data.id;
       }
     }
   }

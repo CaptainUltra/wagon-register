@@ -47,6 +47,10 @@
             >{{wagon.revision_expiration_date ? wagon.revision_expiration_date : "-"}}</b>
           </p>
           <p>
+            <b>Статус:</b>
+            {{wagon.status.data.name}}
+          </p>
+          <p>
             <b>Последна промяна:</b>
             {{wagon.last_updated}}
           </p>

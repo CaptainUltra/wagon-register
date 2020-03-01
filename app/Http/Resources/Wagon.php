@@ -25,6 +25,7 @@ class Wagon extends JsonResource
                 'seats' => $this->seats,
                 'depot' => new Depot($this->depot),
                 'revisory_point' => new RevisoryPoint($this->revisoryPoint),
+                'status' => new Status($this->status),
                 'revision_date' => isset($this->revision_date) ? $this->revision_date->format('d.m.Y') : null,
                 'revision_expiration_date' => isset($this->revision_exp_date) ? $this->revision_exp_date->format('d.m.Y') : null,
                 'events' => Event::collection($this->whenLoaded('events')),

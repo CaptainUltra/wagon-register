@@ -9,9 +9,30 @@ use Laravel\Scout\Searchable;
 class Wagon extends Model
 {
     use Searchable;
-    
-    protected $fillable = ['number', 'letter_index', 'v_max', 'seats', 'depot_id', 'revisory_point_id', 'revision_date'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['number', 'letter_index', 'v_max', 'seats', 'depot_id', 'revisory_point_id', 'revision_date', 'status_id'];
+
+    /**
+     * The attributes that should be treated as dates.
+     *
+     * @var array
+     */
     protected $dates = ['revision_date', 'revision_exp_date'];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'status_id' => 4,
+    ];
+    
     /**
      * Return url to self
      * 
@@ -52,12 +73,9 @@ class Wagon extends Model
      */
     public function setRevisionDateAttribute($value)
     {
-        if($value == '')
-        {
+        if ($value == '') {
             $this->attributes['revision_date'] = null;
-        }
-        else
-        {
+        } else {
             $this->attributes['revision_date'] = Carbon::parse($value);
         }
     }
@@ -69,12 +87,9 @@ class Wagon extends Model
      */
     public function setRevisionExpDateAttribute($value)
     {
-        if($value == '')
-        {
+        if ($value == '') {
             $this->attributes['revision_exp_date'] = null;
-        }
-        else
-        {
+        } else {
             $this->attributes['revision_exp_date'] = $value;
         }
     }
@@ -121,6 +136,14 @@ class Wagon extends Model
     {
         return $this->hasMany(Event::class);
     }
+    /**
+     * Get the status that the wagon belongs to
+     */
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
     /**
      * Get the images associated with the wagon
      */

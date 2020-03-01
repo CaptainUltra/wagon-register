@@ -105,6 +105,7 @@ class WagonController extends Controller
             'depot_id' => '',
             'revisory_point_id' => '',
             'revision_date' => '',
+            'status_id' => '',
             //'index_image_id'=> ''
         ]);
     }

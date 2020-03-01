@@ -22,6 +22,7 @@ class CreateWagonsTable extends Migration
             $table->integer('seats')->nullable();
             $table->integer('depot_id')->nullable();
             $table->integer('revisory_point_id')->nullable();
+            $table->integer('status_id')->nullable()->default(4);
             $table->date('revision_date')->nullable();
             $table->date('revision_exp_date')->nullable();
             $table->integer('index_image_id')->nullable();

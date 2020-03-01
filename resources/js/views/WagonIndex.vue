@@ -15,6 +15,7 @@
             <th scope="col">Буквено означение</th>
             <th scope="col">Места</th>
             <th scope="col">Гара на домуване</th>
+            <th scope="col">Статус</th>
             <th scope="col">Последна промяна</th>
           </tr>
         </thead>
@@ -25,6 +26,7 @@
             <td>{{wagon.data.letter_index ? wagon.data.letter_index : "-" }}</td>
             <td>{{wagon.data.seats ? wagon.data.seats : "-"}}</td>
             <td>{{wagon.data.depot ? wagon.data.depot.data.name : "-"}}</td>
+            <td>{{wagon.data.status.data.name}}</td>
             <td>{{wagon.data.last_updated}}</td>
           </tr>
         </tbody>
