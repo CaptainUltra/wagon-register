@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import ExampleComponent from "./components/ExampleComponent.vue";
+import Welcome from "./components/Welcome.vue";
 import DepotCreate from "./views/DepotCreate.vue";
 import DepotShow from "./views/DepotShow.vue";
 import DepotIndex from "./views/DepotIndex.vue";
@@ -44,6 +44,7 @@ import RoleCreate from "./views/RoleCreate.vue";
 import RoleShow from "./views/RoleShow.vue";
 import RoleIndex from "./views/RoleIndex.vue";
 import RoleEdit from "./views/RoleEdit.vue";
+import MarkWagonsAsSeen from "./views/MarkWagonsAsSeen.vue";
 
 Vue.use(VueRouter);
 
@@ -57,7 +58,7 @@ function todayFilter(route) {
 
 export default new VueRouter({
     routes: [
-        { path: "/", component: ExampleComponent },
+        { path: "/", component: Welcome },
         { path: "/dashboard", redirect: "/" },
         { path: "/depots/create", component: DepotCreate },
         { path: "/depots", component: DepotIndex },
@@ -117,6 +118,7 @@ export default new VueRouter({
         { path: "/roles", component: RoleIndex },
         { path: "/roles/:id", component: RoleShow },
         { path: "/roles/:id/edit", component: RoleEdit },
+        { path: "/markseen", component: MarkWagonsAsSeen },
     ],
     mode: "history"
 });

@@ -30,7 +30,7 @@ class WagonTypeSeeder extends Seeder
             ['name' => '20-44', 'conditioned' => true, 'revision_valid_for' => 5, 'interior_type_id' => 1],
             ['name' => '84-44', 'conditioned' => true, 'revision_valid_for' => 5, 'interior_type_id' => 1],
             ['name' => '25-63', 'conditioned' => true, 'revision_valid_for' => 5, 'interior_type_id' => 1],
-            ['name' => '16-63', 'conditioned' => true, 'revision_valid_for' => 5, 'interior_type_id' => 1],
+            ['name' => '15-63', 'conditioned' => true, 'revision_valid_for' => 5, 'interior_type_id' => 1],
             ['name' => '31-43', 'conditioned' => false, 'revision_valid_for' => 5, 'interior_type_id' => 1],
             ['name' => '22-97', 'conditioned' => false, 'revision_valid_for' => 4, 'interior_type_id' => 5],
             ['name' => '21-50', 'conditioned' => false, 'revision_valid_for' => 4, 'interior_type_id' => 3],

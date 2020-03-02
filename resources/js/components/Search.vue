@@ -26,6 +26,7 @@
           <router-link  v-if="model === 'number'" class="text-body" :to="result.links.self">{{ result.data.number}}</router-link>
           <p v-if="model === 'return_train_id'" class="text-body"  v-on:click="$emit('updateid', result.data.id)">{{ result.data.number}}</p>
           <p v-if="model === 'return_station_id'" class="text-body" v-on:click="$emit('updateid', result.data.id)">{{ result.data.name}}</p>
+          <p v-if="model === 'return_wagon'" class="text-body" v-on:click="$emit('updateid', {id: result.data.id, stylized_number: result.data.stylized_number})">{{ result.data.stylized_number}}</p>
         </div>
       </div>
     </div>

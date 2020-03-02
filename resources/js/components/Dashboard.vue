@@ -8,7 +8,7 @@
             <router-link to="/" class="nav-link active">Начало</router-link>
           </li>
           <li class="nav-item" v-if="userHasPermission('event-create')">
-            <router-link to="/" class="nav-link">Маркиране на видени</router-link>
+            <router-link to="/markseen" class="nav-link">Маркиране на видени</router-link>
           </li>
           <li class="nav-item">
             <router-link
