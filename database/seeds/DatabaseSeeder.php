@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DepotSeeder::class);
         $this->call(RevisoryPointSeeder::class);
         $this->call(StatusSeeder::class);
+        $this->call(StationSeeder::class);
     }
 }

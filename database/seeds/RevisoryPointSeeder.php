@@ -30,7 +30,7 @@ class RevisoryPointSeeder extends Seeder
             ['name' => 'Хан Крум', 'abbreviation' => 'HCR'],
             ['name' => 'Пловдив', 'abbreviation' => 'Po'],
             ['name' => 'Левски', 'abbreviation' => 'L'],
-            ['name' => 'Септември', 'abbreviation' => 'Sp'],
+            ['name' => 'Септември (до 2018)', 'abbreviation' => 'Sp'],
         ];
     }
 }
