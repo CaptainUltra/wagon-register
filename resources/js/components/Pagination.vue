@@ -9,7 +9,9 @@
           <a @click="changePagePrev()" class="page-link">Предишна</a>
         </li>
         <li class="page-item">
-          <p class="page-link disabled text-body">{{emitData.paginationData.currentPage}} от {{this.emitData.paginationData.lastPage}}</p>
+          <p
+            class="page-link disabled text-body"
+          >{{emitData.paginationData.currentPage}} от {{this.emitData.paginationData.lastPage}}</p>
         </li>
         <li :class="nextClass">
           <a @click="changePageNext()" class="page-link">Следваща</a>
@@ -24,9 +26,9 @@ export default {
   name: "Pagination",
   props: ["pagination", "model"],
   mounted() {
-      this.emitData.paginationData.total = this.pagination.total;
-      this.emitData.paginationData.currentPage = this.pagination.currentPage;
-      this.emitData.paginationData.lastPage = this.pagination.lastPage;
+    this.emitData.paginationData.total = this.pagination.total;
+    this.emitData.paginationData.currentPage = this.pagination.currentPage;
+    this.emitData.paginationData.lastPage = this.pagination.lastPage;
   },
   data: function() {
     return {
@@ -49,9 +51,11 @@ export default {
         return "page-item disabled";
       }
     },
-    nextClass: function()
-    {
-        if (this.emitData.paginationData.currentPage < this.emitData.paginationData.lastPage) {
+    nextClass: function() {
+      if (
+        this.emitData.paginationData.currentPage <
+        this.emitData.paginationData.lastPage
+      ) {
         return "page-item text-primary";
       } else {
         return "page-item disabled";
@@ -60,18 +64,22 @@ export default {
   },
   methods: {
     loadData(response) {
-        this.emitData.values = response.data.data;
-        this.emitData.paginationData.currentPage = response.data.meta["current_page"];
-        this.emitData.paginationData.lastPage = response.data.meta["last_page"];
-        this.emitData.paginationData.total = response.data.meta["total"];
-        this.emitData.loading = false;
-        this.$emit("updatepage", this.emitData);
+      this.emitData.values = response.data.data;
+      this.emitData.paginationData.currentPage =
+        response.data.meta["current_page"];
+      this.emitData.paginationData.lastPage = response.data.meta["last_page"];
+      this.emitData.paginationData.total = response.data.meta["total"];
+      this.emitData.loading = false;
+      this.$emit("updatepage", this.emitData);
     },
     changePageNext() {
       let nextPage = this.emitData.paginationData.currentPage + 1;
       let pageQueryString = "?page=" + nextPage.toString();
+      if (this.model.includes("?")) {
+        pageQueryString = "&page=" + nextPage.toString();
+      }
       axios
-        .get("/api/"+ this.model + pageQueryString)
+        .get("/api/" + this.model + pageQueryString)
         .then(response => this.loadData(response))
         .catch(error => {
           alert("Грешка при взимането на информация");
@@ -80,8 +88,11 @@ export default {
     changePagePrev() {
       let nextPage = this.emitData.paginationData.currentPage - 1;
       let pageQueryString = "?page=" + nextPage.toString();
+      if (this.model.includes("?")) {
+        pageQueryString = "&page=" + nextPage.toString();
+      }
       axios
-        .get("/api/"+ this.model + pageQueryString)
+        .get("/api/" + this.model + pageQueryString)
         .then(response => this.loadData(response))
         .catch(error => {
           alert("Грешка при взимането на информация");

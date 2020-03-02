@@ -71,7 +71,7 @@
           </tr>
         </tbody>
       </table>
-      <Pagination :pagination="pagination" model="events" @updatepage="updateData"></Pagination>
+      <Pagination :pagination="pagination" model="events?show-wagon=1" @updatepage="updateData"></Pagination>
     </div>
   </div>
 </template>
