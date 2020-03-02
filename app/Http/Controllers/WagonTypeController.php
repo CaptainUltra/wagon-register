@@ -18,7 +18,15 @@ class WagonTypeController extends Controller
     {
         $this->authorize('viewAny', WagonType::class);
 
-        return WagonTypeResource::collection(WagonType::paginate(15));
+        if (request()->has('pagination') && !request('pagination')) {
+            $wagonTypes = WagonType::all();
+        }
+        else
+        {
+            $wagonTypes = WagonType::paginate(15);
+        }
+
+        return WagonTypeResource::collection($wagonTypes);
     }
 
     /**

@@ -29,7 +29,7 @@
             v-for="i in Number(coachesCount)"
             name="wagontypes"
             :label="'Серия вагон №' + i"
-            model="wagontypes"
+            model="wagontypes?pagination=0"
             @updatefield="updateWagonTypeArray($event, i)"
           ></SelectField>
         </div>
