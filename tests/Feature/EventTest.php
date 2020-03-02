@@ -34,8 +34,11 @@ class EventTest extends TestCase
         factory(Permission::class)->create(['slug' => 'event-create']);
         factory(Permission::class)->create(['slug' => 'event-update']);
         factory(Permission::class)->create(['slug' => 'event-delete']);
+        factory(Permission::class)->create(['slug' => 'event-viewDate']);
+        factory(Permission::class)->create(['slug' => 'event-viewWagon']);
+        factory(Permission::class)->create(['slug' => 'event-viewUser']);
 
-        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5]);
+        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5, 6, 7, 8]);
 
         factory(WagonType::class)->create(['name' => '85-97']);
         factory(Wagon::class)->create();

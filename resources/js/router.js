@@ -51,7 +51,7 @@ function todayFilter(route) {
     const now = new Date();
     return {
         filter: "date",
-        value: now.getDate + "." + now.getMonth + "." + now.getFullYear
+        value: now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear()
     };
 }
 

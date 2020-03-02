@@ -20,7 +20,7 @@ class CreateTrainWagontypeTable extends Migration
             $table->foreign('train_id')->references('id')->on('trains')->onDelete('cascade');
             $table->foreign('wagon_type_id')->references('id')->on('wagon_types')->onDelete('cascade');
 
-            $table->primary(['train_id', 'wagon_type_id']);
+            $table->primary(['train_id', 'wagon_type_id', 'position']);
         });
     }
 

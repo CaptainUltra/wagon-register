@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Event as EventResource;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
@@ -18,24 +19,31 @@ class EventController extends Controller
      */
     public function index()
     {
+        if (request()->has('date')) {
+            $this->authorize('viewDate', Event::class);
+            $date = Carbon::parse(request('date'))->toDateString();
+            $events = Event::with('wagon')->whereRaw('created_at', $date)->paginate(15);
+            return EventResource::collection($events);
+        }
+        if (request()->has('wagon_id')) {
+            $this->authorize('viewWagon', Event::class);
+            $events = Event::where('wagon_id', request('wagon_id'))->paginate(15);
+            return EventResource::collection($events);
+        }
+        if (request()->has('user_id')) {
+            $this->authorize('viewUser', Event::class);
+            $events = Event::where('user_id', request('user_id'))->paginate(15);
+            return EventResource::collection($events);
+        }
+
         $this->authorize('viewAny', Event::class);
 
         $events = Event::paginate(15);
-        if(request()->has('date'))
-        {
-            $events = Event::where('created_at', request('date'))->paginate(15);
-        }
-        if(request()->has('wagon_id'))
-        {
-            $events = Event::where('wagon_id', request('wagon_id'))->paginate(15);
-        }
-        if(request()->has('user_id'))
-        {
-            $events = Event::where('user_id', request('user_id'))->paginate(15);
-        }
-        if(request()->has('show-wagon') && request('show-wagon')){
+
+        if (request()->has('show-wagon') && request('show-wagon')) {
             $events = Event::with('wagon')->paginate(15);
         }
+
         return EventResource::collection($events);
     }
 
@@ -67,7 +75,7 @@ class EventController extends Controller
     {
         $this->authorize('view', $event);
 
-        if(request()->has('show-wagon') && request('show-wagon')){
+        if (request()->has('show-wagon') && request('show-wagon')) {
             $eventId = $event->id;
             $event = Event::with('wagon')->find($eventId);
         }
@@ -118,7 +126,7 @@ class EventController extends Controller
             'date' => 'required',
             'wagon_id' => 'required|exists:wagons,id',
             'station_id' => 'required_without:train_id',
-            'train_id'=> 'required_without:station_id',
+            'train_id' => 'required_without:station_id',
             'comment' => ''
         ]);
     }

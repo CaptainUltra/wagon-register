@@ -3,7 +3,7 @@
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="events.length === 0">
-        <p>Няма налични депа</p>
+        <p>Няма налични събития</p>
       </div>
       <h4 v-if="filter === 'wagon'">Списък на събития за вагон</h4>
       <h4 v-if="filter === 'date'">Списък на събития от днес</h4>
@@ -80,13 +80,13 @@ export default {
   mounted() {
     var url = "/api/events/?show-wagon=1";
     if (this.filter === "wagon") {
-      url = url + "?wagon_id=" + this.value;
+      url = url + "&wagon_id=" + this.value;
     }
     if (this.filter === "date") {
-      url = url + "?date=" + this.value;
+      url = url + "&date=" + this.value;
     }
     if (this.filter === "user") {
-      url = url + "?user_id=" + this.value;
+      url = url + "&user_id=" + this.value;
     }
     axios
       .get(url)
