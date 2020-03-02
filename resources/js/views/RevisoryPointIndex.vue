@@ -18,8 +18,20 @@
         <tbody>
           <tr v-for="revisoryPoint in revisoryPoints">
             <th scope="row">{{ revisoryPoint.data.id}}</th>
-            <td><router-link class="text-body" :to="'/revisorypoints/' + revisoryPoint.data.id">{{revisoryPoint.data.name}}</router-link></td>
-            <td><router-link class="text-body" :to="'/revisorypoints/' + revisoryPoint.data.id">{{revisoryPoint.data.abbreviation}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/revisorypoints/' + revisoryPoint.data.id"
+                :permissions="permissions"
+              >{{revisoryPoint.data.name}}</router-link>
+            </td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/revisorypoints/' + revisoryPoint.data.id"
+                :permissions="permissions"
+              >{{revisoryPoint.data.abbreviation}}</router-link>
+            </td>
             <td>{{revisoryPoint.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -34,6 +46,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "RevisoryPointIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },
@@ -69,8 +82,6 @@ export default {
       this.loading = value.loading;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>

@@ -31,13 +31,18 @@
           {{wagonType.last_updated}}
         </p>
         <div class="pt-3 d-flex justify-content-between">
-            <a href="#" @click="$router.back()">< Назад</a>
+          <a href="#" @click="$router.back()">< Назад</a>
           <div class="justify-content-end position-relative">
             <router-link
               :to="'/wagontypes/' + wagonType.id + '/edit'"
               class="btn btn-outline-success"
+              v-if="userHasPermission('wagontype-update')"
             >Промяна</router-link>
-            <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal">Изтриване</button>
+            <button
+              class="btn btn-outline-danger ml-3 mr-4"
+              @click="modal = !modal"
+              v-if="userHasPermission('wagontype-delete')"
+            >Изтриване</button>
             <div v-if="modal" class="position-absolute bg-dark rounded-lg p-4">
               <p
                 class="text-white"
@@ -57,6 +62,7 @@
 <script>
 export default {
   name: "WagonTypeShow",
+  props: ["permissions"],
   mounted() {
     axios
       .get("/api/wagontypes/" + this.$route.params.id)
@@ -89,6 +95,16 @@ export default {
         .catch(error => {
           alert("Грешка при изтриването!");
         });
+    },
+    userHasPermission(permission) {
+      var flag = false;
+      this.permissions.forEach(element => {
+        if (element == permission) {
+          flag = true;
+          return false;
+        }
+      });
+      return flag;
     }
   }
 };

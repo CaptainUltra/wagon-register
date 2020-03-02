@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $roleUser = factory(App\Role::class)->create(['name' => 'Потребител', 'slug' => 'user-role']);
-        $roleUser->permissions()->sync([21, 22, 26, 27, 31, 32, 37, 48, 41]);
+        $roleUser->permissions()->sync([21, 22, 26, 27, 31, 32, 37, 38, 41]);
         $roleUser->save();
         $roleTrustedUser = factory(App\Role::class)->create(['name' => 'Доверен потребител', 'slug' => 'trusted-user-role']);
         $roleTrustedUser->permissions()->sync([21, 22, 26, 27, 31, 32, 36, 37, 38, 41, 42, 43]);

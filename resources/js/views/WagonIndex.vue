@@ -21,7 +21,13 @@
         </thead>
         <tbody>
           <tr v-for="wagon in wagons">
-            <th scope="row"><router-link class="text-body" :to="'/wagons/' + wagon.data.id">{{ wagon.data.stylized_number}}</router-link></th>
+            <th scope="row">
+              <router-link
+                class="text-body"
+                :to="'/wagons/' + wagon.data.id"
+                :permissions="permissions"
+              >{{ wagon.data.stylized_number}}</router-link>
+            </th>
             <td>{{wagon.data.type.data.name}}</td>
             <td>{{wagon.data.letter_index ? wagon.data.letter_index : "-" }}</td>
             <td>{{wagon.data.seats ? wagon.data.seats : "-"}}</td>
@@ -46,6 +52,7 @@ export default {
     Pagination,
     Search
   },
+  props: ["permissions"],
   mounted() {
     axios
       .get("/api/wagons")
@@ -77,9 +84,6 @@ export default {
       this.pagination = value.pagination;
       this.loading = value.loading;
     }
-  },
-  computed: {
-    
   }
 };
 </script>

@@ -19,7 +19,13 @@
         <tbody>
           <tr v-for="wagonType in wagonTypes">
             <th scope="row">{{ wagonType.data.id}}</th>
-            <td><router-link class="text-body" :to="'/wagontypes/' + wagonType.data.id">{{wagonType.data.name}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/wagontypes/' + wagonType.data.id"
+                :permissions="permissions"
+              >{{wagonType.data.name}}</router-link>
+            </td>
             <td>{{wagonType.data.interior_type.data.name}}</td>
             <td>{{wagonType.data.conditioned ? "Да" : "Не"}}</td>
             <td>{{wagonType.data.last_updated}}</td>
@@ -36,6 +42,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "WagonTypeIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },
@@ -71,8 +78,6 @@ export default {
       this.loading = value.loading;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>

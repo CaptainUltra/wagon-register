@@ -9,7 +9,6 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <!--<img class="d-block w-100" src="http://placehold.it/1280x720" alt="First slide">-->
         <img class="carousel-img" src="/storage/homepage-images/default-slide1.jpg" alt="First slide">
         <div class="container">
           <div class="carousel-caption">
@@ -47,8 +46,8 @@
     </a>
   </div>
 
-  <!-- How to use section -->
-  <div class="container-fluid padding">
+  <!-- What site offers section -->
+  <div class="container-fluid padding" id="whatOffersSection">
     <div class="row welcome text-center">
       <div class="col-12">
           <h1 class="display-4">Какво предлага сайтът?</h1>
@@ -68,7 +67,7 @@
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4">
           <img class="rounded-circle how-to-img" src="/storage/homepage-images/drawings/undraw_web_developer_p3e5.svg">
-          <h2><a href="#">Информация за вагони</a></h2>
+          <h2>Информация за вагони</h2>
           <p>Служител сте в железницата и Ви трябва информация за даден вагон? Тук я има - брой места, спирачна маса и пр.</p>
       </div>
       <div class="col-sm-12 col-md-4">
@@ -81,7 +80,7 @@
   </div>
 
   <!-- About -->
-  <div class="container-fluid padding">
+  <div class="container-fluid padding" id="about">
     <div class="row padding">
       <div class="col-md-12 col-lg-6">
         <h2>За сайта...</h2>
@@ -97,7 +96,6 @@
 
       </div>
       <div class="col-md-12 col-lg-6">
-        <!-- <img class="img-fluid" src="http://placehold.it/1000x642"> -->
         <img class="img-fluid" src="/storage/homepage-images/drawings/undraw_experts3_3njd.svg">
       </div>
     </div>
@@ -105,7 +103,7 @@
   <!-- Footer -->
   <footer class="footer mt-auto py-3">
       <div class="container text-center">
-        <span class="">&copy; Stoyan Haydushki</span>
+        <span class="">Stoyan Haydushki</span>
       </div>
   </footer>
 @endsection

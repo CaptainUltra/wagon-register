@@ -24,7 +24,11 @@
         <tbody>
           <tr v-for="event in events">
             <th scope="row" v-if="filter === 'wagon'">
-              <router-link class="text-body" :to="'/events/' + event.data.id">{{ event.data.date}}</router-link>
+              <router-link
+                class="text-body"
+                :to="'/events/' + event.data.id"
+                :permissions="permissions"
+              >{{ event.data.date}}</router-link>
             </th>
             <th scope="row" v-if="filter === 'date'">
               <router-link
@@ -33,7 +37,11 @@
               >{{ event.data.wagon.data.stylized_number}}</router-link>
             </th>
             <th scope="row" v-if="filter ==  null">
-              <router-link class="text-body" :to="'/events/' + event.data.id">{{ event.data.date}}</router-link>
+              <router-link
+                class="text-body"
+                :to="'/events/' + event.data.id"
+                :permissions="permissions"
+              >{{ event.data.date}}</router-link>
             </th>
             <th scope="row" v-if="filter == null">
               <router-link
@@ -73,7 +81,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "EventIndex",
-  props: ["filter", "value"],
+  props: ["filter", "value", "permissions"],
   components: {
     Pagination
   },

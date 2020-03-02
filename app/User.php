@@ -58,11 +58,41 @@ class User extends Authenticatable
     public function hasPermission($permission)
     {
         foreach ($this->roles as $role) {
-            foreach($role->permissions as $userPermisson)
-            {
-                if($userPermisson['slug'] === $permission) return true;
+            foreach ($role->permissions as $userPermisson) {
+                if ($userPermisson['slug'] === $permission) return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Get the slugs of the user's roles' permissions
+     * 
+     * @return string
+     */
+    public function getPermissionsSlugs()
+    {
+        $permissions = [];
+        foreach ($this->roles as $role) {
+            foreach ($role->permissions as $userPermisson) {
+                $slug = $userPermisson['slug'];
+                array_push($permissions, $slug);
+            }
+        }
+        return json_encode($permissions);
+    }
+    /**
+     * Get the slugs of the user's roles
+     * 
+     * @return string
+     */
+    public function getRolesSlugs()
+    {
+        $roles = [];
+        foreach ($this->roles as $role) {
+            $slug = $role['slug'];
+            array_push($roles, $slug);
+        }
+        return json_encode($roles);
     }
 }

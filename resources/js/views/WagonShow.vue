@@ -55,7 +55,7 @@
             {{wagon.last_updated}}
           </p>
         </div>
-        <div class="col-12 pt-2">
+        <div class="col-12 pt-2" v-if="userHasPermission('event-viewWagon')">
           <h5>Последно видян:</h5>
           <ul class="list-group">
             <li
@@ -72,13 +72,14 @@
           <div class="justify-content-end position-relative">
             <router-link
               :to="'/wagons/' + wagon.id + '/events/create'"
-              class="btn btn-outline-primary"
+              class="btn btn-outline-primary mr-4"
             >Добавяне на събитие</router-link>
             <router-link
               :to="'/wagons/' + wagon.id + '/edit'"
               class="btn btn-outline-success ml-3"
+              v-if="userHasPermission('wagon-update')"
             >Промяна</router-link>
-            <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal">Изтриване</button>
+            <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal" v-if="userHasPermission('wagon-delete')">Изтриване</button>
             <div v-if="modal" class="position-absolute bg-dark rounded-lg p-4">
               <p
                 class="text-white"
@@ -98,6 +99,7 @@
 <script>
 export default {
   name: "WagonShow",
+  props: ["permissions"],
   mounted() {
     axios
       .get("/api/wagons/" + this.$route.params.id + "?show-events=1")
@@ -130,6 +132,16 @@ export default {
         .catch(error => {
           alert("Грешка при изтриването!");
         });
+    },
+    userHasPermission(permission) {
+      var flag = false;
+      this.permissions.forEach(element => {
+        if (element == permission) {
+          flag = true;
+          return false;
+        }
+      });
+      return flag;
     }
   }
 };

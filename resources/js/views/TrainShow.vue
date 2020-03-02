@@ -39,8 +39,13 @@
             <router-link
               :to="'/trains/' + train.id + '/edit'"
               class="btn btn-outline-success"
+              v-if="userHasPermission('train-update')"
             >Промяна</router-link>
-            <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal">Изтриване</button>
+            <button
+              class="btn btn-outline-danger ml-3 mr-4"
+              @click="modal = !modal"
+              v-if="userHasPermission('train-delete')"
+            >Изтриване</button>
             <div v-if="modal" class="position-absolute bg-dark rounded-lg p-4">
               <p
                 class="text-white"
@@ -60,6 +65,7 @@
 <script>
 export default {
   name: "TrainShow",
+  props: ["permissions"],
   mounted() {
     axios
       .get("/api/trains/" + this.$route.params.id)
@@ -92,6 +98,16 @@ export default {
         .catch(error => {
           alert("Грешка при изтриването!");
         });
+    },
+    userHasPermission(permission) {
+      var flag = false;
+      this.permissions.forEach(element => {
+        if (element == permission) {
+          flag = true;
+          return false;
+        }
+      });
+      return flag;
     }
   }
 };

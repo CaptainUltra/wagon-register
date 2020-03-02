@@ -3,9 +3,9 @@
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="users.length === 0">
-        <p>Няма налични депа</p>
+        <p>Няма налични потребители</p>
       </div>
-      <h4>Списък на всички депа</h4>
+      <h4>Списък на всички потребители</h4>
       <table class="table">
         <thead>
           <tr>
@@ -18,8 +18,20 @@
         <tbody>
           <tr v-for="user in users">
             <th scope="row">{{ user.data.id}}</th>
-            <td><router-link class="text-body" :to="'/users/' + user.data.id">{{user.data.name}}</router-link></td>
-            <td><router-link class="text-body" :to="'/users/' + user.data.id">{{user.data.email}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/users/' + user.data.id"
+                :permissions="permissions"
+              >{{user.data.name}}</router-link>
+            </td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/users/' + user.data.id"
+                :permissions="permissions"
+              >{{user.data.email}}</router-link>
+            </td>
             <td>{{user.data.created_at}}</td>
           </tr>
         </tbody>
@@ -34,6 +46,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "UserIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },

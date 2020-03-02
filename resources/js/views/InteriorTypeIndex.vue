@@ -5,7 +5,7 @@
       <div v-if="interiorTypes.length === 0">
         <p>Няма налични типове интериори</p>
       </div>
-      <h4>Списък на всички депа</h4>
+      <h4>Списък на всички типове интериори</h4>
       <table class="table">
         <thead>
           <tr>
@@ -17,7 +17,13 @@
         <tbody>
           <tr v-for="interiorType in interiorTypes">
             <th scope="row">{{ interiorType.data.id}}</th>
-            <td><router-link class="text-body" :to="'/interiortypes/' + interiorType.data.id">{{interiorType.data.name}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/interiortypes/' + interiorType.data.id"
+                :permissions="permissions"
+              >{{interiorType.data.name}}</router-link>
+            </td>
             <td>{{interiorType.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -32,6 +38,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "InteriorTypeIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },
@@ -67,8 +74,6 @@ export default {
       this.loading = value.loading;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>

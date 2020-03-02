@@ -1,6 +1,6 @@
 <template>
   <div class="py-4">
-      <Search model="number" placeholder="Търсене на влак" route="trainsearch"></Search>
+    <Search model="number" placeholder="Търсене на влак" route="trainsearch"></Search>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="trains.length === 0">
@@ -17,8 +17,20 @@
         </thead>
         <tbody>
           <tr v-for="train in trains">
-            <th scope="row"><router-link class="text-body" :to="'/trains/' + train.data.id">{{train.data.number}}</router-link></th>
-            <td><router-link class="text-body" :to="'/trains/' + train.data.id">{{train.data.route}}</router-link></td>
+            <th scope="row">
+              <router-link
+                class="text-body"
+                :to="'/trains/' + train.data.id"
+                :permissions="permissions"
+              >{{train.data.number}}</router-link>
+            </th>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/trains/' + train.data.id"
+                :permissions="permissions"
+              >{{train.data.route}}</router-link>
+            </td>
             <td>{{train.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -34,6 +46,7 @@ import Search from "../components/Search";
 
 export default {
   name: "TrainIndex",
+  props: ["permissions"],
   components: {
     Pagination,
     Search
@@ -70,8 +83,6 @@ export default {
       this.loading = value.loading;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>

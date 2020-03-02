@@ -36,20 +36,17 @@
                   <li class="nav-item">
                     <a class="nav-link active" href="{{route('homepage')}}">Начало</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/search">Тъсене</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/gallery">Галерия</a>
-                  </li>
                   @guest
                   <li class="nav-item">
-                    <a class="nav-link" href="/login">Влез</a>
+                    <a class="nav-link" href="#whatOffersSection">Какво предлага?</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#about">За сайтът</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{route('dashboard')}}">Влез</a>
                   </li>
                   @else
-                  <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Табло</a>
-                  </li>
                   <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }} <span class="caret"></span>

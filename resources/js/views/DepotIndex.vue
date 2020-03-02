@@ -17,7 +17,13 @@
         <tbody>
           <tr v-for="depot in depots">
             <th scope="row">{{ depot.data.id}}</th>
-            <td><router-link class="text-body" :to="'/depots/' + depot.data.id">{{depot.data.name}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/depots/' + depot.data.id"
+                :permissions="permissions"
+              >{{depot.data.name}}</router-link>
+            </td>
             <td>{{depot.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -32,6 +38,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "DepotIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },
@@ -67,8 +74,6 @@ export default {
       this.loading = value.loading;
     }
   },
-  computed: {
-    
-  }
+  computed: {}
 };
 </script>

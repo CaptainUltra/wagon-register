@@ -17,7 +17,13 @@
         <tbody>
           <tr v-for="role in roles">
             <th scope="row">{{ role.data.id}}</th>
-            <td><router-link class="text-body" :to="'/roles/' + role.data.id">{{role.data.name}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/roles/' + role.data.id"
+                :permissions="permissions"
+              >{{role.data.name}}</router-link>
+            </td>
             <td>{{role.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -27,9 +33,9 @@
 </template>
 
 <script>
-
 export default {
   name: "RoleIndex",
+  props: ["permissions"],
   mounted() {
     axios
       .get("/api/roles")
@@ -44,7 +50,7 @@ export default {
   data: function() {
     return {
       loading: true,
-      roles: null,
+      roles: null
     };
   }
 };

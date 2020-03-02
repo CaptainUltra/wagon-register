@@ -17,7 +17,13 @@
         <tbody>
           <tr v-for="status in statuses">
             <th scope="row">{{ status.data.id}}</th>
-            <td><router-link class="text-body" :to="'/statuses/' + status.data.id">{{status.data.name}}</router-link></td>
+            <td>
+              <router-link
+                class="text-body"
+                :to="'/statuses/' + status.data.id"
+                :permissions="permissions"
+              >{{status.data.name}}</router-link>
+            </td>
             <td>{{status.data.last_updated}}</td>
           </tr>
         </tbody>
@@ -32,6 +38,7 @@ import Pagination from "../components/Pagination";
 
 export default {
   name: "StatusIndex",
+  props: ["permissions"],
   components: {
     Pagination
   },
