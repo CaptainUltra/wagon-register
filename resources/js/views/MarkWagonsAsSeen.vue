@@ -23,7 +23,7 @@
           model="return_station_id"
           route="stationsearch"
           placeholder="Въведете име на гара"
-          @updateid="form.station_id = $event"
+          @updateid="station_id = $event"
         ></Search>
         <label for="train" class="ml-2 pt-2 font-weight-bold text-primary">Влак</label>
         <Search
@@ -31,14 +31,14 @@
           model="return_train_id"
           route="trainsearch"
           placeholder="Въведете номер на влак"
-          @updateid="form.train_id = $event"
+          @updateid="train_id = $event"
         ></Search>
         <InputField
           name="date"
           label="Дата на събитие"
           placeholder="Въведете дата на събитие..."
           :errors="errors"
-          @updatefield="form.date = $event"
+          @updatefield="date = $event"
         />
         <div class="pt-3 d-flex justify-content-end">
           <button class="btn btn-outline-danger" @click="$router.push('/')">Отказ</button>
@@ -54,7 +54,7 @@ import InputField from "../components/InputField";
 import Search from "../components/Search";
 
 export default {
-  name: "EventCreate",
+  name: "MarkWagonsAsSeen",
   props: ["wagonId"],
   components: {
     InputField,
@@ -62,12 +62,9 @@ export default {
   },
   data: function() {
     return {
-      form: {
-        date: null,
-        wagon_id: null,
-        station_id: null,
-        train_id: null
-      },
+      date: null,
+      station_id: null,
+      train_id: null,
       wagons: [],
       wagons_id: [],
       errors: null
@@ -76,9 +73,16 @@ export default {
   methods: {
     submitForm() {
       this.wagons_id.forEach(element => {
-        this.form.wagon_id = element;
+        let form = {
+          wagon_id: element,
+          date: this.date,
+          station_id: this.station_id,
+          train_id: this.train_id
+        };
+        console.log(element);
+        console.log(form);
         axios
-          .post("/api/events", this.form)
+          .post("/api/events", form)
           .then(response => {})
           .catch(errors => {
             this.errors = errors.response.data.errors;

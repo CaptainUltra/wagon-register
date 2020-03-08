@@ -10,10 +10,10 @@
           <img class="img-fluid" src="https://placehold.it/1920x1080" />
         </div>
         <div class="col-md-12 col-lg-6">
-          <p>
+          <h5>
             <b>№:</b>
-            {{wagon.stylized_number}}
-          </p>
+            <b>{{wagon.stylized_number}}</b>
+          </h5>
           <p>
             <b>Серия:</b>
             {{wagon.type.data.name}}
@@ -47,8 +47,12 @@
             >{{wagon.revision_expiration_date ? wagon.revision_expiration_date : "-"}}</b>
           </p>
           <p>
-            <b>Статус:</b>
-            {{wagon.status.data.name}}
+            <b class="text-body">Статус:</b>
+            <b
+              class="text-success"
+              v-if="wagon.status.data.id == 1 || wagon.status.data.id == 7||wagon.status.data.id == 8||wagon.status.data.id == 9"
+            >{{wagon.status.data.name}}</b>
+            <b class="text-danger" v-else>{{wagon.status.data.name}}</b>
           </p>
           <p>
             <b>Последна промяна:</b>
@@ -79,7 +83,11 @@
               class="btn btn-outline-success ml-3"
               v-if="userHasPermission('wagon-update')"
             >Промяна</router-link>
-            <button class="btn btn-outline-danger ml-3 mr-4" @click="modal = !modal" v-if="userHasPermission('wagon-delete')">Изтриване</button>
+            <button
+              class="btn btn-outline-danger ml-3 mr-4"
+              @click="modal = !modal"
+              v-if="userHasPermission('wagon-delete')"
+            >Изтриване</button>
             <div v-if="modal" class="position-absolute bg-dark rounded-lg p-4">
               <p
                 class="text-white"

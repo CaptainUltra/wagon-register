@@ -18,7 +18,7 @@ class StationController extends Controller
     {
         $this->authorize('viewAny', Station::class);
 
-        return StationResource::collection(Station::paginate(15));
+        return StationResource::collection(Station::orderBy('name', 'asc')->paginate(15));
     }
 
     /**

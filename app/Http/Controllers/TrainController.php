@@ -19,7 +19,7 @@ class TrainController extends Controller
     {
         $this->authorize('viewAny', Train::class);
 
-        return TrainResource::collection(Train::paginate(15));
+        return TrainResource::collection(Train::orderBy('number', 'asc')->paginate(15));
     }
 
     /**

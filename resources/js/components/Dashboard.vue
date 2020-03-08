@@ -1,6 +1,6 @@
 <template>
   <div class="row bg-white mr-0">
-    <nav class="col-md-2 col-sm-3 d-md-block bg-light sidebar">
+    <nav class="col-md-2 col-sm-3 col-3 d-md-block bg-light sidebar text-break">
       <div class="sidebar-sticky">
         <h3 class="p-4 pb-0">Табло за управление</h3>
         <ul class="nav flex-column pl-3">
@@ -276,7 +276,7 @@
       </div>
     </nav>
     <main
-      class="col-md-10 col-sm-9 d-md-block ml-sm-auto col-lg-10 px-4 overflow-auto"
+      class="col-md-10 col-sm-9 col-9 d-md-block ml-auto col-lg-10 px-4 overflow-auto"
       style="height: 94.6vh;"
     >
       <div class="pt-3 pb-2 mb-3">

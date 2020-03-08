@@ -18,7 +18,7 @@ class WagonController extends Controller
     {
         $this->authorize('viewAny', Wagon::class);
 
-        return WagonResource::collection(Wagon::paginate(15));
+        return WagonResource::collection(Wagon::orderBy('number', 'asc')->paginate(15));
     }
 
     /**

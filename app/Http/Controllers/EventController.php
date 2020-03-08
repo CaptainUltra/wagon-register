@@ -22,26 +22,26 @@ class EventController extends Controller
         if (request()->has('date')) {
             $this->authorize('viewDate', Event::class);
             $date = Carbon::parse(request('date'))->toDateString();
-            $events = Event::with('wagon')->whereRaw('created_at', $date)->paginate(15);
+            $events = Event::with('wagon')->whereDate('created_at', $date)->orderByDesc('created_at')->paginate(15);
             return EventResource::collection($events);
         }
         if (request()->has('wagon_id')) {
             $this->authorize('viewWagon', Event::class);
-            $events = Event::where('wagon_id', request('wagon_id'))->paginate(15);
+            $events = Event::where('wagon_id', request('wagon_id'))->orderByDesc('created_at')->paginate(15);
             return EventResource::collection($events);
         }
         if (request()->has('user_id')) {
             $this->authorize('viewUser', Event::class);
-            $events = Event::where('user_id', request('user_id'))->paginate(15);
+            $events = Event::where('user_id', request('user_id'))->orderByDesc('created_at')->paginate(15);
             return EventResource::collection($events);
         }
 
         $this->authorize('viewAny', Event::class);
 
-        $events = Event::paginate(15);
+        $events = Event::orderByDesc('created_at')->paginate(15);
 
         if (request()->has('show-wagon') && request('show-wagon')) {
-            $events = Event::with('wagon')->paginate(15);
+            $events = Event::with('wagon')->orderByDesc('created_at')->paginate(15);
         }
 
         return EventResource::collection($events);
