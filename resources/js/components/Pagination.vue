@@ -26,9 +26,7 @@ export default {
   name: "Pagination",
   props: ["pagination", "model"],
   mounted() {
-    this.emitData.paginationData.total = this.pagination.total;
-    this.emitData.paginationData.currentPage = this.pagination.currentPage;
-    this.emitData.paginationData.lastPage = this.pagination.lastPage;
+    this.getDataFromProp();
   },
   data: function() {
     return {
@@ -63,6 +61,11 @@ export default {
     }
   },
   methods: {
+    getDataFromProp() {
+      this.emitData.paginationData.total = this.pagination.total;
+      this.emitData.paginationData.currentPage = this.pagination.currentPage;
+      this.emitData.paginationData.lastPage = this.pagination.lastPage;
+    },
     loadData(response) {
       this.emitData.values = response.data.data;
       this.emitData.paginationData.currentPage =
@@ -97,6 +100,15 @@ export default {
         .catch(error => {
           alert("Грешка при взимането на информация");
         });
+    }
+  },
+  watch: {
+    pagination: {
+      //immediate: true,
+      deep: true, //FIXME:Causes an error when going to second page as the prop gets set to undefined
+      handler(value) {
+        this.getDataFromProp();
+      }
     }
   }
 };

@@ -78,7 +78,7 @@ export default {
   methods: {
     updateData(value) {
       this.revisoryPoints = value.values;
-      this.pagination = value.pagination;
+      this.pagination = value.paginationData;
       this.loading = value.loading;
     }
   },

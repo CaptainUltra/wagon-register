@@ -86,28 +86,7 @@ export default {
     Pagination
   },
   mounted() {
-    var url = "/api/events/?show-wagon=1";
-    if (this.filter === "wagon") {
-      url = url + "&wagon_id=" + this.value;
-    }
-    if (this.filter === "date") {
-      url = url + "&date=" + this.value;
-    }
-    if (this.filter === "user") {
-      url = url + "&user_id=" + this.value;
-    }
-    axios
-      .get(url)
-      .then(response => {
-        this.events = response.data.data;
-        this.pagination.currentPage = response.data.meta["current_page"];
-        this.pagination.lastPage = response.data.meta["last_page"];
-        this.pagination.total = response.data.meta["total"];
-        this.loading = false;
-      })
-      .catch(error => {
-        alert("Грешка при взимането на информация");
-      });
+    this.getData();
   },
   data: function() {
     return {
@@ -123,10 +102,41 @@ export default {
   methods: {
     updateData(value) {
       this.events = value.values;
-      this.pagination = value.pagination;
+      this.pagination = value.paginationData;
       this.loading = value.loading;
+    },
+    getData() {
+      var url = "/api/events/?show-wagon=1";
+      if (this.filter === "wagon") {
+        url = url + "&wagon_id=" + this.value;
+      }
+      if (this.filter === "date") {
+        url = url + "&date=" + this.value;
+      }
+      if (this.filter === "user") {
+        url = url + "&user_id=" + this.value;
+      }
+      axios
+        .get(url)
+        .then(response => {
+          this.events = response.data.data;
+          this.pagination.currentPage = response.data.meta["current_page"];
+          this.pagination.lastPage = response.data.meta["last_page"];
+          this.pagination.total = response.data.meta["total"];
+          this.loading = false;
+        })
+        .catch(error => {
+          alert("Грешка при взимането на информация");
+        });
     }
   },
-  computed: {}
+  watch: {
+    filter: {
+      immediate: true,
+      handler(value) {
+        this.getData();
+      }
+    }
+  }
 };
 </script>

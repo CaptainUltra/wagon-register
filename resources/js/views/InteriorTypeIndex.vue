@@ -70,7 +70,7 @@ export default {
   methods: {
     updateData(value) {
       this.interiorTypes = value.values;
-      this.pagination = value.pagination;
+      this.pagination = value.paginationData;
       this.loading = value.loading;
     }
   },
