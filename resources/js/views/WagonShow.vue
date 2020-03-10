@@ -19,7 +19,7 @@
             {{wagon.type.data.name}}
           </p>
           <p>
-            <b>Буквено означение:</b>
+            <b>Означение:</b>
             {{wagon.letter_index ? wagon.letter_index : "-"}}
           </p>
           <p>

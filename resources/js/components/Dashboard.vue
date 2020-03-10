@@ -15,14 +15,14 @@
               to="/events"
               class="nav-link"
               v-if="userHasPermission('event-viewAny')"
-            >Всички събития</router-link>
+            >Всички видени</router-link>
           </li>
           <li class="nav-item">
             <router-link
               to="/events/today"
               class="nav-link"
               v-if="userHasPermission('event-viewDate')"
-            >Събития от днес</router-link>
+            >Видени днес</router-link>
           </li>
           <li class="nav-item dropdown" v-if="userHasPermission('wagon-viewAny')">
             <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#wagonCollapse">Вагони</a>

@@ -12,8 +12,8 @@
         />
         <InputField
           name="letter_index"
-          label="Буквено означение"
-          placeholder="Въведете буквеното означение на вагона..."
+          label="Означение"
+          placeholder="Въведете означението на вагона..."
           :errors="errors"
           @updatefield="form.letter_index = $event"
         />

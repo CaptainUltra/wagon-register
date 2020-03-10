@@ -12,7 +12,7 @@
           <tr>
             <th scope="col">№</th>
             <th scope="col">Серия</th>
-            <th scope="col">Буквено означение</th>
+            <th scope="col">Означение</th>
             <th scope="col">Места</th>
             <th scope="col">Гара на домуване</th>
             <th scope="col">Статус</th>
