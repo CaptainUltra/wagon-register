@@ -71,7 +71,7 @@
           </tr>
         </tbody>
       </table>
-      <Pagination :pagination="pagination" model="events?show-wagon=1" @updatepage="updateData"></Pagination>
+      <Pagination :pagination="pagination" :model="model" @updatepage="updateData"></Pagination>
     </div>
   </div>
 </template>
@@ -92,6 +92,7 @@ export default {
     return {
       loading: true,
       events: null,
+      model: "events?show-wagon=1",
       pagination: {
         total: null,
         currentPage: null,
@@ -109,12 +110,15 @@ export default {
       var url = "/api/events/?show-wagon=1";
       if (this.filter === "wagon") {
         url = url + "&wagon_id=" + this.value;
+        this.model = this.model + "&wagon_id=" + this.value;
       }
       if (this.filter === "date") {
         url = url + "&date=" + this.value;
+        this.model = this.model + "&date=" + this.value;
       }
       if (this.filter === "user") {
         url = url + "&user_id=" + this.value;
+        this.model = this.model + "&user_id=" + this.value;
       }
       axios
         .get(url)
@@ -134,6 +138,7 @@ export default {
     filter: {
       immediate: true,
       handler(value) {
+        this.model = "events?show-wagon=1";
         this.getData();
       }
     }
