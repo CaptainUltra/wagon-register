@@ -6,8 +6,8 @@
         <p>Няма налични събития</p>
       </div>
       <h4 v-if="filter === 'wagon'">Списък на събития за вагон</h4>
-      <h4 v-if="filter === 'date'">Списък на събития от днес</h4>
-      <h4 v-if="filter == null">Списък на всички събития</h4>
+      <h4 v-if="filter === 'date'">Видени вагони днес</h4>
+      <h4 v-if="filter == null">Списък на всички видени вагони</h4>
       <table class="table">
         <thead>
           <tr>
@@ -18,7 +18,7 @@
             <th scope="col">Влак</th>
             <th scope="col">Гара</th>
             <th scope="col">Коментар</th>
-            <th scope="col">Последна промяна</th>
+            <th scope="col">Създаден на</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
               <router-link
                 class="text-body"
                 :to="'/events/' + event.data.id"
-              >{{event.data.comment ? event.data.comment : "-"}}</router-link>
+              >{{event.data.comment ? (event.data.comment.length > 20 ? (event.data.comment.substr(0,20)).concat("...") : event.data.comment) : "-"}}</router-link>
             </td>
             <td>{{event.data.last_updated}}</td>
           </tr>

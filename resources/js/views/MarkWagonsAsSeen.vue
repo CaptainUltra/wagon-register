@@ -14,7 +14,10 @@
         <div v-if="wagons.length > 0">
           <h5 class="pl-2 pt-2">Избрани вагони:</h5>
           <ul class="list-group">
-            <li v-for="wagon in wagons" class="list-group-item">{{wagon}}</li>
+            <li v-for="wagon in wagons" class="list-group-item">
+              <button type="button" class="btn btn-sm" @click="removeWagon(wagon)">X</button>
+              {{wagon}}
+            </li>
           </ul>
         </div>
         <label for="station" class="ml-2 pt-2 font-weight-bold text-primary">Гара</label>
@@ -79,8 +82,6 @@ export default {
           station_id: this.station_id,
           train_id: this.train_id
         };
-        console.log(element);
-        console.log(form);
         axios
           .post("/api/events", form)
           .then(response => {})
@@ -89,12 +90,23 @@ export default {
           });
       });
       if (this.errors === null) {
-        this.$router.push("/");
+        this.$router.push("/events/today");
       }
     },
     updateWagons(event) {
-      this.wagons_id.push(event.id);
-      this.wagons.push(event.stylized_number);
+      //If the id is not present in array only then push it
+      let id = this.wagons_id.indexOf(event.id);
+      if (id === -1) {
+        this.wagons_id.push(event.id);
+        this.wagons.push(event.stylized_number);
+      }
+    },
+    removeWagon(wagon) {
+      let id = this.wagons.indexOf(wagon);
+      if (id > -1) {
+        this.wagons.splice(id, 1);
+        this.wagons_id.splice(id, 1);
+      }
     }
   }
 };
