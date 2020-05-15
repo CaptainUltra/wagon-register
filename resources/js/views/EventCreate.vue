@@ -3,10 +3,9 @@
     <div>
       <h4 class="pl-2">Създаване на събитие за вагон</h4>
       <form class="pt-4" @submit.prevent="submitForm()">
-        <InputField
+        <DatePicker
           name="date"
           label="Дата на събитие"
-          placeholder="Въведете дата на събитие..."
           :errors="errors"
           @updatefield="form.date = $event"
         />
@@ -31,6 +30,7 @@
 </template>
 
 <script>
+import DatePicker from "../components/DatePicker";
 import InputField from "../components/InputField";
 import Search from "../components/Search";
 
@@ -38,6 +38,7 @@ export default {
   name: "EventCreate",
   props: ["wagonId"],
   components: {
+    DatePicker,
     InputField,
     Search
   },

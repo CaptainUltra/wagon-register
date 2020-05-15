@@ -36,10 +36,9 @@
           placeholder="Въведете номер на влак"
           @updateid="train_id = $event"
         ></Search>
-        <InputField
+        <DatePicker
           name="date"
           label="Дата на събитие"
-          placeholder="Въведете дата на събитие..."
           :errors="errors"
           @updatefield="date = $event"
         />
@@ -55,13 +54,15 @@
 <script>
 import InputField from "../components/InputField";
 import Search from "../components/Search";
+import DatePicker from "../components/DatePicker";
 
 export default {
   name: "MarkWagonsAsSeen",
   props: ["wagonId"],
   components: {
     InputField,
-    Search
+    Search,
+    DatePicker
   },
   data: function() {
     return {

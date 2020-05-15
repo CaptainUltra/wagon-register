@@ -49,11 +49,9 @@
           model="revisorypoints"
           @updatefield="form.revisory_point_id = $event"
         ></SelectField>
-        <InputField
+        <DatePicker
           name="revision_date"
           label="Дата на ревизията"
-          placeholder="Въведете датата на ревизия на вагона..."
-          :errors="errors"
           @updatefield="form.revision_date = $event"
         />
         <div class="pt-3 d-flex justify-content-end">
@@ -68,12 +66,14 @@
 <script>
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
+import DatePicker from "../components/DatePicker";
 
 export default {
   name: "WagonCreate",
   components: {
     InputField,
-    SelectField
+    SelectField,
+    DatePicker
   },
   data: function() {
     return {

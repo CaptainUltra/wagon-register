@@ -65,11 +65,9 @@
               @updatefield="form.revisory_point_id = $event"
             ></SelectField>
           </div>
-          <InputField
+          <DatePicker
             name="revision_date"
             label="Дата на ревизията"
-            placeholder="Въведете датата на ревизия на вагона..."
-            :errors="errors"
             :data="form.revision_date"
             @updatefield="form.revision_date = $event"
           />
@@ -86,12 +84,14 @@
 <script>
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
+import DatePicker from "../components/DatePicker";
 
 export default {
   name: "WagonEdit",
   components: {
     InputField,
-    SelectField
+    SelectField,
+    DatePicker
   },
   mounted() {
     axios

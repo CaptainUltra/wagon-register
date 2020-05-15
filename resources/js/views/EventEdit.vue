@@ -3,11 +3,9 @@
     <div>
       <h4 class="pl-2">Промяна на събитие</h4>
       <form class="pt-4" @submit.prevent="submitForm()">
-        <InputField
+        <DatePicker
           name="date"
           label="Дата на събитие"
-          placeholder="Въведете дата на събитие..."
-          :errors="errors"
           :data="form.date"
           @updatefield="form.date = $event"
         />
@@ -35,12 +33,14 @@
 <script>
 import InputField from "../components/InputField";
 import Search from "../components/Search";
+import DatePicker from "../components/DatePicker";
 
 export default {
   name: "EventEdit",
   components: {
     InputField,
-    Search
+    Search,
+    DatePicker
   },
   mounted() {
     axios
