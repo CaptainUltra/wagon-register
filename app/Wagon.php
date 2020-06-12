@@ -5,6 +5,8 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Illuminate\Pipeline\Pipeline;
+use App\QueryFilters\Wagon as Filters;
 
 class Wagon extends Model
 {
@@ -42,6 +44,7 @@ class Wagon extends Model
     {
         return '/wagons/' . $this->id;
     }
+    
     /**
      * Stylized number (with spaces and dashes)
      */
@@ -106,6 +109,21 @@ class Wagon extends Model
         ];
 
         return $array;
+    }
+
+    /**
+     * Get all records through filtering pipelines.
+     */
+    public static function allWagons()
+    {
+        return app(Pipeline::class)
+        ->send(Wagon::query())
+        ->through([
+            Filters\Status::class,
+            Filters\Sort::class,
+        ])
+        ->thenReturn()
+        ->paginate(15);
     }
     /**
      * Get the wagon type to which the wagon belongs
