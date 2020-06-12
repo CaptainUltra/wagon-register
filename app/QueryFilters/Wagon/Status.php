@@ -8,6 +8,6 @@ class Status extends Filter
 {
     protected function applyFilter($builder)
     {
-        return $builder->join('statuses', 'statuses.id', '=', 'wagons.status_id')->where('status_id', '=', request($this->filterName()));
+        return $builder->where('status_id', '=', request($this->filterName()));
     }
 }
