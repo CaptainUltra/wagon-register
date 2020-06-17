@@ -1,6 +1,7 @@
 <template>
   <div class="py-4">
     <Search model="stylized_number" route="wagonsearch" placeholder="Търсене на вагон"></Search>
+    <WagonFilter></WagonFilter>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="wagons.length === 0">
@@ -45,12 +46,14 @@
 <script>
 import Pagination from "../components/Pagination";
 import Search from "../components/Search";
+import WagonFilter from "../components/WagonFilter";
 
 export default {
   name: "WagonIndex",
   components: {
     Pagination,
-    Search
+    Search,
+    WagonFilter
   },
   props: ["permissions"],
   mounted() {
