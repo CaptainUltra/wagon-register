@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\QueryFilters\Filter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
@@ -121,6 +122,10 @@ class Wagon extends Model
         ->through([
             Filters\Status::class,
             Filters\Sort::class,
+            Filters\WagonType::class,
+            Filters\RevisoryPoint::class,
+            Filters\Depot::class,
+            Filters\RevisionDate::class,
         ])
         ->thenReturn()
         ->paginate(15);

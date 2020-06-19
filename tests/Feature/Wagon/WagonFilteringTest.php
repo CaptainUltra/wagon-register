@@ -55,4 +55,42 @@ class WagonFilteringTest extends TestCase
         $responseDesc = $this->get('api/wagons' . '?sort=desc' . '&api_token=' . $this->user->api_token);
         $this->assertEquals($wagon2->number, $responseDesc->getData()->data[0]->data->number);
     }
+    /**@test */
+    public function testWagonsCanBeFilteredByWagonTypeId()
+    {
+        factory(Wagon::class)->create(['number' => '615285970039']);
+        factory(WagonType::class)->create(['name' => '22-97']);
+        $wagon = factory(Wagon::class)->create(['number' => '615222970039']);
+
+        $response = $this->get('api/wagons' . '?wagon_type=2' . '&api_token=' . $this->user->api_token);
+
+        $this->assertEquals($wagon->type_id, $response->getData()->data[0]->data->type->data->id);
+    }
+    /**@test */
+    public function testWagonsCanBeFilteredByRevisoryPointId()
+    {
+        factory(Wagon::class)->create(['revisory_point_id' => 1]);
+        factory(Wagon::class)->create(['revisory_point_id' => 2]);
+
+        $response = $this->get('api/wagons' . '?revisory_point=1' . '&api_token=' . $this->user->api_token);
+        $response->assertJsonCount(1, 'data');
+    }
+    /**@test */
+    public function testWagonsCanBeFilteredByDepotId()
+    {
+        factory(Wagon::class)->create(['depot_id' => 1]);
+        factory(Wagon::class)->create(['depot_id' => 2]);
+
+        $response = $this->get('api/wagons' . '?depot=1' . '&api_token=' . $this->user->api_token);
+        $response->assertJsonCount(1, 'data');
+    }
+    /**@test */
+    public function testWagonsCanBeFilteredByRevisionDate()
+    {
+        factory(Wagon::class)->create(['revision_date' => "2020-06-19"]);
+        factory(Wagon::class)->create(['revision_date' => "2020-05-19"]);
+
+        $response = $this->get('api/wagons' . '?revision_date=2020-06-19' . '&api_token=' . $this->user->api_token);
+        $response->assertJsonCount(1, 'data');
+    }
 }
