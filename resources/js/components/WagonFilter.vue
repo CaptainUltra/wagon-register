@@ -29,7 +29,7 @@
       <div class="col-4">
         <div class="pb-2">
           <label for="revisoryDate" class="ml-2 pt-2 font-weight-bold text-primary">Дата ревизия</label>
-          <input type="date" id="revisoryDate" class="form-control" v-model="filters.date" />
+          <input type="date" id="revisoryDate" class="form-control" v-model="filters.revisionDate" />
         </div>
         <label for="sort" class="ml-2 pt-2 font-weight-bold text-primary">Сортиране</label>
         <select class="form-control" id="sort" v-model="filters.sort">
@@ -58,7 +58,7 @@ export default {
         status: null,
         depot: null,
         revisoryPoint: null,
-        date: null,
+        revisionDate: null,
         sort: null
       },
       queryString: null,
@@ -80,8 +80,8 @@ export default {
       if (this.filters.revisoryPoint !== null) {
         this.queryString += "&revisory_point=" + this.filters.revisoryPoint;
       }
-      if (this.filters.date !== null && this.filters.date !== "") {
-        this.queryString += "&date=" + this.filters.date;
+      if (this.filters.revisionDate !== null && this.filters.revisionDate !== "") {
+        this.queryString += "&revision_date=" + this.filters.revisionDate;
       }
       if (this.filters.sort !== null && this.filters.sort !== "null") {
         this.queryString += "&sort=" + this.filters.sort;
