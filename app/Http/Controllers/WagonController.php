@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Wagon;
-use App\Http\Resources\Wagon as WagonResource;
 use Illuminate\Http\Request;
+use App\Http\Resources\Wagon as WagonResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class WagonController extends Controller
@@ -17,8 +17,10 @@ class WagonController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Wagon::class);
+        
+        $wagons = Wagon::allWagons();
 
-        return WagonResource::collection(Wagon::orderBy('number', 'asc')->paginate(15));
+        return WagonResource::collection($wagons);
     }
 
     /**
