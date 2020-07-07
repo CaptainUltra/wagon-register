@@ -35,7 +35,7 @@
               <td>{{wagon.data.seats ? wagon.data.seats : "-"}}</td>
               <td>{{wagon.data.depot ? wagon.data.depot.data.name : "-"}}</td>
               <td>{{wagon.data.status.data.name}}</td>
-              <td>{{wagon.data.revision_expiration_date}}</td>
+              <td>{{wagon.data.revision_expiration_date ? wagon.data.revision_expiration_date : "-"}}</td>
             </tr>
           </tbody>
         </table>
