@@ -1,33 +1,35 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички депа</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="depots.length === 0">
         <p>Няма налични депа</p>
       </div>
-      <h4>Списък на всички депа</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Име</th>
-            <th scope="col">Последна промяна</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="depot in depots">
-            <th scope="row">{{ depot.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/depots/' + depot.data.id"
-                :permissions="permissions"
-              >{{depot.data.name}}</router-link>
-            </td>
-            <td>{{depot.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Име</th>
+              <th scope="col">Последна промяна</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="depot in depots">
+              <th scope="row">{{ depot.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/depots/' + depot.data.id"
+                  :permissions="permissions"
+                >{{depot.data.name}}</router-link>
+              </td>
+              <td>{{depot.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="depots" @updatepage="updateData"></Pagination>
     </div>
   </div>
