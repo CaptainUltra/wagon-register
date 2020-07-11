@@ -1,41 +1,43 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички пунктове за ревизия</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="revisoryPoints.length === 0">
         <p>Няма налични пунктове за ревизия</p>
       </div>
-      <h4>Списък на всички пунктове за ревизия</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Име</th>
-            <th scope="col">Съкращение</th>
-            <th scope="col">Последна промяна</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="revisoryPoint in revisoryPoints">
-            <th scope="row">{{ revisoryPoint.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/revisorypoints/' + revisoryPoint.data.id"
-                :permissions="permissions"
-              >{{revisoryPoint.data.name}}</router-link>
-            </td>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/revisorypoints/' + revisoryPoint.data.id"
-                :permissions="permissions"
-              >{{revisoryPoint.data.abbreviation}}</router-link>
-            </td>
-            <td>{{revisoryPoint.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Име</th>
+              <th scope="col">Съкращение</th>
+              <th scope="col">Последна промяна</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="revisoryPoint in revisoryPoints">
+              <th scope="row">{{ revisoryPoint.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/revisorypoints/' + revisoryPoint.data.id"
+                  :permissions="permissions"
+                >{{revisoryPoint.data.name}}</router-link>
+              </td>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/revisorypoints/' + revisoryPoint.data.id"
+                  :permissions="permissions"
+                >{{revisoryPoint.data.abbreviation}}</router-link>
+              </td>
+              <td>{{revisoryPoint.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="revisorypoints" @updatepage="updateData"></Pagination>
     </div>
   </div>
