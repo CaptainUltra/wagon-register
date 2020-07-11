@@ -1,33 +1,35 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички гари</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="stations.length === 0">
         <p>Няма налични гари</p>
       </div>
-      <h4>Списък на всички гари</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Име</th>
-            <th scope="col">Последна промяна</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="station in stations">
-            <th scope="row">{{ station.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/stations/' + station.data.id"
-                :permissions="permissions"
-              >{{station.data.name}}</router-link>
-            </td>
-            <td>{{station.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Име</th>
+              <th scope="col">Последна промяна</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="station in stations">
+              <th scope="row">{{ station.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/stations/' + station.data.id"
+                  :permissions="permissions"
+                >{{station.data.name}}</router-link>
+              </td>
+              <td>{{station.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="stations" @updatepage="updateData"></Pagination>
     </div>
   </div>
