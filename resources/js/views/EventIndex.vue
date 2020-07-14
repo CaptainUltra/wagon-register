@@ -1,76 +1,78 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4 v-if="filter === 'wagon'">Списък на събития за вагон</h4>
+    <h4 v-if="filter === 'date'">Видени вагони днес</h4>
+    <h4 v-if="filter == null">Списък на всички видени вагони</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="events.length === 0">
         <p>Няма налични събития</p>
       </div>
-      <h4 v-if="filter === 'wagon'">Списък на събития за вагон</h4>
-      <h4 v-if="filter === 'date'">Видени вагони днес</h4>
-      <h4 v-if="filter == null">Списък на всички видени вагони</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col" v-if="filter === 'wagon'">Дата</th>
-            <th scope="col" v-if="filter === 'date'">Вагон</th>
-            <th scope="col" v-if="filter == null">Дата</th>
-            <th scope="col" v-if="filter == null">Вагон</th>
-            <th scope="col">Влак</th>
-            <th scope="col">Гара</th>
-            <th scope="col">Коментар</th>
-            <th scope="col">Създаден на</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="event in events">
-            <th scope="row" v-if="filter === 'wagon'">
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-                :permissions="permissions"
-              >{{ event.data.date}}</router-link>
-            </th>
-            <th scope="row" v-if="filter === 'date'">
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-              >{{ event.data.wagon.data.stylized_number}}</router-link>
-            </th>
-            <th scope="row" v-if="filter ==  null">
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-                :permissions="permissions"
-              >{{ event.data.date}}</router-link>
-            </th>
-            <th scope="row" v-if="filter == null">
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-              >{{ event.data.wagon.data.stylized_number}}</router-link>
-            </th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-              >{{event.data.train ? event.data.train.data.number : "-"}}</router-link>
-            </td>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-              >{{event.data.station ? event.data.station.data.name : "-"}}</router-link>
-            </td>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/events/' + event.data.id"
-              >{{event.data.comment ? (event.data.comment.length > 20 ? (event.data.comment.substr(0,20)).concat("...") : event.data.comment) : "-"}}</router-link>
-            </td>
-            <td>{{event.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" v-if="filter === 'wagon'">Дата</th>
+              <th scope="col" v-if="filter === 'date'">Вагон</th>
+              <th scope="col" v-if="filter == null">Дата</th>
+              <th scope="col" v-if="filter == null">Вагон</th>
+              <th scope="col">Влак</th>
+              <th scope="col">Гара</th>
+              <th scope="col">Коментар</th>
+              <th scope="col">Създаден на</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="event in events">
+              <th scope="row" v-if="filter === 'wagon'">
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                  :permissions="permissions"
+                >{{ event.data.date}}</router-link>
+              </th>
+              <th scope="row" v-if="filter === 'date'">
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                >{{ event.data.wagon.data.stylized_number}}</router-link>
+              </th>
+              <th scope="row" v-if="filter ==  null">
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                  :permissions="permissions"
+                >{{ event.data.date}}</router-link>
+              </th>
+              <th scope="row" v-if="filter == null">
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                >{{ event.data.wagon.data.stylized_number}}</router-link>
+              </th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                >{{event.data.train ? event.data.train.data.number : "-"}}</router-link>
+              </td>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                >{{event.data.station ? event.data.station.data.name : "-"}}</router-link>
+              </td>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/events/' + event.data.id"
+                >{{event.data.comment ? (event.data.comment.length > 20 ? (event.data.comment.substr(0,20)).concat("...") : event.data.comment) : "-"}}</router-link>
+              </td>
+              <td>{{event.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" :model="model" @updatepage="updateData"></Pagination>
     </div>
   </div>

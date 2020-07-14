@@ -1,33 +1,35 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички типове интериори</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="interiorTypes.length === 0">
         <p>Няма налични типове интериори</p>
       </div>
-      <h4>Списък на всички типове интериори</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Име</th>
-            <th scope="col">Последна промяна</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="interiorType in interiorTypes">
-            <th scope="row">{{ interiorType.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/interiortypes/' + interiorType.data.id"
-                :permissions="permissions"
-              >{{interiorType.data.name}}</router-link>
-            </td>
-            <td>{{interiorType.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Име</th>
+              <th scope="col">Последна промяна</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="interiorType in interiorTypes">
+              <th scope="row">{{ interiorType.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/interiortypes/' + interiorType.data.id"
+                  :permissions="permissions"
+                >{{interiorType.data.name}}</router-link>
+              </td>
+              <td>{{interiorType.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="interiortypes" @updatepage="updateData"></Pagination>
     </div>
   </div>

@@ -1,41 +1,43 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички потребители</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="users.length === 0">
         <p>Няма налични потребители</p>
       </div>
-      <h4>Списък на всички потребители</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Име</th>
-            <th scope="col">E-mail</th>
-            <th scope="col">Регистриран</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in users">
-            <th scope="row">{{ user.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/users/' + user.data.id"
-                :permissions="permissions"
-              >{{user.data.name}}</router-link>
-            </td>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/users/' + user.data.id"
-                :permissions="permissions"
-              >{{user.data.email}}</router-link>
-            </td>
-            <td>{{user.data.created_at}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Име</th>
+              <th scope="col">E-mail</th>
+              <th scope="col">Регистриран</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users">
+              <th scope="row">{{ user.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/users/' + user.data.id"
+                  :permissions="permissions"
+                >{{user.data.name}}</router-link>
+              </td>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/users/' + user.data.id"
+                  :permissions="permissions"
+                >{{user.data.email}}</router-link>
+              </td>
+              <td>{{user.data.created_at}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="users" @updatepage="updateData"></Pagination>
     </div>
   </div>

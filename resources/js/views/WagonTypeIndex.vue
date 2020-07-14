@@ -1,37 +1,39 @@
 <template>
-  <div class="py-4">
+  <div class="py-2">
+    <h4>Списък на всички серии вагони</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="wagonTypes.length === 0">
         <p>Няма налични серии вагони</p>
       </div>
-      <h4>Списък на всички серии вагони</h4>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">№</th>
-            <th scope="col">Означение</th>
-            <th scope="col">Тип интериор</th>
-            <th scope="col">Климатирзиран</th>
-            <th scope="col">Последна промяна</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="wagonType in wagonTypes">
-            <th scope="row">{{ wagonType.data.id}}</th>
-            <td>
-              <router-link
-                class="text-body"
-                :to="'/wagontypes/' + wagonType.data.id"
-                :permissions="permissions"
-              >{{wagonType.data.name}}</router-link>
-            </td>
-            <td>{{wagonType.data.interior_type.data.name}}</td>
-            <td>{{wagonType.data.conditioned ? "Да" : "Не"}}</td>
-            <td>{{wagonType.data.last_updated}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Означение</th>
+              <th scope="col">Тип интериор</th>
+              <th scope="col">Климатирзиран</th>
+              <th scope="col">Последна промяна</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="wagonType in wagonTypes">
+              <th scope="row">{{ wagonType.data.id}}</th>
+              <td>
+                <router-link
+                  class="text-body"
+                  :to="'/wagontypes/' + wagonType.data.id"
+                  :permissions="permissions"
+                >{{wagonType.data.name}}</router-link>
+              </td>
+              <td>{{wagonType.data.interior_type.data.name}}</td>
+              <td>{{wagonType.data.conditioned ? "Да" : "Не"}}</td>
+              <td>{{wagonType.data.last_updated}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination :pagination="pagination" model="wagontypes" @updatepage="updateData"></Pagination>
     </div>
   </div>
