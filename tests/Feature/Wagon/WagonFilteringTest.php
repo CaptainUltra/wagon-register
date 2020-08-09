@@ -22,7 +22,7 @@ class WagonFilteringTest extends TestCase
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
-        factory(WagonType::class)->create(['name' => '85-97']);
+        factory(WagonType::class)->create(['name' => '85-97', 'revision_valid_for' => 1]);
         factory(Depot::class)->create();
         factory(RevisoryPoint::class)->create();
 
@@ -50,7 +50,7 @@ class WagonFilteringTest extends TestCase
         //Test ascending
         $responseAsc = $this->get('api/wagons' . '?sort=asc' . '&api_token=' . $this->user->api_token);
         $this->assertEquals($wagon1->number, $responseAsc->getData()->data[0]->data->number);
-        
+
         //Test descending
         $responseDesc = $this->get('api/wagons' . '?sort=desc' . '&api_token=' . $this->user->api_token);
         $this->assertEquals($wagon2->number, $responseDesc->getData()->data[0]->data->number);
@@ -91,6 +91,15 @@ class WagonFilteringTest extends TestCase
         factory(Wagon::class)->create(['revision_date' => "2020-05-19"]);
 
         $response = $this->get('api/wagons' . '?revision_date=2020-06-19' . '&api_token=' . $this->user->api_token);
+        $response->assertJsonCount(1, 'data');
+    }
+    /**@test */
+    public function testWagonsCanBeFilteredByRevisionExpirationMonth()
+    {
+        factory(Wagon::class)->create(['revision_date' => "2019-01-09"]);
+        factory(Wagon::class)->create(['revision_date' => "2019-08-09"]);
+
+        $response = $this->get('api/wagons' . '?revision_expiration_this_month=1' . '&api_token=' . $this->user->api_token);
         $response->assertJsonCount(1, 'data');
     }
 }

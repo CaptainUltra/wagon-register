@@ -126,6 +126,7 @@ class Wagon extends Model
             Filters\RevisoryPoint::class,
             Filters\Depot::class,
             Filters\RevisionDate::class,
+            Filters\RevisionExpirationThisMonth::class
         ])
         ->thenReturn()
         ->paginate(15);
