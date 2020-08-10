@@ -109,6 +109,19 @@ export default {
       this.loading = true;
       this.getData();
     }
+  },
+  watch: {
+    pageFilter: {
+      immediate: true,
+      handler(value) {
+        this.model = "wagons";
+        if(this.pageFilter !== null)
+        {
+          this.model += "?" + this.pageFilter;
+        }
+        this.getData();
+      }
+    }
   }
 };
 </script>
