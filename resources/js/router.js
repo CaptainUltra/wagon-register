@@ -78,6 +78,11 @@ export default new VueRouter({
         { path: "/wagontypes/:id/edit", component: WagonTypeEdit },
         { path: "/wagons/create", component: WagonCreate },
         { path: "/wagons", component: WagonIndex },
+        {
+            path: "/wagons/expiring-revision",
+            component: WagonIndex,
+            props: {pageFilter: "revision_expiration_this_month=1"}
+        },
         { path: "/wagons/:id", component: WagonShow },
         { path: "/wagons/:id/edit", component: WagonEdit },
         { path: "/trains/create", component: TrainCreate },

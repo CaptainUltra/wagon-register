@@ -41,6 +41,13 @@
                   v-if="userHasPermission('wagon-viewAny')"
                 >Всички вагони</router-link>
               </li>
+              <li class="nav-item">
+                <router-link
+                  to="/wagons/expiring-revision"
+                  class="nav-link"
+                  v-if="userHasPermission('wagon-viewAny')"
+                >Изтичащи този месец ревизии</router-link>
+              </li>
             </div>
           </div>
         </li>

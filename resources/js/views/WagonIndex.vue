@@ -2,7 +2,7 @@
   <div class="py-2">
     <Search model="stylized_number" route="wagonsearch" placeholder="Търсене на вагон"></Search>
     <WagonFilter @applyFilters="applyFilters($event)"></WagonFilter>
-    <h4>Списък на всички вагони</h4>
+    <h4>Списък на всички вагони {{pageFilter ? "с изтичаща този месец ревизия" : ""}}</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="wagons.length === 0">
@@ -57,9 +57,16 @@ export default {
     Search,
     WagonFilter
   },
-  props: ["permissions"],
+  props: {
+    permissions: Array,
+    pageFilter: String
+  },
   mounted() {
-    this.getData("");
+    if(this.pageFilter !== null)
+    {
+      this.model += "?" + this.pageFilter;
+    }
+    this.getData();
   },
   data: function() {
     return {
@@ -95,6 +102,10 @@ export default {
     },
     applyFilters(queryString) {
       this.model = "wagons" + queryString;
+      if(this.pageFilter !== null)
+      {
+      this.model += "&" + this.pageFilter;
+      }
       this.loading = true;
       this.getData();
     }
