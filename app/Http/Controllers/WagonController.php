@@ -17,7 +17,7 @@ class WagonController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Wagon::class);
-        
+
         $wagons = Wagon::allWagons();
 
         return WagonResource::collection($wagons);
@@ -34,7 +34,7 @@ class WagonController extends Controller
         $this->authorize('create', Wagon::class);
 
         $wagon = Wagon::create($this->validateRequest());
-        
+
         return (new WagonResource($wagon))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -50,7 +50,7 @@ class WagonController extends Controller
     {
         $this->authorize('view', $wagon);
 
-        if(request()->has('show-events') && request('show-events')){
+        if (request()->has('show-events') && request('show-events')) {
             $wagonId = $wagon->id;
             $wagon = Wagon::with(['events' => function ($query) {
                 $query->orderBy('date', 'desc')->paginate(3);
@@ -100,10 +100,10 @@ class WagonController extends Controller
     private function validateRequest()
     {
         return request()->validate([
-            'number' => 'required',
-            'letter_index'=> '',
-            'v_max'=> '',
-            'seats'=> '',
+            'number' => 'required|digits:12',
+            'letter_index' => '',
+            'v_max' => '',
+            'seats' => '',
             'depot_id' => '',
             'revisory_point_id' => '',
             'revision_date' => '',
