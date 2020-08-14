@@ -85,7 +85,7 @@ class WagonValidationRulesTest extends TestCase
     /**
      * Fuction to return test data.abs
      * 
-     * @return mixed
+     * @return array
      */
     private function data()
     {
