@@ -19,30 +19,14 @@ class EventController extends Controller
      */
     public function index()
     {
-        if (request()->has('date')) {
-            $this->authorize('viewDate', Event::class);
-            $date = Carbon::parse(request('date'))->toDateString();
-            $events = Event::with('wagon')->whereDate('created_at', $date)->orderByDesc('id')->paginate(15);
-            return EventResource::collection($events);
-        }
-        if (request()->has('wagon_id')) {
-            $this->authorize('viewWagon', Event::class);
-            $events = Event::where('wagon_id', request('wagon_id'))->orderByDesc('id')->paginate(15);
-            return EventResource::collection($events);
-        }
-        if (request()->has('user_id')) {
-            $this->authorize('viewUser', Event::class);
-            $events = Event::where('user_id', request('user_id'))->orderByDesc('id')->paginate(15);
-            return EventResource::collection($events);
-        }
-
         $this->authorize('viewAny', Event::class);
 
-        $events = Event::orderByDesc('id')->paginate(15);
+        $events = Event::allEvents();
 
-        if (request()->has('show-wagon') && request('show-wagon')) {
+        //TODO: Change whole wagon to id + stylized number
+        /*if (request()->has('show-wagon') && request('show-wagon')) {
             $events = Event::with('wagon')->orderByDesc('id')->paginate(15);
-        }
+        }*/
 
         return EventResource::collection($events);
     }
