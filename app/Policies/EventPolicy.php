@@ -22,7 +22,7 @@ class EventPolicy
     }
 
     /**
-     * Determine whether the user can view their events.
+     * Determine whether the user has permission to see events' user.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -30,28 +30,6 @@ class EventPolicy
     public function viewUser(User $user)
     {
         return $user->hasPermission('event-viewUser');
-    }
-
-    /**
-     * Determine whether the user can view events per wagon.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function viewWagon(User $user)
-    {
-        return $user->hasPermission('event-viewWagon');
-    }
-
-    /**
-     * Determine whether the user can view events per date.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function viewDate(User $user)
-    {
-        return $user->hasPermission('event-viewDate');
     }
 
     /**

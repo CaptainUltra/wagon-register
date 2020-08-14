@@ -64,8 +64,6 @@ class PermissionSeeder extends Seeder
             ['name' => 'Event update', 'slug' => 'event-update'],
             ['name' => 'Event delete', 'slug' => 'event-delete'],
             ['name' => 'Event viewUser', 'slug' => 'event-viewUser'],
-            ['name' => 'Event viewWagon', 'slug' => 'event-viewWagon'],
-            ['name' => 'Event viewDate', 'slug' => 'event-viewDate'],
             ['name' => 'Status viewAny', 'slug' => 'status-viewAny'],
             ['name' => 'Status view', 'slug' => 'status-view'],
             ['name' => 'Status create', 'slug' => 'status-create'],
