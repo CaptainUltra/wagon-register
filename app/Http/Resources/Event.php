@@ -21,7 +21,10 @@ class Event extends JsonResource
                 'comment' => $this->comment,
                 'station' => new Station($this->station),
                 'train' => new Train($this->train),
-                'wagon' => new Wagon($this->whenLoaded('wagon')),
+                'wagon' => [
+                    'id' => $this->wagon->id,
+                    'number' => $this->wagon->getStylizedNumber()
+                ],
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [

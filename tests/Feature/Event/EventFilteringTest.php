@@ -28,6 +28,10 @@ class EventFilteringTest extends TestCase
         $this->user->roles()->sync($role);
         factory(Permission::class)->create(['slug' => 'event-viewAny']);
         $this->user->roles[0]->permissions()->sync(1);
+
+        factory(WagonType::class)->create(['name' => '85-97', 'revision_valid_for' => 1]);
+        factory(Wagon::class)->create();
+        factory(Wagon::class)->create();
     }
 
     /**

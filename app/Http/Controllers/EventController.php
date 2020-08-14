@@ -23,11 +23,6 @@ class EventController extends Controller
 
         $events = Event::allEvents();
 
-        //TODO: Change whole wagon to id + stylized number
-        /*if (request()->has('show-wagon') && request('show-wagon')) {
-            $events = Event::with('wagon')->orderByDesc('id')->paginate(15);
-        }*/
-
         return EventResource::collection($events);
     }
 
