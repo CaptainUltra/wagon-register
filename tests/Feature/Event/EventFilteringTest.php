@@ -83,8 +83,8 @@ class EventFilteringTest extends TestCase
      */
     public function testEventsCanBeFilteredByCreatedAt()
     {
-        factory(Event::class)->create(['created_at' => Carbon::today(), 'wagon_id' => 1]);
-        factory(Event::class)->create(['created_at' => Carbon::yesterday(), 'wagon_id' => 1]);
+        factory(Event::class)->create(['created_at' => '2020-08-14', 'wagon_id' => 1]);
+        factory(Event::class)->create(['created_at' => '2020-08-13', 'wagon_id' => 1]);
 
         $response = $this->get('api/events' . '?created_at=2020-08-13' . '&api_token=' . $this->user->api_token);
         $response->assertJsonCount(1, 'data');
