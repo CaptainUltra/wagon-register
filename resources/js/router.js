@@ -51,8 +51,7 @@ Vue.use(VueRouter);
 function todayFilter(route) {
     const now = new Date();
     return {
-        filter: "date",
-        value: now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear()
+        pageFilter: "date=" + now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear()
     };
 }
 
@@ -89,6 +88,11 @@ export default new VueRouter({
         { path: "/trains", component: TrainIndex },
         { path: "/trains/:id", component: TrainShow },
         { path: "/trains/:id/edit", component: TrainEdit },
+        {
+            path: "/trains/:id/events",
+            component: EventIndex,
+            props: route => ({ pageFilter: "train_id=" + route.params.id})
+        },
         { path: "/stations/create", component: StationCreate },
         { path: "/stations", component: StationIndex },
         { path: "/stations/:id", component: StationShow },
@@ -101,14 +105,14 @@ export default new VueRouter({
         {
             path: "/wagons/:id/events",
             component: EventIndex,
-            props: route => ({ filter: "wagon", value: route.params.id })
+            props: route => ({ pageFilter: "wagon_id=" + route.params.id})
         },
         { path: "/events", component: EventIndex },
         { path: "/events/today", component: EventIndex, props: todayFilter },
         {
             path: "/user/:id/events",
             component: EventIndex,
-            props: route => ({ filter: "user", value: route.params.id })
+            props: route => ({ pageFilter: "user" + route.params.id })
         },
         { path: "/events/:id", component: EventShow },
         { path: "/events/:id/edit", component: EventEdit },

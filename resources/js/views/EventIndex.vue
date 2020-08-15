@@ -1,8 +1,10 @@
 <template>
   <div class="py-2">
-    <h4 v-if="filter === 'wagon'">Списък на събития за вагон</h4>
-    <h4 v-if="filter === 'date'">Видени вагони днес</h4>
-    <h4 v-if="filter == null">Списък на всички видени вагони</h4>
+    <EventFilter @applyFilters="applyFilters($event)"></EventFilter>
+    <h4 v-if="pageFilter != null && pageFilter.includes('wagon')">Списък на събития за вагон</h4>
+    <h4 v-if="pageFilter != null && pageFilter.includes('date')">Видени вагони днес</h4>
+    <h4 v-if="pageFilter != null && pageFilter.includes('train')">Видени вагони на този влак</h4>
+    <h4 v-if="pageFilter == null">Списък на всички видени вагони</h4>
     <div v-if="loading">Зареждане</div>
     <div v-else>
       <div v-if="events.length === 0">
@@ -12,10 +14,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col" v-if="filter === 'wagon'">Дата</th>
-              <th scope="col" v-if="filter === 'date'">Вагон</th>
-              <th scope="col" v-if="filter == null">Дата</th>
-              <th scope="col" v-if="filter == null">Вагон</th>
+              <th scope="col">Дата</th>
+              <th scope="col">Вагон</th>
               <th scope="col">Влак</th>
               <th scope="col">Гара</th>
               <th scope="col">Коментар</th>
@@ -24,31 +24,18 @@
           </thead>
           <tbody>
             <tr v-for="event in events">
-              <th scope="row" v-if="filter === 'wagon'">
+              <th scope="row">
                 <router-link
                   class="text-body"
                   :to="'/events/' + event.data.id"
                   :permissions="permissions"
                 >{{ event.data.date}}</router-link>
               </th>
-              <th scope="row" v-if="filter === 'date'">
+              <th scope="row">
                 <router-link
                   class="text-body"
                   :to="'/events/' + event.data.id"
-                >{{ event.data.wagon.data.stylized_number}}</router-link>
-              </th>
-              <th scope="row" v-if="filter ==  null">
-                <router-link
-                  class="text-body"
-                  :to="'/events/' + event.data.id"
-                  :permissions="permissions"
-                >{{ event.data.date}}</router-link>
-              </th>
-              <th scope="row" v-if="filter == null">
-                <router-link
-                  class="text-body"
-                  :to="'/events/' + event.data.id"
-                >{{ event.data.wagon.data.stylized_number}}</router-link>
+                >{{ event.data.wagon.number}}</router-link>
               </th>
               <td>
                 <router-link
@@ -80,26 +67,31 @@
 
 <script>
 import Pagination from "../components/Pagination";
+import EventFilter from "../components/EventFilter";
 
 export default {
   name: "EventIndex",
-  props: ["filter", "value", "permissions"],
+  props: {
+    permissions: Array,
+    pageFilter: String,
+  },
   components: {
-    Pagination
+    Pagination,
+    EventFilter,
   },
   mounted() {
     this.getData();
   },
-  data: function() {
+  data: function () {
     return {
       loading: true,
       events: null,
-      model: "events?show-wagon=1",
+      model: "events",
       pagination: {
         total: null,
         currentPage: null,
-        lastPage: null
-      }
+        lastPage: null,
+      },
     };
   },
   methods: {
@@ -109,41 +101,39 @@ export default {
       this.loading = value.loading;
     },
     getData() {
-      var url = "/api/events/?show-wagon=1";
-      if (this.filter === "wagon") {
-        url = url + "&wagon_id=" + this.value;
-        this.model = this.model + "&wagon_id=" + this.value;
-      }
-      if (this.filter === "date") {
-        url = url + "&date=" + this.value;
-        this.model = this.model + "&date=" + this.value;
-      }
-      if (this.filter === "user") {
-        url = url + "&user_id=" + this.value;
-        this.model = this.model + "&user_id=" + this.value;
-      }
       axios
-        .get(url)
-        .then(response => {
+        .get("/api/" + this.model)
+        .then((response) => {
           this.events = response.data.data;
           this.pagination.currentPage = response.data.meta["current_page"];
           this.pagination.lastPage = response.data.meta["last_page"];
           this.pagination.total = response.data.meta["total"];
           this.loading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           alert("Грешка при взимането на информация");
         });
-    }
+    },
+    applyFilters(queryString) {
+      this.model = "events" + queryString;
+      if (this.pageFilter !== null) {
+        this.model += "&" + this.pageFilter;
+      }
+      this.loading = true;
+      this.getData();
+    },
   },
   watch: {
-    filter: {
+    pageFilter: {
       immediate: true,
       handler(value) {
-        this.model = "events?show-wagon=1";
+        this.model = "events";
+        if (this.pageFilter != null) {
+          this.model += "?" + this.pageFilter;
+        }
         this.getData();
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
