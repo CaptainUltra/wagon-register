@@ -18,20 +18,35 @@
           <b>Последна промяна:</b>
           {{train.last_updated}}
         </p>
-        <h6>Състав на влака:</h6>
-        <div>
-          <ul class="list-group">
-            <li v-for="wagontype in train.wagontypes" class="list-group-item">
-              <img
-                class="img-fluid pr-2"
-                src="https://placehold.it/1920x1080"
-                style="max-width: 35%;
+        <div class="row">
+          <div :class="userHasPermission('event-viewAny') ? 'col-md-6 pt-2' : 'col-12'">
+            <h5><b>Състав на влака:</b></h5>
+            <ul class="list-group">
+              <li v-for="wagontype in train.wagontypes" class="list-group-item">
+                <img
+                  class="img-fluid pr-2"
+                  src="https://placehold.it/1920x1080"
+                  style="max-width: 35%;
 	                    max-height: 100%;"
-              />
-              <b>{{wagontype.data.name}}</b>
-              - {{wagontype.data.conditioned ? "Климатизиран" : "Неклиматизиран"}} - {{wagontype.data.interior_type.data.name}}
-            </li>
-          </ul>
+                />
+                <b>{{wagontype.data.name}}</b>
+                - {{wagontype.data.conditioned ? "Климатизиран" : "Неклиматизиран"}} - {{wagontype.data.interior_type.data.name}}
+              </li>
+            </ul>
+          </div>
+          <div v-if="userHasPermission('event-viewAny') " class="col-md-6 pt-2">
+            <h5><b>Последно видени вагони на този влак:</b></h5>
+            <ul class="list-group">
+              <li
+                v-for="event in train.events"
+                class="list-group-item"
+              >
+              <router-link :to="'/wagons/' + event.data.wagon.id" class="text-body">{{event.data.date}} - {{event.data.wagon.number}}</router-link></li>
+              <li class="list-group-item">
+                <router-link :to="'/trains/' + train.id +'/events'">Всички видени вагони за този влак</router-link>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="pt-3 d-flex justify-content-between">
           <a href="#" @click="$router.back()">< Назад</a>
@@ -69,11 +84,11 @@ export default {
   mounted() {
     axios
       .get("/api/trains/" + this.$route.params.id)
-      .then(response => {
+      .then((response) => {
         this.train = response.data.data;
         this.loading = false;
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status === 404) {
           this.$router.push("/trains");
         } else {
@@ -81,34 +96,34 @@ export default {
         }
       });
   },
-  data: function() {
+  data: function () {
     return {
       loading: true,
       modal: false,
-      train: null
+      train: null,
     };
   },
   methods: {
     destroy() {
       axios
         .delete("/api/trains/" + this.$route.params.id)
-        .then(response => {
+        .then((response) => {
           this.$router.push("/trains");
         })
-        .catch(error => {
+        .catch((error) => {
           alert("Грешка при изтриването!");
         });
     },
     userHasPermission(permission) {
       var flag = false;
-      this.permissions.forEach(element => {
+      this.permissions.forEach((element) => {
         if (element == permission) {
           flag = true;
           return false;
         }
       });
       return flag;
-    }
-  }
+    },
+  },
 };
 </script>
