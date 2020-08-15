@@ -111,10 +111,28 @@ class EventFilteringTest extends TestCase
      */
     public function testEventsCanBeFilteredByUserId()
     {
+        factory(Permission::class)->create(['slug' => 'event-viewUser']);
+        $this->user->roles[0]->permissions()->sync([1, 2]);
+
         factory(Event::class)->create(['user_id' => 1, 'wagon_id' => 1]);
         factory(Event::class)->create(['user_id' => 2, 'wagon_id' => 1]);
 
         $response = $this->get('api/events' . '?user_id=1' . '&api_token=' . $this->user->api_token);
         $response->assertJsonCount(1, 'data');
+    }
+
+    /**
+     * Test events can be filtered by user id only when having the right permission.
+     * Pipeline will not apply filter when 'event-viewUser' permission is not present.
+     *
+     * @return void
+     */
+    public function testEventsCanBeFilteredByUserIdWithoutPermissionIsForbidden()
+    {
+        factory(Event::class)->create(['user_id' => 1, 'wagon_id' => 1]);
+        factory(Event::class)->create(['user_id' => 2, 'wagon_id' => 1]);
+
+        $response = $this->get('api/events' . '?user_id=1' . '&api_token=' . $this->user->api_token);
+        $response->assertJsonCount(2, 'data');
     }
 }
