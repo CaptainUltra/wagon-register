@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Train;
 use App\Http\Resources\Train as TrainResource;
+use App\Http\Resources\Train\TrainShowResource;
 use App\WagonType;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +58,7 @@ class TrainController extends Controller
     {
         $this->authorize('view', $train);
 
-        return new TrainResource($train);
+        return new TrainShowResource($train);
     }
 
     /**

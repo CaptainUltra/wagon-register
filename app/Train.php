@@ -34,10 +34,18 @@ class Train extends Model
         return $array;
     }
     /**
-     * Get the wagon that the depot has
+     * Get the wagon types that the train has
      */
     public function wagonTypes()
     {
         return $this->belongsToMany(WagonType::class)->withPivot('position');
+    }
+
+    /**
+     * Get the events that the train has.
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 }
