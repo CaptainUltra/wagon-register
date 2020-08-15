@@ -25,7 +25,7 @@ class TrainShowResource extends JsonResource
                 'route' => $this->route,
                 'description' => $this->description,
                 'wagontypes' => WagonType::collection($this->wagonTypes()->orderBy('position')->get()),
-                'events' => $this->when(Auth::user()->can('viewAny', AppEvent::class), Event::collection($this->events()->orderByDesc('id')->get()->take(5))),
+                'events' => $this->when(Auth::user()->can('viewAny', AppEvent::class), Event::collection($this->events()->orderByDesc('id')->get()->take(7))),
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [
