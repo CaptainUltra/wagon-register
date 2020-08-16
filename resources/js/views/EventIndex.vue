@@ -34,19 +34,19 @@
               <th scope="row">
                 <router-link
                   class="text-body"
-                  :to="'/events/' + event.data.id"
+                  :to="'/wagons/' + event.data.wagon.id"
                 >{{ event.data.wagon.number}}</router-link>
               </th>
               <td>
                 <router-link
                   class="text-body"
-                  :to="'/events/' + event.data.id"
+                  :to="'/trains/' + (event.data.train ? event.data.train.data.id : '')"
                 >{{event.data.train ? event.data.train.data.number : "-"}}</router-link>
               </td>
               <td>
                 <router-link
                   class="text-body"
-                  :to="'/events/' + event.data.id"
+                  :to="'/stations/' + (event.data.station ? event.data.station.data.id : '')"
                 >{{event.data.station ? event.data.station.data.name : "-"}}</router-link>
               </td>
               <td>

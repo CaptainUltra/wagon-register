@@ -8,7 +8,7 @@
       <div v-else class="pl-2 pt-2">
         <p>
           <b>Вагон №:</b>
-          {{event.wagon.data.stylized_number}}
+          {{event.wagon.number}}
         </p>
         <p>
           <b>Дата:</b>
