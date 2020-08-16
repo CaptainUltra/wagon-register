@@ -12,7 +12,7 @@
         <SelectField
           name="station"
           label="Гара"
-          model="stations"
+          model="stations?pagination=0"
           @updatefield="filters.station = $event"
         ></SelectField>
       </div>

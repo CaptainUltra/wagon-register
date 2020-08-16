@@ -17,8 +17,15 @@ class StationController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Station::class);
+        if (request()->has('pagination') && !request('pagination')) {
+            $stations = Station::orderBy('name', 'asc')->get();
+        }
+        else
+        {
+            $stations = Station::orderBy('name', 'asc')->paginate(15);
+        }
 
-        return StationResource::collection(Station::orderBy('name', 'asc')->paginate(15));
+        return StationResource::collection($stations);
     }
 
     /**
