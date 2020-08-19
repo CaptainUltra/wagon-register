@@ -65,7 +65,7 @@ export default {
   props: ["permissions"],
   mounted() {
     axios
-      .get("/api/events/" + this.$route.params.id + "?show-wagon=1")
+      .get("/api/events/" + this.$route.params.id)
       .then(response => {
         this.event = response.data.data;
         this.loading = false;
