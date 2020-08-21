@@ -5,11 +5,12 @@ namespace Tests\Feature\Wagon;
 use App\Role;
 use App\User;
 use App\Depot;
+use App\Wagon;
+use App\Status;
 use App\WagonType;
 use App\Permission;
 use Tests\TestCase;
 use App\RevisoryPoint;
-use App\Wagon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -26,6 +27,7 @@ class WagonValidationRulesTest extends TestCase
         factory(WagonType::class)->create(['name' => '85-97']);
         factory(Depot::class)->create();
         factory(RevisoryPoint::class)->create();
+        factory(Status::class)->create();
 
         $role = factory(Role::class)->create();
         $this->user->roles()->sync($role);
@@ -140,6 +142,39 @@ class WagonValidationRulesTest extends TestCase
         //Letters
         $response = $this->post('api/wagons', array_merge($this->data(), ['revision_date' => 'aaa']));
         $response->assertSessionHasErrors('revision_date');
+    }
+
+    /**
+     * Test that wagon depot_id must exist in database.
+     * 
+     * @return void
+     */
+    public function testWagonDepotIdMustExist()
+    {
+        $response = $this->post('api/wagons', array_merge($this->data(), ['depot_id' => 2]));
+        $response->assertSessionHasErrors('depot_id');
+    }
+    
+    /**
+     * Test that wagon revisory_point_id must exist in database.
+     * 
+     * @return void
+     */
+    public function testWagonRevisoryPointIdMustExist()
+    {
+        $response = $this->post('api/wagons', array_merge($this->data(), ['revisory_point_id' => 2]));
+        $response->assertSessionHasErrors('revisory_point_id');
+    }
+
+    /**
+     * Test that wagon status_id must exist in database.
+     * 
+     * @return void
+     */
+    public function testWagonStatusIdMustExist()
+    {
+        $response = $this->post('api/wagons', array_merge($this->data(), ['status_id' => 2]));
+        $response->assertSessionHasErrors('status_id');
     }
 
     /**

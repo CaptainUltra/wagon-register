@@ -29,10 +29,10 @@ class StoreWagonRequest extends FormRequest
             'letter_index' => '',
             'v_max' => 'sometimes|integer',
             'seats' => 'sometimes|integer',
-            'depot_id' => '',
-            'revisory_point_id' => '',
+            'depot_id' => 'sometimes|integer|exists:depots,id',
+            'revisory_point_id' => 'sometimes|integer|exists:revisory_points,id',
             'revision_date' => 'sometimes|date',
-            'status_id' => ''
+            'status_id' => 'sometimes|integer|exists:statuses,id'
         ];
     }
 }

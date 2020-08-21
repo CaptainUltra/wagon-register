@@ -12,6 +12,7 @@ use App\Permission;
 use Tests\TestCase;
 use App\InteriorType;
 use App\RevisoryPoint;
+use App\Status;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,6 +29,7 @@ class WagonTest extends TestCase
         factory(WagonType::class)->create(['name' => '85-97']);
         factory(Depot::class)->create();
         factory(RevisoryPoint::class)->create();
+        factory(Status::class)->create();
 
         $role = factory(Role::class)->create();
         $this->user->roles()->sync($role);
