@@ -9,6 +9,7 @@ use App\WagonType;
 use App\Permission;
 use Tests\TestCase;
 use App\RevisoryPoint;
+use App\Wagon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -79,11 +80,70 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonNumberMustBeUnique()
     {
-        $this->fail('(WIP) Incomplete test.');
+        factory(Wagon::class)->create(['number' => '615285970039']);
+
+        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '615285970039']));
+        $response->assertSessionHasErrors('number');
     }
 
     /**
-     * Fuction to return test data.abs
+     * Test wagon v_max must be an interger validation.
+     * 
+     * @return void
+     */
+    public function testWagonVMaxMustBeAnInteger()
+    {
+        //Decmal number with point
+        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => '9.35']));
+        $response->assertSessionHasErrors('v_max');
+
+        //Decmal number with comma
+        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => '9,35']));
+        $response->assertSessionHasErrors('v_max');
+
+        //Letters
+        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => 'aaa']));
+        $response->assertSessionHasErrors('v_max');
+    }
+
+    /**
+     * Test wagon seats count must be an interger validation.
+     * 
+     * @return void
+     */
+    public function testWagonSeatsMustBeAnInteger()
+    {
+        //Decmal number with point
+        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => '9.35']));
+        $response->assertSessionHasErrors('seats');
+
+        //Decmal number with comma
+        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => '9,35']));
+        $response->assertSessionHasErrors('seats');
+
+        //Letters
+        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => 'aaa']));
+        $response->assertSessionHasErrors('seats');
+    }
+
+    /**
+     * Test that wagon revision_date must be a date.
+     * 
+     * @return void
+     */
+    public function testWagonRevisionDateMustBeADate()
+    {
+        //Number
+        $response = $this->post('api/wagons', array_merge($this->data(), ['revision_date' => '9']));
+        $response->assertSessionHasErrors('revision_date');
+
+        //Letters
+        $response = $this->post('api/wagons', array_merge($this->data(), ['revision_date' => 'aaa']));
+        $response->assertSessionHasErrors('revision_date');
+    }
+
+    /**
+     * Fuction to return test data.
      * 
      * @return array
      */

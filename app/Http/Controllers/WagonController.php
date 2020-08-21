@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreWagonRequest;
 use App\Wagon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Wagon as WagonResource;
@@ -29,11 +30,9 @@ class WagonController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWagonRequest $request)
     {
-        $this->authorize('create', Wagon::class);
-
-        $wagon = Wagon::create($this->validateRequest());
+        $wagon = Wagon::create($request->validated());
 
         return (new WagonResource($wagon))
             ->response()

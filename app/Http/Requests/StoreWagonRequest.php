@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Wagon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreWagonRequest extends FormRequest
@@ -13,7 +14,7 @@ class StoreWagonRequest extends FormRequest
      */
     public function authorize()
     {
-        $this->user()->can('create', Wagon::class);
+        return $this->user()->can('create', Wagon::class);
     }
 
     /**
@@ -24,7 +25,14 @@ class StoreWagonRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'number' => 'required|digits:12|unique:wagons,number',
+            'letter_index' => '',
+            'v_max' => 'sometimes|integer',
+            'seats' => 'sometimes|integer',
+            'depot_id' => '',
+            'revisory_point_id' => '',
+            'revision_date' => 'sometimes|date',
+            'status_id' => ''
         ];
     }
 }
