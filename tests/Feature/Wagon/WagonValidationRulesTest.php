@@ -179,6 +179,27 @@ class WagonValidationRulesTest extends TestCase
     }
 
     /**
+     * Test that wagon fields with sometimes validation can be null.
+     * (v_max, seats, depot_id, revisory_point_id, revision_date, status_id)
+     * 
+     * @return void
+     */
+    public function testWagonFieldsCanBeNull()
+    {
+        $response = $this->post('api/wagons', array_merge($this->data(), [
+            'v_max' => null,
+            'seats' => null,
+            'depot_id' => null,
+            'revisory_point_id' => null,
+            'revision_date' => null,
+            'status_id' => null
+        ]));
+
+        //Satus code will be different if the data is invalid.
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    /**
      * Test wagon can be updated without changing its number. (Unique validation for number is ignored)
      * 
      * @return void
@@ -190,7 +211,7 @@ class WagonValidationRulesTest extends TestCase
 
         $response = $this->patch('api/wagons/' . $wagon->id, $this->data());
         $wagon = Wagon::first();
-        
+
         $this->assertEquals('615285970039', $wagon->number);
         $response->assertStatus(Response::HTTP_OK);
     }

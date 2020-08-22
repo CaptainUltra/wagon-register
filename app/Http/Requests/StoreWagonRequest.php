@@ -27,12 +27,12 @@ class StoreWagonRequest extends FormRequest
         return [
             'number' => 'required|digits:12|unique:wagons,number',
             'letter_index' => '',
-            'v_max' => 'sometimes|integer',
-            'seats' => 'sometimes|integer',
-            'depot_id' => 'sometimes|integer|exists:depots,id',
-            'revisory_point_id' => 'sometimes|integer|exists:revisory_points,id',
-            'revision_date' => 'sometimes|date',
-            'status_id' => 'sometimes|integer|exists:statuses,id'
+            'v_max' => 'sometimes|nullable|integer',
+            'seats' => 'sometimes|nullable|integer',
+            'depot_id' => 'sometimes|nullable|integer|exists:depots,id',
+            'revisory_point_id' => 'sometimes|nullable|integer|exists:revisory_points,id',
+            'revision_date' => 'sometimes|nullable|date',
+            'status_id' => 'sometimes|nullable|integer|exists:statuses,id'
         ];
     }
 }
