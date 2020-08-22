@@ -15,11 +15,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class WagonValidationRulesTest extends TestCase
+class WagonUpdateValidationRulesTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $user;
+    private $wagon_id;
 
     protected function setUp(): void
     {
@@ -29,15 +30,16 @@ class WagonValidationRulesTest extends TestCase
         factory(Depot::class)->create();
         factory(RevisoryPoint::class)->create();
         factory(Status::class)->create();
+        
+        //Create wagon to update
+        $this->wagon_id = (factory(Wagon::class)->create())->id;
 
+        //Permissions
         $role = factory(Role::class)->create();
         $this->user->roles()->sync($role);
-        factory(Permission::class)->create(['slug' => 'wagon-viewAny']);
-        factory(Permission::class)->create(['slug' => 'wagon-view']);
-        factory(Permission::class)->create(['slug' => 'wagon-create']);
         factory(Permission::class)->create(['slug' => 'wagon-update']);
-        factory(Permission::class)->create(['slug' => 'wagon-delete']);
-        $this->user->roles[0]->permissions()->sync([1, 2, 3, 4, 5]);
+        $this->user->roles[0]->permissions()->sync(1);
+        
     }
 
     /**
@@ -48,15 +50,15 @@ class WagonValidationRulesTest extends TestCase
     public function testWagonNumberMustBeOnlyDigits()
     {
         //Digits + space
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '61 285970039']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => '61 285970039']));
         $response->assertSessionHasErrors('number');
 
         //Digits + letter
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '61a285970039']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => '61a285970039']));
         $response->assertSessionHasErrors('number');
 
         //Only letters
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => 'aaaaaaaaaaaa']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => 'aaaaaaaaaaaa']));
         $response->assertSessionHasErrors('number');
     }
 
@@ -68,11 +70,11 @@ class WagonValidationRulesTest extends TestCase
     public function testWagonNumberMustBe12Digits()
     {
         //More digits
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '6152859700391']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => '6152859700391']));
         $response->assertSessionHasErrors('number');
 
         //Less digits
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '6152859700391']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => '6152859700391']));
         $response->assertSessionHasErrors('number');
     }
 
@@ -85,7 +87,7 @@ class WagonValidationRulesTest extends TestCase
     {
         factory(Wagon::class)->create(['number' => '615285970039']);
 
-        $response = $this->post('api/wagons', array_merge($this->data(), ['number' => '615285970039']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['number' => '615285970039']));
         $response->assertSessionHasErrors('number');
     }
 
@@ -97,15 +99,15 @@ class WagonValidationRulesTest extends TestCase
     public function testWagonVMaxMustBeAnInteger()
     {
         //Decmal number with point
-        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => '9.35']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['v_max' => '9.35']));
         $response->assertSessionHasErrors('v_max');
 
         //Decmal number with comma
-        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => '9,35']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['v_max' => '9,35']));
         $response->assertSessionHasErrors('v_max');
 
         //Letters
-        $response = $this->post('api/wagons', array_merge($this->data(), ['v_max' => 'aaa']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['v_max' => 'aaa']));
         $response->assertSessionHasErrors('v_max');
     }
 
@@ -117,15 +119,15 @@ class WagonValidationRulesTest extends TestCase
     public function testWagonSeatsMustBeAnInteger()
     {
         //Decmal number with point
-        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => '9.35']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['seats' => '9.35']));
         $response->assertSessionHasErrors('seats');
 
         //Decmal number with comma
-        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => '9,35']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['seats' => '9,35']));
         $response->assertSessionHasErrors('seats');
 
         //Letters
-        $response = $this->post('api/wagons', array_merge($this->data(), ['seats' => 'aaa']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['seats' => 'aaa']));
         $response->assertSessionHasErrors('seats');
     }
 
@@ -137,11 +139,11 @@ class WagonValidationRulesTest extends TestCase
     public function testWagonRevisionDateMustBeADate()
     {
         //Number
-        $response = $this->post('api/wagons', array_merge($this->data(), ['revision_date' => '9']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['revision_date' => '9']));
         $response->assertSessionHasErrors('revision_date');
 
         //Letters
-        $response = $this->post('api/wagons', array_merge($this->data(), ['revision_date' => 'aaa']));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['revision_date' => 'aaa']));
         $response->assertSessionHasErrors('revision_date');
     }
 
@@ -152,7 +154,7 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonDepotIdMustExist()
     {
-        $response = $this->post('api/wagons', array_merge($this->data(), ['depot_id' => 2]));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['depot_id' => 2]));
         $response->assertSessionHasErrors('depot_id');
     }
 
@@ -163,7 +165,7 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonRevisoryPointIdMustExist()
     {
-        $response = $this->post('api/wagons', array_merge($this->data(), ['revisory_point_id' => 2]));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['revisory_point_id' => 2]));
         $response->assertSessionHasErrors('revisory_point_id');
     }
 
@@ -174,7 +176,7 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonStatusIdMustExist()
     {
-        $response = $this->post('api/wagons', array_merge($this->data(), ['status_id' => 2]));
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), ['status_id' => 2]));
         $response->assertSessionHasErrors('status_id');
     }
 
@@ -186,7 +188,7 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonFieldsCanBeNull()
     {
-        $response = $this->post('api/wagons', array_merge($this->data(), [
+        $response = $this->patch('api/wagons/' . $this->wagon_id, array_merge($this->data(), [
             'v_max' => null,
             'seats' => null,
             'depot_id' => null,
@@ -196,7 +198,7 @@ class WagonValidationRulesTest extends TestCase
         ]));
 
         //Satus code will be different if the data is invalid.
-        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -206,10 +208,7 @@ class WagonValidationRulesTest extends TestCase
      */
     public function testWagonCanBeUpdatedWithSameNumber()
     {
-        factory(Wagon::class)->create();
-        $wagon = Wagon::first();
-
-        $response = $this->patch('api/wagons/' . $wagon->id, $this->data());
+        $response = $this->patch('api/wagons/' . $this->wagon_id, $this->data());
         $wagon = Wagon::first();
 
         $this->assertEquals('615285970039', $wagon->number);
