@@ -12,6 +12,7 @@ use App\Permission;
 use Tests\TestCase;
 use App\RevisoryPoint;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class WagonValidationRulesTest extends TestCase
@@ -154,7 +155,7 @@ class WagonValidationRulesTest extends TestCase
         $response = $this->post('api/wagons', array_merge($this->data(), ['depot_id' => 2]));
         $response->assertSessionHasErrors('depot_id');
     }
-    
+
     /**
      * Test that wagon revisory_point_id must exist in database.
      * 
@@ -175,6 +176,23 @@ class WagonValidationRulesTest extends TestCase
     {
         $response = $this->post('api/wagons', array_merge($this->data(), ['status_id' => 2]));
         $response->assertSessionHasErrors('status_id');
+    }
+
+    /**
+     * Test wagon can be updated without changing its number. (Unique validation for number is ignored)
+     * 
+     * @return void
+     */
+    public function testWagonCanBeUpdatedWithSameNumber()
+    {
+        factory(Wagon::class)->create();
+        $wagon = Wagon::first();
+
+        $response = $this->patch('api/wagons/' . $wagon->id, $this->data());
+        $wagon = Wagon::first();
+        
+        $this->assertEquals('615285970039', $wagon->number);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**

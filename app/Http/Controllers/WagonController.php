@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWagonRequest;
+use App\Http\Requests\UpdateWagonRequest;
 use App\Wagon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Wagon as WagonResource;
@@ -66,11 +67,9 @@ class WagonController extends Controller
      * @param  \App\Wagon  $wagon
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Wagon $wagon)
+    public function update(UpdateWagonRequest $request, Wagon $wagon)
     {
-        $this->authorize('update', $wagon);
-
-        $wagon->update($this->validateRequest());
+        $wagon->update($request->validated());
 
         return (new WagonResource($wagon))
             ->response()
