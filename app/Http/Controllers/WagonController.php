@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreWagonRequest;
+use App\Http\Requests\UpdateWagonRequest;
 use App\Wagon;
 use Illuminate\Http\Request;
 use App\Http\Resources\Wagon as WagonResource;
@@ -17,7 +19,7 @@ class WagonController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Wagon::class);
-        
+
         $wagons = Wagon::allWagons();
 
         return WagonResource::collection($wagons);
@@ -29,12 +31,10 @@ class WagonController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWagonRequest $request)
     {
-        $this->authorize('create', Wagon::class);
+        $wagon = Wagon::create($request->validated());
 
-        $wagon = Wagon::create($this->validateRequest());
-        
         return (new WagonResource($wagon))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -50,7 +50,7 @@ class WagonController extends Controller
     {
         $this->authorize('view', $wagon);
 
-        if(request()->has('show-events') && request('show-events')){
+        if (request()->has('show-events') && request('show-events')) {
             $wagonId = $wagon->id;
             $wagon = Wagon::with(['events' => function ($query) {
                 $query->orderBy('date', 'desc')->paginate(3);
@@ -67,11 +67,9 @@ class WagonController extends Controller
      * @param  \App\Wagon  $wagon
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Wagon $wagon)
+    public function update(UpdateWagonRequest $request, Wagon $wagon)
     {
-        $this->authorize('update', $wagon);
-
-        $wagon->update($this->validateRequest());
+        $wagon->update($request->validated());
 
         return (new WagonResource($wagon))
             ->response()
@@ -91,24 +89,5 @@ class WagonController extends Controller
         $wagon->delete();
 
         return response([], Response::HTTP_NO_CONTENT);
-    }
-    /**
-     * Validate data from request.
-     * 
-     * @return mixed
-     */
-    private function validateRequest()
-    {
-        return request()->validate([
-            'number' => 'required',
-            'letter_index'=> '',
-            'v_max'=> '',
-            'seats'=> '',
-            'depot_id' => '',
-            'revisory_point_id' => '',
-            'revision_date' => '',
-            'status_id' => '',
-            //'index_image_id'=> ''
-        ]);
     }
 }
