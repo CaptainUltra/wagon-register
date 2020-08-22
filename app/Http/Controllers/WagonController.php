@@ -90,23 +90,4 @@ class WagonController extends Controller
 
         return response([], Response::HTTP_NO_CONTENT);
     }
-    /**
-     * Validate data from request.
-     * 
-     * @return mixed
-     */
-    private function validateRequest()
-    {
-        return request()->validate([
-            'number' => 'required|digits:12',
-            'letter_index' => '',
-            'v_max' => '',
-            'seats' => '',
-            'depot_id' => '',
-            'revisory_point_id' => '',
-            'revision_date' => '',
-            'status_id' => '',
-            //'index_image_id'=> ''
-        ]);
-    }
 }
