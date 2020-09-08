@@ -9,7 +9,7 @@ class Train extends Model
 {
     use Searchable;
     
-    protected $fillable = ['number', 'route', 'description'];
+    protected $fillable = ['number', 'route'];
     /**
      * Return url to self
      * 

@@ -113,7 +113,6 @@ class TrainController extends Controller
         return request()->validate([
             'number' => 'required',
             'route' => 'required',
-            'description' => '',
             'wagontypes'=>''
         ]);
     }
