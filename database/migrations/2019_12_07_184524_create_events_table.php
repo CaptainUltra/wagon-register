@@ -22,11 +22,6 @@ class CreateEventsTable extends Migration
             $table->date('date');
             $table->string('comment')->nullable();
             $table->timestamps();
-
-            /*$table->foreign('wagon_id')->references('id')->on('wagons');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('station_id')->references('id')->on('stations');
-            $table->foreign('train_id')->references('id')->on('trains');*/
         });
     }
 
