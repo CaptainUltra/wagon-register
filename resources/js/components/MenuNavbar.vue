@@ -20,7 +20,6 @@
           <router-link
             to="/events/today"
             class="nav-link"
-            v-if="userHasPermission('event-viewDate')"
           >Видени днес</router-link>
         </li>
         <li class="nav-item dropdown" v-if="userHasPermission('wagon-viewAny')">
