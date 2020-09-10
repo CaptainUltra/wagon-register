@@ -14,9 +14,13 @@ class AddForeignKeyConstraintsToWagonsTable extends Migration
     public function up()
     {
         Schema::table('wagons', function (Blueprint $table) {
+            $table->unsignedBigInteger('type_id')->change();
             $table->foreign('type_id')->references('id')->on('wagon_types')->onDelete('cascade');
+            $table->unsignedBigInteger('depot_id')->change();
             $table->foreign('depot_id')->references('id')->on('depots')->onDelete('set null');
+            $table->unsignedBigInteger('revisory_point_id')->change();
             $table->foreign('revisory_point_id')->references('id')->on('revisory_points')->onDelete('set null');
+            $table->unsignedBigInteger('status_id')->change();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }

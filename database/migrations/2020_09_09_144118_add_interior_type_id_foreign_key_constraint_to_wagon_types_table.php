@@ -14,6 +14,7 @@ class AddInteriorTypeIdForeignKeyConstraintToWagonTypesTable extends Migration
     public function up()
     {
         Schema::table('wagon_types', function (Blueprint $table) {
+            $table->unsignedBigInteger('interior_type_id')->change();
             $table->foreign('interior_type_id')->references('id')->on('interior_types')->onDelete('cascade');
         });
     }

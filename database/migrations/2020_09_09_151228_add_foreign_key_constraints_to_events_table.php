@@ -14,9 +14,13 @@ class AddForeignKeyConstraintsToEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
+            $table->unsignedBigInteger('wagon_id')->change();
             $table->foreign('wagon_id')->references('id')->on('wagons')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->change();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('station_id')->change();
             $table->foreign('station_id')->references('id')->on('stations')->onDelete('cascade');
+            $table->unsignedBigInteger('train_id')->change();
             $table->foreign('train_id')->references('id')->on('trains')->onDelete('cascade');
         });
     }
