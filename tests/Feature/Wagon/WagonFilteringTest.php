@@ -94,10 +94,10 @@ class WagonFilteringTest extends TestCase
         $response->assertJsonCount(1, 'data');
     }
     /**@test */
-    public function testWagonsCanBeFilteredByRevisionExpirationMonth()
+    public function testWagonsCanBeFilteredByRevisionExpiringThisMonth()
     {
         factory(Wagon::class)->create(['revision_date' => "2019-01-09"]);
-        factory(Wagon::class)->create(['revision_date' => "2019-08-09"]);
+        factory(Wagon::class)->create(['revision_date' => "2019-" . date("m") ."-09"]);
 
         $response = $this->get('api/wagons' . '?revision_expiration_this_month=1' . '&api_token=' . $this->user->api_token);
         $response->assertJsonCount(1, 'data');
