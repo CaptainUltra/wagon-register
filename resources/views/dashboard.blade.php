@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('head-scripts')
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="{{ mix('js/dashboard.js') }}" defer></script>
 @endsection
 
 @section('content')
