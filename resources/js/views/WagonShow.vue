@@ -59,7 +59,7 @@
             {{wagon.last_updated}}
           </p>
         </div>
-        <div class="col-12 pt-2" v-if="userHasPermission('event-viewWagon')">
+        <div class="col-12 pt-2">
           <h5>Последно видян:</h5>
           <ul class="list-group">
             <li
