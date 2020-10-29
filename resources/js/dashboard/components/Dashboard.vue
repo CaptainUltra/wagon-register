@@ -1,6 +1,5 @@
 <template>
     <div>
-<!--        <MenuNavbar :permissions="permissions" :roles="roles"></MenuNavbar>-->
         <Menu :permissions="permissions" :roles="roles"
               nav-style="navbar navbar-expand-md navbar-light bg-white shadow-sm collapse d-md-none"
               nav-id="navbarResponsive"
@@ -9,7 +8,6 @@
               ul-second-style="navbar-nav ml-auto"
         ></Menu>
         <div class="row bg-white mr-0">
-<!--            <MenuSidebar :permissions="permissions" :roles="roles"></MenuSidebar>-->
             <Menu :permissions="permissions" :roles="roles"
                   nav-style="col-md-2 d-none d-md-block bg-light sidebar text-break"
                   div-style="sidebar-sticky"
@@ -26,16 +24,12 @@
 </template>
 
 <script>
-import MenuNavbar from "./MenuNavbar.vue";
-import MenuSidebar from "./MenuSidebar.vue";
 import Menu from "./Menu.vue";
 
 export default {
     name: "Dashboard",
     props: ["user", "permissions", "roles"],
     components: {
-        MenuSidebar,
-        MenuNavbar,
         Menu
     },
     created() {
