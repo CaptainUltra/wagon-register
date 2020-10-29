@@ -28,7 +28,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#wagonCollapse">Вагони</a>
                     <div class="collapse" id="wagonCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/wagons/create"
@@ -64,7 +64,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#trainCollapse">Влакове</a>
                     <div class="collapse" id="trainCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/trains/create"
@@ -91,7 +91,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#stationCollapse">Гари</a>
                     <div class="collapse" id="stationCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/stations/create"
@@ -127,7 +127,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#depotCollapse">Депа</a>
                     <div class="collapse" id="depotCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/depots/create"
@@ -158,7 +158,7 @@
                     >Пунктове за ревизия</a>
                     <div class="collapse" id="revPointCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/revisorypoints/create"
@@ -189,7 +189,7 @@
                     >Типове интериори</a>
                     <div class="collapse" id="interiorTypeCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/interiortypes/create"
@@ -220,7 +220,7 @@
                     >Серии вагони</a>
                     <div class="collapse" id="wagonTypeCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/wagontypes/create"
@@ -251,7 +251,7 @@
                     >Статуси на вагони</a>
                     <div class="collapse" id="statusCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/statuses/create"
@@ -290,7 +290,7 @@
                     >Потребители</a>
                     <div class="collapse" id="userCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/users/create"
@@ -317,7 +317,7 @@
                     <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#roleCollapse">Роли</a>
                     <div class="collapse" id="roleCollapse">
                         <div class="card card-body mr-3">
-                            <ul>
+                            <ul class="noBulletAndPadding">
                                 <li class="nav-item">
                                     <router-link
                                         to="/roles/create"
@@ -401,3 +401,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.noBulletAndPadding {
+    list-style-type: none;
+    padding: 0;
+}
+</style>
+
