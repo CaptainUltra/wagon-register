@@ -3,13 +3,16 @@
         <div :class="divClass">
             <ul :class="ulStyle">
                 <li class="nav-item" v-if="userHasPermission('event-create')">
-                    <router-link to="/markseen" class="nav-link">Маркиране на видени</router-link>
+                    <router-link to="/markseen" class="nav-link" data-toggle="collapse" :data-target="'#' + navId">
+                        Маркиране на видени
+                    </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link
                         to="/events"
                         class="nav-link"
                         v-if="userHasPermission('event-viewAny')"
+                        data-toggle="collapse" :data-target="'#' + navId"
                     >Всички видени
                     </router-link>
                 </li>
@@ -17,6 +20,7 @@
                     <router-link
                         to="/events/today"
                         class="nav-link"
+                        data-toggle="collapse" :data-target="'#' + navId"
                     >Видени днес
                     </router-link>
                 </li>
@@ -30,6 +34,7 @@
                                         to="/wagons/create"
                                         class="nav-link"
                                         v-if="userHasPermission('wagon-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Регистриране на вагон
                                     </router-link>
                                 </li>
@@ -38,6 +43,7 @@
                                         to="/wagons"
                                         class="nav-link"
                                         v-if="userHasPermission('wagon-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички вагони
                                     </router-link>
                                 </li>
@@ -46,6 +52,7 @@
                                         to="/wagons/expiring-revision"
                                         class="nav-link"
                                         v-if="userHasPermission('wagon-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Изтичащи този месец ревизии
                                     </router-link>
                                 </li>
@@ -63,6 +70,7 @@
                                         to="/trains/create"
                                         class="nav-link"
                                         v-if="userHasPermission('train-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на влак
                                     </router-link>
                                 </li>
@@ -71,6 +79,7 @@
                                         to="/trains"
                                         class="nav-link"
                                         v-if="userHasPermission('train-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички влакове
                                     </router-link>
                                 </li>
@@ -88,6 +97,7 @@
                                         to="/stations/create"
                                         class="nav-link"
                                         v-if="userHasPermission('station-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на гара
                                     </router-link>
                                 </li>
@@ -96,6 +106,7 @@
                                         to="/stations"
                                         class="nav-link"
                                         v-if="userHasPermission('station-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички гари
                                     </router-link>
                                 </li>
@@ -122,6 +133,7 @@
                                         to="/depots/create"
                                         class="nav-link"
                                         v-if="userHasPermission('depot-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на депо
                                     </router-link>
                                 </li>
@@ -130,6 +142,7 @@
                                         to="/depots"
                                         class="nav-link"
                                         v-if="userHasPermission('depot-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички депа
                                     </router-link>
                                 </li>
@@ -151,6 +164,7 @@
                                         to="/revisorypoints/create"
                                         class="nav-link"
                                         v-if="userHasPermission('revisorypoint-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на пункт
                                     </router-link>
                                 </li>
@@ -159,6 +173,7 @@
                                         to="/revisorypoints"
                                         class="nav-link"
                                         v-if="userHasPermission('revisorypoint-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички пунктове
                                     </router-link>
                                 </li>
@@ -180,6 +195,7 @@
                                         to="/interiortypes/create"
                                         class="nav-link"
                                         v-if="userHasPermission('interiortype-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на тип
                                     </router-link>
                                 </li>
@@ -188,6 +204,7 @@
                                         to="/interiortypes"
                                         class="nav-link"
                                         v-if="userHasPermission('interiortype-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички типове
                                     </router-link>
                                 </li>
@@ -209,6 +226,7 @@
                                         to="/wagontypes/create"
                                         class="nav-link"
                                         v-if="userHasPermission('wagontype-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на серия
                                     </router-link>
                                 </li>
@@ -217,6 +235,7 @@
                                         to="/wagontypes"
                                         class="nav-link"
                                         v-if="userHasPermission('wagontype-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички серии
                                     </router-link>
                                 </li>
@@ -238,6 +257,7 @@
                                         to="/statuses/create"
                                         class="nav-link"
                                         v-if="userHasPermission('status-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на статус
                                     </router-link>
                                 </li>
@@ -246,6 +266,7 @@
                                         to="/statuses"
                                         class="nav-link"
                                         v-if="userHasPermission('status-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички статуси
                                     </router-link>
                                 </li>
@@ -275,6 +296,7 @@
                                         to="/users/create"
                                         class="nav-link"
                                         v-if="userHasPermission('user-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на потребител
                                     </router-link>
                                 </li>
@@ -283,6 +305,7 @@
                                         to="/users"
                                         class="nav-link"
                                         v-if="userHasPermission('user-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички потребители
                                     </router-link>
                                 </li>
@@ -300,6 +323,7 @@
                                         to="/roles/create"
                                         class="nav-link"
                                         v-if="userHasPermission('role-create')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Създаване на роля
                                     </router-link>
                                 </li>
@@ -308,6 +332,7 @@
                                         to="/roles"
                                         class="nav-link"
                                         v-if="userHasPermission('role-viewAny')"
+                                        data-toggle="collapse" :data-target="'#' + navId"
                                     >Всички роли
                                     </router-link>
                                 </li>
