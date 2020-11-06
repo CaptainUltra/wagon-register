@@ -22,3 +22,10 @@ Homestead.json
 .rocketeer/
 
 /storage/*.index
+
+
+#PHPStorm
+.idea/*
+
+#Dolphin
+.directory
