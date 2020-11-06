@@ -1,12 +1,22 @@
 {
-    "name": "laravel/laravel",
+    "name": "CaptainUltra/wagon-register",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A web platform designed to track and store information about passenger wagons in Bulgaria.",
     "keywords": [
-        "framework",
-        "laravel"
+        "laravel",
+        "vue",
+        "wagon",
+        "wagons",
+        "passenger wagons"
     ],
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Stoyan Haydushki",
+            "email": "s.haidushki@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^7.3",
         "doctrine/dbal": "^2.10",
