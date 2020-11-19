@@ -2,13 +2,45 @@
 
 namespace Tests\Feature;
 
+use App\Image;
+use App\Permission;
+use App\Role;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ImageTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected $data;
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Storage::fake('images');
+
+        $this->user = factory(User::class)->create();
+        $image = factory(Image::class)->make();
+        $file = UploadedFile::fake()->image('photo.jpg'); //TODO: Should this be included in the factory?
+        $this->data = [
+            'title' => $image->title,
+            'description' => $image->description,
+            'file' => $file,
+            'api_token' => $this->user->api_token
+        ];
+
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'image-create']);
+        $this->user->roles[0]->permissions()->sync([1]);
+    }
 
     /**
      * Test that a user must be logged in in order to upload an image.
@@ -17,7 +49,11 @@ class ImageTest extends TestCase
      */
     public function testImageCannotBeUploadedWithoutLogin()
     {
-        $this->Fail("Test not implemented.");
+        $response = $this->post('api/images', array_merge($this->data, ['api_token' => '']));
+
+        $response->assertRedirect('/login');
+        $this->assertCount(0, Image::all());
+        Storage::disk('images')->assertMissing('photo.jpg');
     }
 
     /**
@@ -27,7 +63,11 @@ class ImageTest extends TestCase
      */
     public function testImageCannotBeUploadedWithoutTheRightPermission()
     {
-        $this->Fail("Test not implemented.");
+        $this->user->roles[0]->permissions()->sync([]);
+        $response = $this->post('api/images', $this->data);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertCount(0, Image::all());
+        Storage::disk('images')->assertMissing('photo.jpg');
     }
 
     /**
@@ -38,7 +78,39 @@ class ImageTest extends TestCase
 
     public function testImageCanBeUploaded()
     {
-        $this->Fail("Test not implemented.");
+        $this->withoutExceptionHandling();
+
+        $response = $this->post('api/images', $this->data);
+        $image = Image::first();
+
+        $this->assertCount(1, Image::all());
+        $response->assertStatus(Response::HTTP_CREATED);
+        Storage::disk('local')->assertExists("images/" . $image->file_name);
+        $response->assertJson([
+            'data' => [
+                'id' => $image->id,
+                'file_name' => $image->filename,
+                'title' => $image->title,
+                'description' => $image->description
+            ],
+            'links' => [
+                'self' => $image->path()
+            ]
+        ]);
+    }
+
+    /**
+     * Test image title and the file itself are required when uploading.
+     *
+     * @return void
+     */
+    public function testImageRequiredAttributes()
+    {
+        collect(['title', 'file'])
+            ->each(function ($field) {
+                $response = $this->post('api/images', array_merge($this->data, [$field => null]));
+                $response->assertSessionHasErrors($field);
+            });
     }
 
     /**

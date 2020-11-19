@@ -6,8 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    public function imageable()
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['title', 'description', 'file_name', 'user_id'];
+
+    /**
+     * Return url to self
+     *
+     * @return string
+     */
+    public function path()
     {
-        return $this->morphTo();
+        return '/images/' . $this->id;
     }
 }
