@@ -104,11 +104,25 @@ class ImageTest extends TestCase
      *
      * @return void
      */
-    public function testImageRequiredAttributes()
+    public function testImageTitleAndFileItselfAreRequiredValidationWhenCreating()
     {
         collect(['title', 'file'])
             ->each(function ($field) {
                 $response = $this->post('api/images', array_merge($this->data, [$field => null]));
+                $response->assertSessionHasErrors($field);
+            });
+    }
+
+    /**
+     * Test image title and description must be strings validation.
+     *
+     * @return void
+     */
+    public function testImageTitleAndDescriptionMustBeStringsValidationWhenCreating()
+    {
+        collect(['title', 'description'])
+            ->each(function ($field) {
+                $response = $this->post('api/images', array_merge($this->data, [$field => (object)null]));
                 $response->assertSessionHasErrors($field);
             });
     }
