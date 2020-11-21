@@ -27,6 +27,7 @@ class StoreImageRequest extends FormRequest
         return [
             'title' => 'required|string',
             'description' => 'sometimes|string',
+            'date' => 'sometimes|date',
             'file' => 'required|image'
         ];
     }

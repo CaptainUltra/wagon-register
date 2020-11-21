@@ -6,6 +6,7 @@ use App\Image;
 use App\Permission;
 use App\Role;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -125,6 +126,36 @@ class ImageTest extends TestCase
                 $response = $this->post('api/images', array_merge($this->data, [$field => (object)null]));
                 $response->assertSessionHasErrors($field);
             });
+    }
+
+    /**
+     * Test image date must be valid date when uploading.
+     *
+     * @return void
+     */
+    public function testImageDateMustBeAValidDateWhenCreating()
+    {
+        $response = $this->post('api/images', array_merge($this->data, ['date' => "abcdef"]));
+        $response->assertSessionHasErrors('date');
+
+        $response = $this->post('api/images', array_merge($this->data, ['date' => "abcdef12"]));
+        $response->assertSessionHasErrors('date');
+
+        $response = $this->post('api/images', array_merge($this->data, ['date' => "21313"]));
+        $response->assertSessionHasErrors('date');
+    }
+
+    /**
+     * Test image date is stored properly when uploading. (Date is instance of Carbon)
+     *
+     * @return void
+     */
+    public function testImageDateIsStoredProperlyWhenCreating()
+    {
+        $this->post('api/images', array_merge($this->data, ['date' => "2020-11-21"]));
+
+        $this->assertCount(1, Image::all());
+        $this->assertInstanceOf(Carbon::class, Image::first()->date);
     }
 
     /**
