@@ -90,7 +90,7 @@ class ImageTest extends TestCase
         $response->assertJson([
             'data' => [
                 'id' => $image->id,
-                'file_name' => $image->filename,
+                'file_name' => $image->file_name,
                 'title' => $image->title,
                 'description' => $image->description
             ],
@@ -159,13 +159,29 @@ class ImageTest extends TestCase
     }
 
     /**
-     * Test image can be retrieved.
+     * Test image data can be retrieved. (proper JSON is returned)
      *
      * @return void
      */
-    public function testImageCanBeRetrieved()
+    public function testImageDataCanBeRetrieved()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create();
+
+        $response = $this->get('api/images/' . $image->id . '?api_token=' . $this->user->api_token);
+
+        $image = Image::first();
+        $response->assertJson([
+            'data' => [
+                'id' => $image->id,
+                'file_name' => $image->file_name,
+                'title' => $image->title,
+                'description' => $image->description,
+                'date' => $image->date->format('d.m.Y')
+            ],
+            'links' => [
+                'self' => $image->path()
+            ]
+        ]);
     }
 
     /**

@@ -61,7 +61,9 @@ class ImageController extends Controller
      */
     public function show(Image $image)
     {
-        //
+        $this->authorize('view', $image);
+
+        return new ImageResource($image);
     }
 
     /**

@@ -17,9 +17,10 @@ class Image extends JsonResource
         return [
             'data' => [
                 'id' => $this->id,
-                'file_name' => $this->filename,
+                'file_name' => $this->file_name,
                 'title' => $this->title,
                 'description' => $this->description,
+                'date' => isset($this->date) ? $this->date->format('d.m.Y') : null,
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [
