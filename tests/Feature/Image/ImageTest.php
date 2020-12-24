@@ -101,6 +101,23 @@ class ImageTest extends TestCase
     }
 
     /**
+     * Test thumbnail is created when an image is uploaded.
+     *
+     * @return void
+     */
+    public function testThumbnailIsCreatedWhenAnImageIsUploaded()
+    {
+        $this->withoutExceptionHandling();
+
+        $response = $this->post('api/images', $this->data);
+        $image = Image::first();
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        Storage::disk('local')->assertExists("images/thumbnails" . $image->file_name);
+    }
+
+
+    /**
      * Test image title and the file itself are required when uploading.
      *
      * @return void

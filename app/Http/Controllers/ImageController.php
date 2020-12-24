@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ImageHelper;
 use App\Http\Requests\StoreImageRequest;
 use App\Image;
 use App\Http\Resources\Image as ImageResource;
@@ -47,6 +48,9 @@ class ImageController extends Controller
         $image = Image::create($data);
 
         Storage::put('images/' . $fileName, $fileContents);
+
+        $thumbnail = imagegd(ImageHelper::createThumbnailFromImage($fileContents, 200, 200));
+        Storage::put('images/thumbnails' . $fileName, $thumbnail);
 
         return (new ImageResource($image))
             ->response()
