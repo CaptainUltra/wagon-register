@@ -3,8 +3,10 @@
 namespace Tests\Unit;
 
 use App\Helpers\ImageHelper;
+use App\Image;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ImageHelperTest extends TestCase
@@ -52,6 +54,40 @@ class ImageHelperTest extends TestCase
      */
     public function  testInvalidArgumentExceptionIsThrownWhenFiletypeIsNotSupported()
     {
-        //TODO
+        $this->expectException(InvalidArgumentException::class);
+        $fileGIF = UploadedFile::fake()->image('photo.gif');
+        $result = ImageHelper::createImageFromFile($fileGIF, 'image/gif');
+    }
+
+    /**
+     * Test image with specified size is returned from cropImageToCenter function.
+     *
+     * @return void
+     */
+    public function testImageWithSpecifiedSizeIsReturnedWhenCropping()
+    {
+        $fileJPEG = UploadedFile::fake()->image('photo.jpg', 800, 600);
+        $image = ImageHelper::createImageFromFile($fileJPEG, 'image/jpeg');
+
+        $result = ImageHelper::cropImageToCenter($image, 200, 200);
+        $size = imagesx($result) . "x" . imagesy($result);
+
+        $this->assertIsResource($result);
+        $this->assertEquals("200x200", $size);
+    }
+
+    /**
+     * Test thumbnail resource is created.
+     *
+     * @return void
+     */
+    public function testImageThumbnailIsCreated()
+    {
+        $filePNG = UploadedFile::fake()->image('photo.png');
+        $result = ImageHelper::createThumbnailFromImage($filePNG, 200, 200);
+        $size = imagesx($result) . "x" . imagesy($result);
+
+        $this->assertIsResource($result);
+        $this->assertEquals("200x200", $size);
     }
 }
