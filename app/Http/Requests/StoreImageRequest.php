@@ -28,7 +28,7 @@ class StoreImageRequest extends FormRequest
             'title' => 'required|string',
             'description' => 'sometimes|string',
             'date' => 'sometimes|date',
-            'file' => 'required|image'
+            'file' => 'required|image|mimes:jpeg,bmp,png,gif,webp'
         ];
     }
 }

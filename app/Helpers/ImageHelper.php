@@ -87,11 +87,23 @@ class ImageHelper
     {
         switch ($fileType) {
             case 'image/jpeg':
-                $image = imagejpeg($image, $fileName);
-                //Storage::putFile('images/thumbnails', $image);
+                $file = $image->encode('jpg');
+                Storage::put('images/thumbnails/' . $fileName, $file->__toString());
                 break;
             case 'image/png':
                 $file = $image->encode('png');
+                Storage::put('images/thumbnails/' . $fileName, $file->__toString());
+                break;
+            case 'image/bmp':
+                $file = $image->encode('bmp');
+                Storage::put('images/thumbnails/' . $fileName, $file->__toString());
+                break;
+            case 'image/gif':
+                $file = $image->encode('gif');
+                Storage::put('images/thumbnails/' . $fileName, $file->__toString());
+                break;
+            case 'image/webp':
+                $file = $image->encode('webp');
                 Storage::put('images/thumbnails/' . $fileName, $file->__toString());
                 break;
             default:
