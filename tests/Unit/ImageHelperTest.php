@@ -90,4 +90,36 @@ class ImageHelperTest extends TestCase
         $this->assertIsResource($result);
         $this->assertEquals("200x200", $size);
     }
+
+    /**
+     * Test resize to height function.
+     *
+     * @return void
+     */
+    public function testResizeToHeight()
+    {
+        $file = UploadedFile::fake()->image('photo.png', 600, 400);
+        $image = imagecreatefrompng($file);
+        $result = ImageHelper::resizeToHeight($image, 200);
+        $size = imagesx($result) . "x" . imagesy($result);
+
+        $this->assertIsResource($result);
+        $this->assertEquals("300x200", $size);
+    }
+
+    /**
+     * Test resize to width function.
+     *
+     * @return void
+     */
+    public function testResizeToWidth()
+    {
+        $file = UploadedFile::fake()->image('photo.png', 400, 600);
+        $image = imagecreatefrompng($file);
+        $result = ImageHelper::resizeToWidth($image, 200);
+        $size = imagesx($result) . "x" . imagesy($result);
+
+        $this->assertIsResource($result);
+        $this->assertEquals("200x300", $size);
+    }
 }

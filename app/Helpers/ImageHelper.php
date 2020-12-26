@@ -75,14 +75,56 @@ class ImageHelper
     public static function createImageFromFile($file, string $filetype)
     {
         switch ($filetype) {
-            case 'image/jpeg' :
+            case 'image/jpeg':
                 return imagecreatefromjpeg($file);
                 break;
-            case 'image/png'  :
+            case 'image/png':
                 return imagecreatefrompng($file);
                 break;
-            default             :
-                throw new InvalidArgumentException("Filetype $filetype is not suppported.");
+            default:
+                throw new InvalidArgumentException("Filetype $filetype is not supported.");
         }
+    }
+
+    /**
+     * Resize a given GD image resource to a specified height.
+     *
+     * @param $image
+     * @param int $newHeight
+     * @return false|resource
+     */
+    public static function resizeToHeight($image, int $newHeight)
+    {
+        //Determine original image dimension and new width for resizing.
+        $width = imagesx($image);
+        $height =imagesy($image);
+        $ratio = $height/$newHeight;
+        $newWidth = $width/$ratio;
+
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        return $resized;
+    }
+
+    /**
+     * Resize a given GD image resource to a specified width.
+     *
+     * @param $image
+     * @param int $newWidth
+     * @return false|resource
+     */
+    public static function resizeToWidth($image, int $newWidth)
+    {
+        //Determine original image dimension and new width for resizing.
+        $width = imagesx($image);
+        $height =imagesy($image);
+        $ratio = $width/$newWidth;
+        $newHeight = $height/$ratio;
+
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        return $resized;
     }
 }
