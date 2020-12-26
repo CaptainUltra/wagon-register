@@ -3,62 +3,16 @@
 namespace Tests\Unit;
 
 use App\Helpers\ImageHelper;
-use App\Image;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManagerStatic;
 use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class ImageHelperTest extends TestCase
 {
-    /**
-     * Test filetype is determined properly.
-     *
-     * @return void
-     */
-    public function testFiletypeIsDeterminedProperly(): void
-    {
-        //JPEG
-        $fileJPEG = UploadedFile::fake()->image('photo.jpg');
-        $result = ImageHelper::determineImageFiletype($fileJPEG);
-        $this->assertEquals("image/jpeg", $result);
-
-        //PNG
-        $filePNG = UploadedFile::fake()->image('photo.png');
-        $result = ImageHelper::determineImageFiletype($filePNG);
-        $this->assertEquals("image/png", $result);
-    }
-
-    /**
-     * Test GD image is created properly.
-     *
-     * @return void
-     */
-    public function testGDImageIsCreatedProperly(): void
-    {
-        //JPEG
-        $fileJPEG = UploadedFile::fake()->image('photo.jpg');
-        $result = ImageHelper::createImageFromFile($fileJPEG, 'image/jpeg');
-        $this->assertIsResource($result);
-
-        //PNG
-        $filePNG = UploadedFile::fake()->image('photo.png');
-        $result = ImageHelper::createImageFromFile($filePNG, 'image/png');
-        $this->assertIsResource($result);
-    }
-
-    /**
-     * Test InvalidArgumentException is thrown when filetype is not supported.
-     *
-     * @return void
-     */
-    public function  testInvalidArgumentExceptionIsThrownWhenFiletypeIsNotSupported()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $fileGIF = UploadedFile::fake()->image('photo.gif');
-        $result = ImageHelper::createImageFromFile($fileGIF, 'image/gif');
-    }
-
     /**
      * Test image with specified size is returned from cropImageToCenter function.
      *
@@ -67,27 +21,12 @@ class ImageHelperTest extends TestCase
     public function testImageWithSpecifiedSizeIsReturnedWhenCropping()
     {
         $fileJPEG = UploadedFile::fake()->image('photo.jpg', 800, 600);
-        $image = ImageHelper::createImageFromFile($fileJPEG, 'image/jpeg');
+        $image = ImageManagerStatic::make($fileJPEG);
 
         $result = ImageHelper::cropImageToCenter($image, 200, 200);
-        $size = imagesx($result) . "x" . imagesy($result);
+        $size = $result->width() . "x" .$result->height();
 
-        $this->assertIsResource($result);
-        $this->assertEquals("200x200", $size);
-    }
-
-    /**
-     * Test thumbnail resource is created.
-     *
-     * @return void
-     */
-    public function testImageThumbnailIsCreated()
-    {
-        $filePNG = UploadedFile::fake()->image('photo.png');
-        $result = ImageHelper::createThumbnailFromImage($filePNG, 200, 200);
-        $size = imagesx($result) . "x" . imagesy($result);
-
-        $this->assertIsResource($result);
+        $this->assertInstanceOf(Image::class, $result);
         $this->assertEquals("200x200", $size);
     }
 
@@ -99,11 +38,11 @@ class ImageHelperTest extends TestCase
     public function testResizeToHeight()
     {
         $file = UploadedFile::fake()->image('photo.png', 600, 400);
-        $image = imagecreatefrompng($file);
+        $image = ImageManagerStatic::make($file);
         $result = ImageHelper::resizeToHeight($image, 200);
-        $size = imagesx($result) . "x" . imagesy($result);
+        $size = $result->width() . "x" .$result->height();
 
-        $this->assertIsResource($result);
+        $this->assertInstanceOf(Image::class, $result);
         $this->assertEquals("300x200", $size);
     }
 
@@ -115,11 +54,26 @@ class ImageHelperTest extends TestCase
     public function testResizeToWidth()
     {
         $file = UploadedFile::fake()->image('photo.png', 400, 600);
-        $image = imagecreatefrompng($file);
+        $image = ImageManagerStatic::make($file);
         $result = ImageHelper::resizeToWidth($image, 200);
-        $size = imagesx($result) . "x" . imagesy($result);
+        $size = $result->width() . "x" .$result->height();
 
-        $this->assertIsResource($result);
+        $this->assertInstanceOf(Image::class, $result);
         $this->assertEquals("200x300", $size);
+    }
+
+    /**
+     * Test images are properly saved to storage.
+     *
+     * @return void
+     */
+    public function testImagesAreProperlyStored()
+    {
+        Storage::fake('local');
+        $file = UploadedFile::fake()->image('photo.png', 600, 400);
+        $image = ImageManagerStatic::make($file);
+        ImageHelper::saveImageToStorage($image, 'photo.png', 'image/png');
+        //dd(Storage::allFiles());
+        Storage::disk('local')->assertExists("images/thumbnails/" . 'photo.png');
     }
 }

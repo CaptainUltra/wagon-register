@@ -49,8 +49,7 @@ class ImageController extends Controller
 
         Storage::put('images/' . $fileName, $fileContents);
 
-        $thumbnail = imagegd(ImageHelper::createThumbnailFromImage($fileContents, 200, 200));
-        Storage::put('images/thumbnails' . $fileName, $thumbnail);
+        ImageHelper::createThumbnailFromImage($fileContents, $fileName, 200, 200);
 
         return (new ImageResource($image))
             ->response()

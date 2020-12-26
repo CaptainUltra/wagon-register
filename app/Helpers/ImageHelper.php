@@ -4,127 +4,98 @@
 namespace App\Helpers;
 
 
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManagerStatic;
 use InvalidArgumentException;
 
 class ImageHelper
 {
     /**
-     * Take an image file and return thumbnail GD resource.
+     * Take an image file, create a thumbnail with desired size and save it.
      *
      * @param $file
+     * @param string $fileName
      * @param int $width
      * @param int $height
-     * @return false|resource
      */
-    public static function createThumbnailFromImage($file, int $width, int $height)
+    public static function createThumbnailFromImage($file, string $fileName, int $width, int $height): void
     {
-        $type = ImageHelper::determineImageFiletype($file);
-        $image = ImageHelper::createImageFromFile($file, $type);
-        return ImageHelper::cropImageToCenter($image, $width, $height);
+        $image = ImageManagerStatic::make($file);
+        $type = $image->mime();
+
+        //Resize
+        if($width > $height){
+            ImageHelper::resizeToHeight($image, $height);
+        }
+        else{
+            ImageHelper::resizeToWidth($image, $width);
+        }
+
+        //Crop
+        ImageHelper::cropImageToCenter($image, $width, $height);
+        //Save
+        ImageHelper::saveImageToStorage($image, $fileName, $type);
     }
 
     /**
-     * Take an image GD resource and crop it to the desired size with central alignment.
+     * Take an Intervention Image and crop it to the desired size with central alignment.
      *
-     * @param $image
+     * @param \Intervention\Image\Image $image
      * @param int $cropWidth
      * @param int $cropHeight
-     * @return false|resource
+     * @return \Intervention\Image\Image
      */
-    public static function cropImageToCenter($image, int $cropWidth, int $cropHeight)
+    public static function cropImageToCenter(\Intervention\Image\Image  $image, int $cropWidth, int $cropHeight)
     {
-        $width  = imagesx($image);
-        $height = imagesy($image);
-        $centreX = round($width / 2);
-        $centreY = round($height / 2);
+        $image->crop($cropWidth, $cropHeight);
 
-        $cropWidthHalf  = round($cropWidth / 2);
-        $cropHeightHalf = round($cropHeight / 2);
-
-        $x1 = max(0, $centreX - $cropWidthHalf);
-        $y1 = max(0, $centreY - $cropHeightHalf);
-
-        $x2 = min($width, $centreX + $cropWidthHalf);
-        $y2 = min($height, $centreY + $cropHeightHalf);
-
-        $result  = imagecreatetruecolor($cropWidth, $cropHeight);
-
-        imagecopy($result, $image, 0,0,$x1, $y1, $x2, $y2);
-        return  $result;
+        return $image;
     }
 
     /**
-     * Return filetype as string of an image file.
+     * Resize a given Intervention Image to specified heigh while conserving aspect ratio.
      *
-     * @param $file
-     * @return string
+     * @param \Intervention\Image\Image $image
+     * @param int $newHeight
+     * @return \Intervention\Image\Image
      */
-    public static function determineImageFiletype($file): string
+    public static function resizeToHeight(\Intervention\Image\Image $image, int $newHeight)
     {
-        return getimagesize($file)['mime'];
+        $image->resize(null, $newHeight, function ($constraint) {
+            $constraint->aspectRatio();});
+
+        return $image;
     }
 
     /**
-     * Create a GD image resource from file of given filetype.
+     * Resize a given Intervention Image to specified width while conserving aspect ratio.
      *
-     * @param mixed $file
-     * @param string $filetype
-     * @return false|resource
-     * @throws InvalidArgumentException
+     * @param \Intervention\Image\Image $image
+     * @param int $newWidth
+     * @return \Intervention\Image\Image
      */
-    public static function createImageFromFile($file, string $filetype)
+    public static function resizeToWidth(\Intervention\Image\Image $image, int $newWidth)
     {
-        switch ($filetype) {
+        $image->resize($newWidth, null, function ($constraint) {
+            $constraint->aspectRatio();});
+
+        return $image;
+    }
+
+    public static function saveImageToStorage(\Intervention\Image\Image $image, string $fileName, string $fileType)
+    {
+        switch ($fileType) {
             case 'image/jpeg':
-                return imagecreatefromjpeg($file);
+                $image = imagejpeg($image, $fileName);
+                //Storage::putFile('images/thumbnails', $image);
                 break;
             case 'image/png':
-                return imagecreatefrompng($file);
+                $file = $image->encode('png');
+                Storage::put('images/thumbnails/' . $fileName, $file->__toString());
                 break;
             default:
-                throw new InvalidArgumentException("Filetype $filetype is not supported.");
+                throw new InvalidArgumentException("Filetype $fileType is not supported.");
         }
-    }
-
-    /**
-     * Resize a given GD image resource to a specified height.
-     *
-     * @param $image
-     * @param int $newHeight
-     * @return false|resource
-     */
-    public static function resizeToHeight($image, int $newHeight)
-    {
-        //Determine original image dimension and new width for resizing.
-        $width = imagesx($image);
-        $height =imagesy($image);
-        $ratio = $height/$newHeight;
-        $newWidth = $width/$ratio;
-
-        $resized = imagecreatetruecolor($newWidth, $newHeight);
-        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-        return $resized;
-    }
-
-    /**
-     * Resize a given GD image resource to a specified width.
-     *
-     * @param $image
-     * @param int $newWidth
-     * @return false|resource
-     */
-    public static function resizeToWidth($image, int $newWidth)
-    {
-        //Determine original image dimension and new width for resizing.
-        $width = imagesx($image);
-        $height =imagesy($image);
-        $ratio = $width/$newWidth;
-        $newHeight = $height/$ratio;
-
-        $resized = imagecreatetruecolor($newWidth, $newHeight);
-        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-        return $resized;
     }
 }
