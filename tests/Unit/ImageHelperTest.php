@@ -73,7 +73,19 @@ class ImageHelperTest extends TestCase
         $file = UploadedFile::fake()->image('photo.png', 600, 400);
         $image = ImageManagerStatic::make($file);
         ImageHelper::saveImageToStorage($image, 'photo.png', 'image/png');
-        //dd(Storage::allFiles());
         Storage::disk('local')->assertExists("images/thumbnails/" . 'photo.png');
+    }
+
+    /**
+     * Test timestamp is added to the original filename.
+     *
+     * @return void
+     */
+    public function testFileNameWithTimestampIsReturned()
+    {
+        $file = UploadedFile::fake()->image('photo.png');
+        $result = ImageHelper::generateFilename($file);
+
+        $this->assertEquals(date("Ymd-His") . "-" . $file->getClientOriginalName(), $result);
     }
 }

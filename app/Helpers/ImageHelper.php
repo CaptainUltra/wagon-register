@@ -110,4 +110,15 @@ class ImageHelper
                 throw new InvalidArgumentException("Filetype $fileType is not supported.");
         }
     }
+
+    /**
+     * Returns string with date and time stamp for filename.
+     *
+     * @param $file
+     * @return string
+     */
+    public static function generateFilename($file)
+    {
+        return date("Ymd-His") . "-" . $file->getClientOriginalName();
+    }
 }
