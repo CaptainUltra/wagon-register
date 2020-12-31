@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Helpers\ImageHelper;
-use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
@@ -87,5 +86,26 @@ class ImageHelperTest extends TestCase
         $result = ImageHelper::generateFilename($file);
 
         $this->assertEquals(date("Ymd-His") . "-" . $file->getClientOriginalName(), $result);
+    }
+
+    /**
+     * Test thumbnail is created with the specified dimensions and saved to storage.
+     *
+     * @return void
+     */
+    public function testThumbnailWithSpecifiedDimensionsIsCreatedAndSaved()
+    {
+        Storage::fake('local');
+        $file = UploadedFile::fake()->image('photo.png', 600, 400);
+        ImageHelper::createThumbnailFromImage($file, 200, 200);
+
+        //Test saving
+        Storage::disk('local')->assertExists("images/thumbnails/" . date("Ymd-His") . "-" . $file->getClientOriginalName());
+
+        //Test dimensions
+        $result = Storage::get("images/thumbnails/" . date("Ymd-His") . "-" . $file->getClientOriginalName());
+        $image = ImageManagerStatic::make($result);
+        $dimensions = $image->width() . "x" . $image->height();
+        $this->assertEquals("200x200", $dimensions);
     }
 }

@@ -15,14 +15,14 @@ class ImageHelper
      * Take an image file, create a thumbnail with desired size and save it.
      *
      * @param $file
-     * @param string $fileName
      * @param int $width
      * @param int $height
      */
-    public static function createThumbnailFromImage($file, string $fileName, int $width, int $height): void
+    public static function createThumbnailFromImage($file, int $width, int $height): void
     {
         $image = ImageManagerStatic::make($file);
         $type = $image->mime();
+        $fileName = ImageHelper::generateFilename($file);
 
         //Resize
         if($width > $height){
