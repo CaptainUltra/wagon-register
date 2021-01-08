@@ -113,7 +113,7 @@ class ImageTest extends TestCase
         $image = Image::first();
         $response->assertStatus(Response::HTTP_CREATED);
 
-        Storage::disk('local')->assertExists("images/thumbnails" . $image->file_name);
+        Storage::disk('local')->assertExists("images/thumbnails/" . $image->file_name);
     }
 
 

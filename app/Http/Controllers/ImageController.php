@@ -38,18 +38,14 @@ class ImageController extends Controller
     {
         $data = $request->validated();
         $fileContents = $data['file'];
-        $fileName = time() . "-" . $fileContents->getClientOriginalName();
 
         $data = array_merge($data, [
-            'file_name' => $fileName,
+            'file_name' => ImageHelper::generateFilename($fileContents),
             'user_id' => Auth::user()->id
         ]);
 
         $image = Image::create($data);
-
-        Storage::put('images/' . $fileName, $fileContents);
-
-        ImageHelper::createThumbnailFromImage($fileContents, $fileName, 200, 200);
+        ImageHelper::storeImageAndCreateThumbnail($fileContents, 500, 500);
 
         return (new ImageResource($image))
             ->response()

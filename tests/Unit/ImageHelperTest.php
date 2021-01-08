@@ -108,4 +108,21 @@ class ImageHelperTest extends TestCase
         $dimensions = $image->width() . "x" . $image->height();
         $this->assertEquals("200x200", $dimensions);
     }
+
+    /**
+     * Test image is saved and thumbnail is created and saved.
+     *
+     * @return void
+     */
+    public function testImageIsSavedAndThumnailIsCreated()
+    {
+        Storage::fake('local');
+        $file = UploadedFile::fake()->image('photo.png', 600, 400);
+
+        $result = ImageHelper::storeImageAndCreateThumbnail($file, 200, 200);
+
+        $this->assertEquals(true, $result);
+        Storage::disk('local')->assertExists("images/" . date("Ymd-His") . "-" . $file->getClientOriginalName());
+        Storage::disk('local')->assertExists("images/thumbnails/" . date("Ymd-His") . "-" . $file->getClientOriginalName());
+    }
 }

@@ -5,12 +5,43 @@ namespace App\Helpers;
 
 
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManagerStatic;
 use InvalidArgumentException;
 
 class ImageHelper
 {
+    /**
+     * Takes an image file, saves it to storage and creates a thumbnail with specified dimensions.
+     *
+     * @param $file image
+     * @param int $width width
+     * @param int $height height
+     * @return bool
+     */
+    public static function storeImageAndCreateThumbnail($file, int $width, int $height): bool
+    {
+        //Save image to storage
+        $fileName = ImageHelper::generateFilename($file);
+        Storage::put('images/' . $fileName, $file);
+
+        //Create thumbnail
+        ImageHelper::createThumbnailFromImage($file, $width, $height);
+
+        //Return whether images are saved.
+        return Storage::disk('local')->exists('images/thumbnails/' . $fileName) && Storage::disk('local')->exists('images/thumbnails/' . $fileName);
+    }
+
+    /**
+     * Returns string with date and time stamp for filename.
+     *
+     * @param $file
+     * @return string
+     */
+    public static function generateFilename($file)
+    {
+        return date("Ymd-His") . "-" . $file->getClientOriginalName();
+    }
+
     /**
      * Take an image file, create a thumbnail with desired size and save it.
      *
@@ -25,10 +56,9 @@ class ImageHelper
         $fileName = ImageHelper::generateFilename($file);
 
         //Resize
-        if($width > $height){
+        if ($width > $height) {
             ImageHelper::resizeToHeight($image, $height);
-        }
-        else{
+        } else {
             ImageHelper::resizeToWidth($image, $width);
         }
 
@@ -36,21 +66,6 @@ class ImageHelper
         ImageHelper::cropImageToCenter($image, $width, $height);
         //Save
         ImageHelper::saveImageToStorage($image, $fileName, $type);
-    }
-
-    /**
-     * Take an Intervention Image and crop it to the desired size with central alignment.
-     *
-     * @param \Intervention\Image\Image $image
-     * @param int $cropWidth
-     * @param int $cropHeight
-     * @return \Intervention\Image\Image
-     */
-    public static function cropImageToCenter(\Intervention\Image\Image  $image, int $cropWidth, int $cropHeight)
-    {
-        $image->crop($cropWidth, $cropHeight);
-
-        return $image;
     }
 
     /**
@@ -63,7 +78,8 @@ class ImageHelper
     public static function resizeToHeight(\Intervention\Image\Image $image, int $newHeight)
     {
         $image->resize(null, $newHeight, function ($constraint) {
-            $constraint->aspectRatio();});
+            $constraint->aspectRatio();
+        });
 
         return $image;
     }
@@ -78,7 +94,23 @@ class ImageHelper
     public static function resizeToWidth(\Intervention\Image\Image $image, int $newWidth)
     {
         $image->resize($newWidth, null, function ($constraint) {
-            $constraint->aspectRatio();});
+            $constraint->aspectRatio();
+        });
+
+        return $image;
+    }
+
+    /**
+     * Take an Intervention Image and crop it to the desired size with central alignment.
+     *
+     * @param \Intervention\Image\Image $image
+     * @param int $cropWidth
+     * @param int $cropHeight
+     * @return \Intervention\Image\Image
+     */
+    public static function cropImageToCenter(\Intervention\Image\Image $image, int $cropWidth, int $cropHeight)
+    {
+        $image->crop($cropWidth, $cropHeight);
 
         return $image;
     }
@@ -109,16 +141,5 @@ class ImageHelper
             default:
                 throw new InvalidArgumentException("Filetype $fileType is not supported.");
         }
-    }
-
-    /**
-     * Returns string with date and time stamp for filename.
-     *
-     * @param $file
-     * @return string
-     */
-    public static function generateFilename($file)
-    {
-        return date("Ymd-His") . "-" . $file->getClientOriginalName();
     }
 }
