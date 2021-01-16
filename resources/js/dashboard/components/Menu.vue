@@ -20,6 +20,7 @@
                     <router-link
                         to="/events/today"
                         class="nav-link"
+                        v-if="userHasPermission('event-viewAny')"
                         data-toggle="collapse" :data-target="'#' + navId"
                     >Видени днес
                     </router-link>
