@@ -32,6 +32,7 @@ class ImageTest extends TestCase
         $this->data = [
             'title' => $image->title,
             'description' => $image->description,
+            'date' => "2020-11-21",
             'file' => $file,
             'api_token' => $this->user->api_token
         ];
@@ -167,7 +168,7 @@ class ImageTest extends TestCase
      */
     public function testImageDateIsStoredProperlyWhenCreating()
     {
-        $this->post('api/images', array_merge($this->data, ['date' => "2020-11-21"]));
+        $this->post('api/images', $this->data);
 
         $this->assertCount(1, Image::all());
         $this->assertInstanceOf(Carbon::class, Image::first()->date);
@@ -212,7 +213,7 @@ class ImageTest extends TestCase
     }
 
     /**
-     * Test image title and description can be updated by the owner.
+     * Test image title, description and date can be updated by the owner.
      *
      * @return void
      */
@@ -230,7 +231,8 @@ class ImageTest extends TestCase
             'data' => [
                 'id' => $image->id,
                 'title' => $this->data["title"],
-                'description' => $this->data["description"]
+                'description' => $this->data["description"],
+                'date' => Carbon::parse($this->data["date"])->format('d.m.Y')
             ],
             'links' => [
                 'self' => $image->path()
@@ -276,7 +278,8 @@ class ImageTest extends TestCase
             'data' => [
                 'id' => $image->id,
                 'title' => $this->data["title"],
-                'description' => $this->data["description"]
+                'description' => $this->data["description"],
+                'date' => Carbon::parse($this->data["date"])->format('d.m.Y')
             ],
             'links' => [
                 'self' => $image->path()
