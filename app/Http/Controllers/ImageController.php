@@ -74,7 +74,11 @@ class ImageController extends Controller
      */
     public function update(Request $request, Image $image)
     {
-        //
+        $image->update($this->validateRequest());
+
+        return (new ImageResource($image))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -86,5 +90,19 @@ class ImageController extends Controller
     public function destroy(Image $image)
     {
         //
+    }
+
+    /**
+     * Validate data from request.
+     *
+     * @return mixed
+     */
+    private function validateRequest()
+    {
+        return request()->validate([
+            'title' => 'required|string',
+            'description' => 'sometimes|string',
+            'date' => 'sometimes|date'
+        ]);
     }
 }

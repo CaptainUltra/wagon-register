@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Image;
 
 use App\Image;
 use App\Permission;
@@ -8,7 +8,6 @@ use App\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -116,7 +115,6 @@ class ImageTest extends TestCase
         Storage::disk('local')->assertExists("images/thumbnails/" . $image->file_name);
     }
 
-
     /**
      * Test image title and the file itself are required when uploading.
      *
@@ -208,37 +206,52 @@ class ImageTest extends TestCase
      */
     public function testImageDetailsCannotBeUpdatedWithoutLogin()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create();
+        $response = $this->patch('api/images/' . $image->id, array_merge($this->data, ['api_token' => '']));
+        $response->assertRedirect('/login');
     }
 
     /**
-     * Test image title can be updated by the owner.
+     * Test image title and description can be updated by the owner.
      *
      * @return void
      */
-    public function testImageTitleCanBeUpdatedByOwner()
+    public function testImageDetailsCanBeUpdatedByOwner()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create(['user_id' => $this->user->id]); //Specify the owner
+
+        $response = $this->patch('api/images/' . $image->id, $this->data);
+        $result = Image::first();
+
+        $this->assertEquals($this->data["title"], $result->title);
+        $this->assertEquals($this->data["description"], $result->description);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                'id' => $image->id,
+                'title' => $this->data["title"],
+                'description' => $this->data["description"]
+            ],
+            'links' => [
+                'self' => $image->path()
+            ]
+        ]);
     }
 
     /**
-     * Test image description can be updated by the owner.
-     *
-     * @return void
-     */
-    public function testImageDescriptionCanBeUpdatedByOwner()
-    {
-        $this->Fail("Test not implemented.");
-    }
-
-    /**
-     * Test image details can't be updated by other user who is not owner.
+     * Test image details can't be updated by other user who is not owner and doesn't have the 'image-update' permission.
      *
      * @return void
      */
     public function testImageDetailsCannotBeUpdatedByOtherUserWhoIsNotOwner()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create(); //Creates an image with different user_id
+
+        $response = $this->patch('api/images/' . $image->id, $this->data);
+        $result = Image::first();
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertNotEquals($this->data["title"], $result->title);
     }
 
     /**
@@ -248,7 +261,27 @@ class ImageTest extends TestCase
      */
     public function testImageDetailsCanBeUpdatedByOtherUserWithTheRightPermission()
     {
-        $this->Fail("Test not implemented.");
+        factory(Permission::class)->create(['slug' => 'image-update']);
+        $this->user->roles[0]->permissions()->sync([2]);
+
+        $image = factory(Image::class)->create(); //Creates an image with different user_id
+
+        $response = $this->patch('api/images/' . $image->id, $this->data);
+        $result = Image::first();
+
+        $this->assertEquals($this->data["title"], $result->title);
+        $this->assertEquals($this->data["description"], $result->description);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'data' => [
+                'id' => $image->id,
+                'title' => $this->data["title"],
+                'description' => $this->data["description"]
+            ],
+            'links' => [
+                'self' => $image->path()
+            ]
+        ]);
     }
 
     /**
@@ -290,5 +323,4 @@ class ImageTest extends TestCase
     {
         $this->Fail("Test not implemented.");
     }
-
 }

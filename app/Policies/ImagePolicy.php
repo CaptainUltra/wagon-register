@@ -53,7 +53,7 @@ class ImagePolicy
      */
     public function update(User $user, Image $image)
     {
-        return $user->is($image->author)|| $user->hasPermission('image-update');
+        return $user->id == $image->user_id || $user->hasPermission('image-update');
     }
 
     /**
@@ -65,7 +65,7 @@ class ImagePolicy
      */
     public function delete(User $user, Image $image)
     {
-        return $user->is($image->author)|| $user->hasPermission('image-update');
+        return $user->id == $image->user_id || $user->hasPermission('image-update');
     }
 
     /**
