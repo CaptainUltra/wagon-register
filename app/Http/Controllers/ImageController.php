@@ -8,7 +8,6 @@ use App\Image;
 use App\Http\Resources\Image as ImageResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class ImageController extends Controller
@@ -32,7 +31,7 @@ class ImageController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreImageRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return ImageResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function store(StoreImageRequest $request)
     {
@@ -56,12 +55,10 @@ class ImageController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Image  $image
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|ImageResource
      */
     public function show(Image $image)
     {
-        $this->authorize('view', $image);
-
         return new ImageResource($image);
     }
 
@@ -70,7 +67,7 @@ class ImageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Image  $image
-     * @return \Illuminate\Http\Response
+     * @return ImageResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function update(Request $request, Image $image)
     {
