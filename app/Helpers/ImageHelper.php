@@ -22,13 +22,13 @@ class ImageHelper
     {
         //Save image to storage
         $fileName = ImageHelper::generateFilename($file);
-        Storage::put('images/' . $fileName, $file);
+        Storage::putFileAs('images', $file, $fileName);
 
         //Create thumbnail
         ImageHelper::createThumbnailFromImage($file, $width, $height);
 
         //Return whether images are saved.
-        return Storage::disk('local')->exists('images/thumbnails/' . $fileName) && Storage::disk('local')->exists('images/thumbnails/' . $fileName);
+        return Storage::disk('local')->exists('images/' . $fileName) && Storage::disk('local')->exists('images/thumbnails/' . $fileName);
     }
 
     /**
