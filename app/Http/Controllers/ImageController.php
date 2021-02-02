@@ -86,7 +86,9 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        $image->delete();
+
+        return response([], Response::HTTP_NO_CONTENT);
     }
 
     /**

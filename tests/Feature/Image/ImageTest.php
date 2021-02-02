@@ -288,13 +288,16 @@ class ImageTest extends TestCase
     }
 
     /**
-     * Test that a user must be logged in in order to delete an image.
+     * Test that a user must be logged in in order to delete an image. Assert redirect to /login.
      *
      * @return void
      */
     public function testImageCannotBeDeletedWithoutLogin()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create();
+        $response = $this->delete('api/images/' . $image->id, array_merge($this->data, ['api_token' => '']));
+        $this->assertCount(1, Image::all());
+        $response->assertRedirect('/login');
     }
 
     /**
@@ -304,7 +307,13 @@ class ImageTest extends TestCase
      */
     public function testImageCanBeDeletedByOwner()
     {
-        $this->Fail("Test not implemented.");
+        $this->post('api/images', $this->data);
+        $image = Image::first();
+        $response = $this->delete('api/images/' . $image->id, ['api_token' => $this->data['api_token']]);
+
+        $this->assertCount(0, Image::all());
+        Storage::disk('local')->assertMissing("images/" . $image->file_name);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -314,7 +323,11 @@ class ImageTest extends TestCase
      */
     public function testImageCannotBeDeletedByOtherUserWhoIsNotOwner()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create();
+        $response = $this->delete('api/images/' . $image->id, ['api_token' => $this->data['api_token']]);
+
+        $this->assertCount(1, Image::all());
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -324,6 +337,14 @@ class ImageTest extends TestCase
      */
     public function testImageCanBeDeletedByOtherUserWithTheRightPermission()
     {
-        $this->Fail("Test not implemented.");
+        factory(Permission::class)->create(['slug' => 'image-delete']);
+        $this->user->roles[0]->permissions()->sync([2]);
+
+        $image = factory(Image::class)->create();
+        $response = $this->delete('api/images/' . $image->id, ['api_token' => $this->data['api_token']]);
+
+        $this->assertCount(0, Image::all());
+        Storage::disk('local')->assertMissing("images/" . $image->file_name);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }

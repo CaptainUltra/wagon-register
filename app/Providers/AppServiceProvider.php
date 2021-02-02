@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Image;
+use App\Observers\ImageObserver;
 use App\Wagon;
 use App\Observers\WagonObserver;
 use Illuminate\Support\Facades\App;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Wagon::observe(WagonObserver::class);
+        Image::observe(ImageObserver::class);
 
         if (App::environment('production')) {
             $this->app->bind('path.public', function () {
