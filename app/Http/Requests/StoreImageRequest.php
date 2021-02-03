@@ -28,7 +28,8 @@ class StoreImageRequest extends FormRequest
             'title' => 'required|string',
             'description' => 'sometimes|string',
             'date' => 'sometimes|date',
-            'file' => 'required|image|mimes:jpeg,bmp,png,gif,webp'
+            'file' => 'required|image|mimes:jpeg,bmp,png,gif,webp',
+            'wagon_ids' => 'required|array|min:1'
         ];
     }
 }

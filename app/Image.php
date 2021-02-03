@@ -41,4 +41,14 @@ class Image extends Model
     {
         return '/images/' . $this->id;
     }
+
+    /**
+     * Get wagons which belong to the image.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function wagons()
+    {
+        return $this->belongsToMany(Wagon::class)->withPivot('primary');
+    }
 }

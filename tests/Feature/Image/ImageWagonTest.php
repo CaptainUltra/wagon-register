@@ -2,21 +2,81 @@
 
 namespace Tests\Feature\Image;
 
+use App\Image;
+use App\Permission;
+use App\Role;
+use App\User;
+use App\Wagon;
+use App\WagonType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ImageWagonTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected $data;
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Storage::fake('images');
+
+        $this->user = factory(User::class)->create();
+        $image = factory(Image::class)->make();
+        $file = UploadedFile::fake()->image('photo.jpg');
+
+        //Create wagons
+        factory(WagonType::class)->create(['name' => '85-97']);
+        factory(Wagon::class)->create();
+        factory(Wagon::class)->create();
+        factory(Wagon::class)->create();
+
+        $this->data = [
+            'title' => $image->title,
+            'description' => $image->description,
+            'date' => "2020-11-21",
+            'file' => $file,
+            'wagon_ids' => [1, 2, 3],
+            'api_token' => $this->user->api_token
+        ];
+
+        $role = factory(Role::class)->create();
+        $this->user->roles()->sync($role);
+        factory(Permission::class)->create(['slug' => 'image-create']);
+        $this->user->roles[0]->permissions()->sync([1]);
+    }
 
     /**
      * Test wagons can be added to the image.
      *
      * @return void
      */
-    public function testWagonsCanBeAddedToImageByOwner()
+    public function testWagonsCanBeAddedToImageByOwnerWhenCreating()
     {
-        $this->Fail("Test not implemented.");
+        $response = $this->post('api/images', $this->data);
+        $image = Image::first();
+
+        $this->assertCount(1, Image::all());
+        $this->assertCount(3, $image->wagons);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertJson([
+            'data' => [
+                'id' => $image->id,
+                'file_name' => $image->file_name,
+                'title' => $image->title,
+                'description' => $image->description
+            ],
+            'links' => [
+                'self' => $image->path()
+            ]
+        ]);
+        $this->assertCount(3, $response['data']['wagons']);
     }
 
     /**
@@ -24,9 +84,15 @@ class ImageWagonTest extends TestCase
      *
      * @return void
      */
-    public function testWagonsCanBeRemovedByOwner()
+    public function testWagonsCanBeRemovedByOwnerWhenUpdating()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create(['user_id' => 1]);
+        $image->wagons()->sync([1, 2, 3]);
+
+        $response = $this->patch('api/images/' . $image->id, array_merge($this->data, ['wagon_ids' => [1, 2]]));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertCount(2, $response['data']['wagons']);
     }
 
     /**
@@ -36,7 +102,8 @@ class ImageWagonTest extends TestCase
      */
     public function testAtLeastOneWagonMustBePresentWhenCreatingAnImageWhenCreating()
     {
-        $this->Fail("Test not implemented.");
+        $response = $this->post('api/images', array_merge($this->data, ['wagon_ids' => []]));
+        $response->assertSessionHasErrors('wagon_ids');
     }
 
     /**
@@ -46,26 +113,39 @@ class ImageWagonTest extends TestCase
      */
     public function testAtLeastOneWagonMustBePresentWhenCreatingAnImageWhenUpdating()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create(['user_id' => 1]);
+        $response = $this->patch('api/images/' . $image->id, array_merge($this->data, ['wagon_ids' => []]));
+
+        $response->assertSessionHasErrors('wagon_ids');
     }
 
     /**
-     * Test wagons cannot be edited by other user.
+     * Test 'wagon_ids' in the request must be an array.
      *
      * @return void
      */
-    public function testImageWagonsCannotBeEditedByOtherUser()
+    public function testWagonIdsMustBeAnArray()
     {
-        $this->Fail("Test not implemented.");
+        $response = $this->post('api/images', array_merge($this->data, ['wagon_ids' => null]));
+        $response->assertSessionHasErrors('wagon_ids');
     }
 
     /**
-     * Test wagons can be edited by other user with 'image-edit' permission.
+     * Test wagons can be edited by other user with 'image-update' permission.
      *
      * @return void
      */
     public function testImageWagonsCanBeEditedByOtherUserWithTheRightPermission()
     {
-        $this->Fail("Test not implemented.");
+        $image = factory(Image::class)->create();
+        $image->wagons()->sync([1, 2, 3]);
+
+        factory(Permission::class)->create(['slug' => 'image-update']);
+        $this->user->roles[0]->permissions()->sync([2]);
+
+        $response = $this->patch('api/images/' . $image->id, array_merge($this->data, ['wagon_ids' => [1, 2]]));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertCount(2, $response['data']['wagons']);
     }
 }

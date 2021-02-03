@@ -35,17 +35,17 @@ class Wagon extends Model
     protected $attributes = [
         'status_id' => 4,
     ];
-    
+
     /**
      * Return url to self
-     * 
+     *
      * @return string
      */
     public function path()
     {
         return '/wagons/' . $this->id;
     }
-    
+
     /**
      * Stylized number (with spaces and dashes)
      */
@@ -169,10 +169,12 @@ class Wagon extends Model
     }
 
     /**
-     * Get the images associated with the wagon
+     * Get images which belong to the wagon.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function images()
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->belongsToMany(Image::class)->withPivot('primary');
     }
 }

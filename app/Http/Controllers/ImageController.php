@@ -46,6 +46,9 @@ class ImageController extends Controller
         $image = Image::create($data);
         ImageHelper::storeImageAndCreateThumbnail($fileContents, 500, 500);
 
+        $wagons = $data['wagon_ids'];
+        $image->wagons()->sync($wagons);
+
         return (new ImageResource($image))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -71,7 +74,12 @@ class ImageController extends Controller
      */
     public function update(Request $request, Image $image)
     {
-        $image->update($this->validateRequest());
+        $data = $this->validateRequest();
+
+        $wagons = $data['wagon_ids'];
+        $image->wagons()->sync($wagons);
+
+        $image->update($data);
 
         return (new ImageResource($image))
             ->response()
@@ -101,7 +109,8 @@ class ImageController extends Controller
         return request()->validate([
             'title' => 'required|string',
             'description' => 'sometimes|string',
-            'date' => 'sometimes|date'
+            'date' => 'sometimes|date',
+            'wagon_ids' => 'required|array|min:1'
         ]);
     }
 }

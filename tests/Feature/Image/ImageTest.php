@@ -6,6 +6,8 @@ use App\Image;
 use App\Permission;
 use App\Role;
 use App\User;
+use App\Wagon;
+use App\WagonType;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -29,11 +31,16 @@ class ImageTest extends TestCase
         $this->user = factory(User::class)->create();
         $image = factory(Image::class)->make();
         $file = UploadedFile::fake()->image('photo.jpg'); //TODO: Should this be included in the factory?
+
+        factory(WagonType::class)->create(['name' => '85-97']);
+        factory(Wagon::class)->create();
+
         $this->data = [
             'title' => $image->title,
             'description' => $image->description,
             'date' => "2020-11-21",
             'file' => $file,
+            'wagon_ids' => [1],
             'api_token' => $this->user->api_token
         ];
 

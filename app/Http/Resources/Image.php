@@ -21,6 +21,7 @@ class Image extends JsonResource
                 'title' => $this->title,
                 'description' => $this->description,
                 'date' => isset($this->date) ? $this->date->format('d.m.Y') : null,
+                'wagons' => Wagon::collection($this->wagons()->get()),
                 'last_updated' => $this->updated_at->format('d.m.Y h:i:s')
             ],
             'links' => [
