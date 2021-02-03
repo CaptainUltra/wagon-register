@@ -25,4 +25,8 @@ Route::domain('app.' . $domain)->group(function () {
     Route::get('{any?}', 'PageController@dashboard')->where('any', '.*')->middleware('auth')->name('dashboard');
 });
 
+Route::domain('gallery.' . $domain)->group(function () {
+    Route::get('{any?}', 'PageController@gallery')->where('any', '.*')->name('gallery');
+});
+
 

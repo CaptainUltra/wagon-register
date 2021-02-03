@@ -13,4 +13,5 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/dashboard/dashboard.js', 'public/js').version();
 mix.js('resources/js/homepage.js', 'public/js').version();
+mix.js('resources/js/gallery/gallery.js', 'public/js').version();
 mix.sass('resources/sass/app.scss', 'public/css').version();
